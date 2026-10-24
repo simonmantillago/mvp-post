@@ -207,7 +207,7 @@ The MVP Post es un periódico neoyorquino de 2003 hecho para una sola lectora. L
 
 Cada sección rompe con el papel y es su propio mundo. Detrás del pliego viven cinco pieles (Y2K, Alfombra roja, Vinilos, Cartelera, Cartas) que redefinen **los mismos roles** (`--ground`, `--surface`, `--text`, `--text-soft`, `--accent`, `--accent-text`, `--on-accent`, `--rule`, `--focus`, `--face-display`) bajo `[data-section="…"]`. El cambio de mundo es la sorpresa; la estructura de lectura (folio, título de sección, esquina doblada para volver) es fija.
 
-Los materiales son imprenta y objetos: medio tono, filetes dobles, sellos de goma, lacre, ticket perforado, polaroids, fundas de vinilo, lomos de VHS. Las texturas que no son tipografía (leopardo, marco de pedrería, anillo de gemas, nogal, cuero) son raster generadas en canvas (`src/ui/leopard.ts`) y entran como variables CSS (`--leopard`, `--frame`, `--ring`, `--walnut`, `--leather-tex`), nunca dibujadas en CSS. Se rechaza explícitamente la app de pareja con tarjetas y pestañas y la primera plana genérica de periódico crema.
+Los materiales son imprenta y objetos: medio tono, filetes dobles, sellos de goma, lacre, ticket perforado, polaroids, fundas de vinilo, lomos de VHS. Las texturas que no son tipografía son raster: leopardo rosa, marco de pedrería, anillo de gemas, nogal, cuero y grano de película se generan en canvas (`src/ui/leopard.ts`) y entran como variables CSS (`--leopard`, `--frame`, `--ring`, `--walnut`, `--leather-tex`, `--grain`); las alas de ángel y el fondo de Alfombra roja (leopardo oscuro con lirios vino) son imágenes del usuario en `public/sections/alfombra/`. Nunca se dibujan en CSS. Se rechaza explícitamente la app de pareja con tarjetas y pestañas y la primera plana genérica de periódico crema.
 
 **Key Characteristics:**
 - Papel prensa frío con trama de medio tono de 3 px; tinta negra; un solo acento rosa como segunda plancha.
@@ -234,7 +234,7 @@ Papel y tinta con una segunda plancha rosa en la portada; cada sección trae su 
 ### Mundos de sección
 Cada mundo asigna sus valores a los roles genéricos:
 - **Y2K** (collage chillón sobre leopardo rosa): suelo Rosa Chicle (y2k-ground), superficie blanca, acento Rosa Fucsia Burbuja (y2k-accent) con **texto negro encima** (y2k-text como `on-accent`), Menta (y2k-mint) y Cromo (y2k-chrome) para las píldoras de herramientas. El foco es negro, no rosa.
-- **Alfombra roja** (dark leopard, dorado, pedrería): suelo Negro Laca (alfombra-ground), acento Dorado Viejo (alfombra-gold) también como filete, Dorado Claro (alfombra-gold-text) para texto, Vino (alfombra-wine) para el corazón de «me gusta», Blanco Polaroid (alfombra-polaroid).
+- **Alfombra roja** (dark leopard con lirios vino, dorado, pedrería): fondo fotográfico fijo en pantalla sobre suelo Negro Laca (alfombra-ground), acento Dorado Viejo (alfombra-gold) también como filete, Dorado Claro (alfombra-gold-text) para texto, Vino (alfombra-wine) para el corazón de «me gusta», Blanco Polaroid (alfombra-polaroid).
 - **Los vinilos de Big** (penthouse de noche): Nogal Oscuro (vinilos-ground), Cuero (vinilos-leather), acento Ámbar de Lámpara (vinilos-amber), filete Tabaco (vinilos-rule). Lacres: rosa (spot) para ella, Latón (vinilos-seal-him) para él.
 - **Cartelera** (videoclub de noche): Azul Medianoche (cartelera-ground), acento Amarillo Marquesina (cartelera-marquee), Neón Rosa (cartelera-neon) solo para la pestaña activa y el halo superior.
 - **Cartas al editor** (papel de carta y máquina): Papel de Carta (cartas-ground) rayado cada 32 px, hoja Marfil (cartas-surface), acento rosa texto (spot-text), lacre Oro Viejo (cartas-seal-him) para él.
@@ -251,7 +251,7 @@ Cada mundo asigna sus valores a los roles genéricos:
 **Masthead:** UnifrakturCook 700 (serif)
 **Headline / Label:** Antonio 500/700 (sans-serif)
 **Body:** Libre Caslon Text 400, 400 italic, 700 (Georgia)
-**Handwriting:** Homemade Apple (dedicatorias, pies de polaroid)
+**Handwriting:** Homemade Apple (dedicatorias de vinilos). Los pies de polaroid van en Bodoni Moda itálica, la voz de Alfombra roja.
 **Display por sección:** Bagel Fat One (Y2K), Bodoni Moda 400 + italic (Alfombra), Gloock (Vinilos), Monoton (Cartelera), Special Elite (Cartas y las cartas de él)
 
 **Character:** Gótica de cabecera + gótica condensada de titular + serif de periódico: la voz de un diario de gran tirada. Las caras display de sección son la voz de cada mundo y aparecen también en la portada, en el nombre de cada pliego, como los logos de sección de un diario.
@@ -338,6 +338,9 @@ No hay tarjetas genéricas; cada contenedor es un objeto del mundo: credencial l
 ### Sello «Nuevo» y sello de goma
 El sello «Nuevo» es un rectángulo rosa en Antonio 700 de 0.75rem con 0.14em de tracking, girado −4°, y cambia en su sitio sin mover la fila. El sello de goma (`RubberStamp`) marca estados («Fijado», «Visto»): doble filete de 3 px en `--stamp-ink`, fondo blanco al 55 %, girado −9°, con máscara de tinta irregular.
 
+### Polaroid y carrete de efectos
+Las fotos de Alfombra roja son polaroids (Blanco Polaroid, pie en Bodoni itálica) que se revelan con un efecto elegido por quien la tomó: Original, Grano, Vintage, Flash, Noir o Digicam 2003 (este último con la fecha estampada en naranja LCD). El efecto es CSS sobre la foto (`.fx-<id>`: filtro + una capa con `--grain` o los roles `--fx-*`); el archivo guardado no cambia. En la polaroid grande, la autora o el autor desliza un carrete de miniaturas (la misma foto con cada efecto) y toca una; la elegida lleva filete `--accent`.
+
 ### Lacre
 Sello de cera SVG (`WaxSeal`) con la inicial hundida en Bodoni italic. Rosa para ella y dorado viejo para él: firma quién escribió o dedicó en cartas y vinilos.
 
@@ -347,7 +350,7 @@ Sello de cera SVG (`WaxSeal`) con la inicial hundida en Bodoni italic. Rosa para
 ### Movimiento
 - **Pasar la página:** la página nueva se desdobla desde el lomo derecho (clip-path, 520 ms, `--ease-out`) sobre la vieja, que se oscurece al 70 %. Al volver, desde el izquierdo.
 - **Llegada:** el periódico cae girando hasta la puerta (900 ms), la cabecera entra con la tinta del rodillo (máscara, 1100 ms) y la tira de rotativa se alimenta (1700 ms).
-- **Flash:** corte duro a blanco con destellos (380 ms, `steps(1)`) y luego se desvanece.
+- **Flash:** ráfaga de paparazzi: cinco flashes parciales desde puntos al azar sobre los clics del audio de prensa y, en el último, el flash completo que toma la foto: corte duro a blanco con destellos (380 ms, `steps(1)`) y luego se desvanece. Con movimiento reducido, un solo flash.
 - **¡Extra!:** sacudida de 600 ms de la página de cartas.
 - `prefers-reduced-motion` anula transiciones de página y reduce toda animación a 0,01 ms.
 

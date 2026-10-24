@@ -1,13 +1,22 @@
-/* Dark leopard con dorado y pedrería */
+/* Dark leopard con lirios vino (imagen elegida por Simón), dorado y pedrería */
 .red-carpet { position: relative; isolation: isolate; }
 .carpet-ground {
   position: absolute;
   inset: 0;
   z-index: -1;
+  background: var(--ground);
+}
+/* El fondo es un wallpaper vertical: se queda quieto en pantalla mientras la página corre (sticky, porque iOS
+   no soporta background-attachment: fixed). Abajo se oscurece para que se lean los dorados y las polaroids. */
+.carpet-ground::before {
+  content: "";
+  position: sticky;
+  top: 0;
+  display: block;
+  height: 100dvh;
   background:
-    linear-gradient(180deg, rgba(11, 10, 9, 0) 0%, rgba(11, 10, 9, 0.35) 55%, rgba(11, 10, 9, 0.8) 95%),
-    var(--leopard, none) 0 0 / 300px 300px,
-    var(--ground);
+    linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--ground) 25%, transparent) 60%, color-mix(in srgb, var(--ground) 70%, transparent) 100%),
+    url(/sections/alfombra/fondo.webp) center / cover;
 }
 .red-carpet .folio-title {
   font-style: italic;
@@ -16,8 +25,16 @@
 }
 
 /* Visor enmarcado en pedrería dorada (marco raster generado en canvas) */
-/* La imagen de las alas es mucho más ancha que la columna (casi todo es negro): se recorta para que no haya scroll lateral */
-.camera { display: grid; gap: var(--s4); justify-items: center; overflow-x: clip; overflow-clip-margin: var(--gutter); }
+/* La cámara va a sangre para que las alas lleguen al borde de la pantalla; la imagen (casi toda negra) es más ancha
+   que la pantalla y se recorta ahí para que no haya scroll lateral. */
+.camera {
+  display: grid;
+  gap: var(--s4);
+  justify-items: center;
+  margin-inline: calc(var(--gutter) * -1);
+  padding-inline: var(--gutter);
+  overflow-x: clip;
+}
 /* El visor deja un cuarto del ancho libre para que las alas abran a los lados */
 .viewfinder-stage {
   position: relative;
@@ -25,16 +42,16 @@
   margin-top: var(--s6);
 }
 /* Alas de pedrería sobre negro: "screen" deja ver solo las piedras sobre el leopardo.
-   Medidas sobre alas.webp: el par ocupa el 65 % del ancho de la imagen con el centro en x 51,3 %, y 56 %.
-   A 200 % del visor las puntas llegan al borde de la columna; subidas un poco, los hombros asoman sobre el marco
-   y las plumas largas terminan a la altura del borde inferior. */
+   Medidas sobre alas.webp: el par ocupa el 65 % del ancho de la imagen (ancho de imagen = envergadura × 1,53)
+   con el centro en x 51,3 %, y 56 %. Abren a 240 % del visor sin pasar del ancho de la pantalla: en el teléfono
+   las puntas llegan al borde; los hombros suben hacia el título y las plumas pasan el borde inferior del marco. */
 .wings {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 200%;
+  width: min(240%, calc((100vw - 0.5rem) * 1.53));
   max-width: none;
-  translate: -51.3% -58%;
+  translate: -51.3% -57%;
   mix-blend-mode: screen;
   filter: brightness(1.35) contrast(1.15);
   pointer-events: none;
@@ -169,10 +186,45 @@
 .polaroid-frame {
   display: block;
   aspect-ratio: 1;
+  position: relative;
   overflow: hidden;
+  container-type: inline-size;
   background: #2b2a27;
 }
 .polaroid-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+/* Efectos de revelado: filtro sobre la foto + una capa encima. La foto guardada no cambia. */
+.polaroid-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.fx-grano img { filter: contrast(1.12) saturate(0.85); }
+.fx-grano::after { background: var(--grain) 0 0 / 160px; mix-blend-mode: overlay; opacity: 0.55; }
+.fx-vintage img { filter: sepia(0.5) saturate(0.75) contrast(0.88) brightness(1.06); }
+.fx-vintage::after {
+  background:
+    radial-gradient(circle at 85% 8%, var(--fx-leak), transparent 45%),
+    radial-gradient(circle, transparent 55%, var(--fx-shade-warm));
+}
+.fx-flash img { filter: brightness(1.3) contrast(1.4) saturate(1.25); }
+.fx-flash::after { background: radial-gradient(circle at 50% 40%, var(--fx-burn), transparent 40%, var(--fx-shade) 100%); }
+.fx-noir img { filter: grayscale(1) contrast(1.45) brightness(0.95); }
+.fx-noir::after { background: var(--grain) 0 0 / 160px; mix-blend-mode: overlay; opacity: 0.45; }
+.fx-digicam img { filter: saturate(1.45) contrast(1.08) hue-rotate(-6deg) brightness(1.05); }
+.fx-digicam::after { background: var(--fx-cool); }
+/* Fecha de cámara digital: naranja de pantalla LCD, a escala de la foto */
+.fx-stamp {
+  position: absolute;
+  right: 6%;
+  bottom: 5%;
+  z-index: 1;
+  font: 500 9cqw/1 var(--face-head);
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: 0.08em;
+  color: var(--fx-stamp);
+}
 .polaroid.is-developing .polaroid-frame img { animation: develop 3.6s ease-out both; }
 @keyframes develop {
   from { filter: brightness(2.2) saturate(0) sepia(0.4); opacity: 0.4; }
@@ -184,7 +236,7 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font: 400 0.75rem/1.6 var(--face-hand);
+  font: italic 400 0.8125rem/1.5 var(--face-display);
 }
 .polaroid-meta {
   font: 0.6875rem/1.2 var(--face-body);
@@ -209,6 +261,35 @@
 }
 .like[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); }
 
+/* Carrete de efectos: la misma foto revelada de cada forma; se desliza y se toca */
+.reel {
+  display: flex;
+  gap: var(--s3);
+  margin-top: var(--s5);
+  padding: var(--s1) var(--s1) var(--s2);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.reel::-webkit-scrollbar { display: none; }
+.reel-frame {
+  flex: 0 0 4.75rem;
+  display: grid;
+  gap: var(--s2);
+  padding: 0;
+  border: 0;
+  background: transparent;
+  scroll-snap-align: start;
+  color: var(--text-soft);
+  font: 500 var(--size-folio) / 1.2 var(--face-head);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.reel-frame .polaroid-frame { outline: 2px solid transparent; outline-offset: 2px; transition: outline-color 160ms var(--ease-out); }
+.reel-frame[aria-pressed="true"] { color: var(--accent-text); }
+.reel-frame[aria-pressed="true"] .polaroid-frame { outline-color: var(--accent); }
+.reel-error { margin-top: var(--s2); }
+
 /* Polaroid en grande */
 .photo-dialog {
   width: min(92vw, 30rem);
@@ -232,7 +313,7 @@
   border: 0;
   border-bottom: 1px dashed #9b968a;
   background: transparent;
-  font: 400 1.05rem/1.8 var(--face-hand);
+  font: italic 400 1.15rem/1.6 var(--face-display);
   color: #1d1b17;
 }
 .photo-dialog-close {

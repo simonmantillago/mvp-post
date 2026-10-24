@@ -41,11 +41,14 @@ export type CollageItem = {
   created_at: string
 }
 
+export type PhotoEffect = 'original' | 'grano' | 'vintage' | 'flash' | 'noir' | 'digicam'
+
 export type Photo = {
   id: string
   author_id: string
   storage_path: string
   caption: string
+  effect: PhotoEffect
   created_at: string
 }
 

@@ -278,3 +278,22 @@ export function leatherTexture(size = 200) {
     return c.toDataURL('image/png')
   })
 }
+
+/** Grano de película para los efectos de polaroid: ruido gris neutro, en mosaico, para mezclar en "overlay". */
+export function grainTexture(size = 160) {
+  return memo(`grain${size}`, () => {
+    const rand = rng(17)
+    const c = document.createElement('canvas')
+    c.width = c.height = size
+    const g = c.getContext('2d')!
+    const img = g.createImageData(size, size)
+    for (let i = 0; i < img.data.length; i += 4) {
+      // Suma de dos uniformes: grano más denso en los medios tonos, como la plata de la película
+      const v = 128 + (rand() + rand() - 1) * 150
+      img.data[i] = img.data[i + 1] = img.data[i + 2] = v
+      img.data[i + 3] = 255
+    }
+    g.putImageData(img, 0, 0)
+    return c.toDataURL('image/png')
+  })
+}

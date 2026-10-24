@@ -14,6 +14,13 @@ Punto de partida para la próxima sesión. Primer MVP **publicado**; de aquí en
 1. **Alas de ángel** (`public/sections/alfombra/alas.webp`, imagen del usuario): el visor ahora mide `min(76%, 22rem)` para dejar aire a los lados; `.wings` a 200 % del visor, `translate: -51.3% -58%`, `mix-blend-mode: screen`. Los hombros asoman sobre el marco y las plumas llegan al borde de la columna. `.camera` recorta en horizontal (`overflow-x: clip`) porque la imagen es más ancha que la pantalla y hacía que el iPhone alejara el zoom. Revisado a 390 y 1440 px.
 2. **Ráfaga de paparazzi**: 4 flashes parciales + 5.º flash completo que toma la foto (`BURST = [0, 95, 190, 285, 560]`), clic-clic-clic con Web Audio en `paparazzi.ts`; con `prefers-reduced-motion`, un solo flash. Probada en el navegador con una cámara simulada: el ritmo y la polaroid nueva funcionan (en `?demo` la foto nueva sale vacía porque el upload falso no guarda bytes). **Falta oír el sonido y verla con la cámara real en el iPhone.**
 
+## Alfombra roja · ronda 2 (publicado 2026-10-24)
+- **Alas más abiertas:** `.wings` a `min(240%, (100vw − 0.5rem) × 1.53)`; la cámara va a sangre y recorta en el borde de la pantalla. En el teléfono las puntas llegan casi al borde.
+- **Fondo:** leopardo oscuro con lirios vino (`public/sections/alfombra/fondo.webp`, imagen del usuario), fijo en pantalla con `position: sticky` en `.carpet-ground::before`. La miniatura del pliego en la portada usa la misma imagen.
+- **Pie de polaroid** en Bodoni Moda itálica.
+- **Efectos de revelado:** columna `photos.effect` (migración `0003_photo_effects.sql`, **aplicada**). Efectos: Original, Grano, Vintage, Flash, Noir y Digicam 2003, hechos con CSS (`.fx-<id>`, `src/sections/alfombra-roja/effects.ts`, grano de `grainTexture()`). Solo quien tomó la foto ve el carrete en la polaroid grande.
+- **Audio de paparazzi:** `public/sections/alfombra/paparazzi.mp3` (1,5 s). Se precarga al tocar «Encender la cámara»; si no carga, suena el clic sintetizado. `BURST = [35, 155, 265, 470, 570, 720]` está medido sobre los clics del audio. **Falta oírlo en el iPhone.**
+
 ## Pendientes conocidos
 - **Fotos de perfil** de ambos en `public/readers/maria-victoria.jpg` y `simon.jpg` (hoy se ven iniciales).
 - **Quitar fondo** a las fotos del collage Y2K (plan: `@imgly/background-removal`; plan B MediaPipe). Hoy se pegan con fondo.

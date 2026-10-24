@@ -41,9 +41,9 @@ export function createDemoClient(): any {
     ],
     watch_ratings: [{ item_id: 'w5', user_id: HIM, rating: 4, comment: '' }],
     photos: [
-      { id: 'p1', author_id: HER, storage_path: 'glam-dark-leopard.webp', caption: 'nuestra primera cena', created_at: ago(100) },
-      { id: 'p2', author_id: HIM, storage_path: 'y2k-swag-collage.webp', caption: 'ese vestido…', created_at: ago(1500) },
-      { id: 'p3', author_id: HER, storage_path: 'stickers.webp', caption: '', created_at: ago(3000) },
+      { id: 'p1', author_id: HER, storage_path: 'glam-dark-leopard.webp', caption: 'nuestra primera cena', effect: 'vintage', created_at: ago(100) },
+      { id: 'p2', author_id: HIM, storage_path: 'y2k-swag-collage.webp', caption: 'ese vestido…', effect: 'flash', created_at: ago(1500) },
+      { id: 'p3', author_id: HER, storage_path: 'stickers.webp', caption: '', effect: 'original', created_at: ago(3000) },
     ],
     photo_likes: [{ photo_id: 'p1', user_id: HIM }],
     collage_items: [
@@ -79,6 +79,7 @@ export function createDemoClient(): any {
           created_at: new Date().toISOString(),
           author_id: demoSession.user.id,
           ...(table === 'editions' ? { number: rows.length + 1, cover_caption: '', body: '', continues_to: null, published_at: null } : {}),
+          ...(table === 'photos' ? { effect: 'original' } : {}),
           ...(table === 'collage_items' ? { style: {}, locked: false, locked_by: null, bg_removed: false } : {}),
           ...p,
         }))

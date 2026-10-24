@@ -192,7 +192,7 @@
 }
 .pliego--y2k .pliego-thumb { background: var(--thumb-y2k, #f6c3d8) 0 0 / 180px 180px; }
 .pliego--alfombra .pliego-thumb {
-  background: var(--thumb-alfombra, #3a2614) 0 0 / 150px 150px;
+  background: var(--thumb-alfombra, #3a2614) 80% 12% / 220% auto; /* el lirio vino de la esquina */
   box-shadow: inset 0 0 0 3px #c9a24a;
 }
 .pliego--vinilos .pliego-thumb {

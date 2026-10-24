@@ -6,7 +6,7 @@ import { sections } from '../sections/registry'
 import { Halftone } from '../ui/Halftone'
 import { Icon } from '../ui/Icon'
 import { WaxSeal } from '../ui/Marks'
-import { darkLeopard, leopardTexture, pinkLeopard } from '../ui/leopard'
+import { leopardTexture, pinkLeopard } from '../ui/leopard'
 import { formatFull, formatShort } from './dates'
 import { blocks, usePublishedEditions } from './editions'
 import './FrontPage.css'
@@ -30,7 +30,7 @@ export function FrontPage() {
   // Miniaturas de los pliegos: cada una enseña el material de su mundo
   const [thumbs, setThumbs] = useState<CSSProperties>()
   useEffect(() => {
-    setThumbs({ '--thumb-y2k': `url(${leopardTexture(pinkLeopard, 360, 11)})`, '--thumb-alfombra': `url(${leopardTexture(darkLeopard)})` } as CSSProperties)
+    setThumbs({ '--thumb-y2k': `url(${leopardTexture(pinkLeopard, 360, 11)})`, '--thumb-alfombra': 'url(/sections/alfombra/fondo.webp)' } as CSSProperties)
   }, [])
 
   return (

@@ -88,6 +88,13 @@
   --rule: #c9a24a;
   --focus: #d9b65c;
   --polaroid: #f6f3ec;
+  /* Efectos de revelado de las polaroids */
+  --fx-leak: rgba(255, 140, 60, 0.4);
+  --fx-shade: rgba(0, 0, 0, 0.6);
+  --fx-shade-warm: rgba(60, 30, 10, 0.5);
+  --fx-burn: rgba(255, 255, 255, 0.35);
+  --fx-cool: rgba(0, 180, 255, 0.08);
+  --fx-stamp: #ff8a1e;
   --face-display: "Bodoni Moda", serif;
 }
 

@@ -3,13 +3,14 @@ import { useCouple } from '../../hooks/useCouple'
 import { useLive, useSignedUrl } from '../../hooks/useData'
 import { compressImage, uploadImage } from '../../lib/images'
 import { supabase } from '../../lib/supabase'
-import type { Photo } from '../../lib/types'
+import type { Photo, PhotoEffect } from '../../lib/types'
 import { formatShort } from '../../paper/dates'
 import { Icon } from '../../ui/Icon'
-import { darkLeopard, gemRing, leopardTexture, rhinestoneFrame } from '../../ui/leopard'
+import { gemRing, grainTexture, rhinestoneFrame } from '../../ui/leopard'
 import { PressNote } from '../../ui/PressNote'
 import { Section } from '../Section'
-import { BURST, shutterBurst } from './paparazzi'
+import { digicamStamp, EFFECTS } from './effects'
+import { BURST, prepareShutter, shutterBurst } from './paparazzi'
 import './RedCarpet.css'
 
 type Like = { photo_id: string; user_id: string }
@@ -17,17 +18,19 @@ type Like = { photo_id: string; user_id: string }
 /** Alfombra roja: fotos tomadas en el momento, con flash, que caen como polaroids. */
 export default function RedCarpet() {
   const { session, me, isMe, nameOf } = useCouple()
-  const { load } = useLive<Photo[]>('photos', () => supabase.from('photos').select('id, author_id, storage_path, caption, created_at').order('created_at', { ascending: false }))
+  const { load } = useLive<Photo[]>('photos', () => supabase.from('photos').select('id, author_id, storage_path, caption, effect, created_at').order('created_at', { ascending: false }))
   const { load: likesLoad } = useLive<Like[]>('photo_likes', () => supabase.from('photo_likes').select('photo_id, user_id'))
-  const [texture, setTexture] = useState<string>()
+  const [grain, setGrain] = useState<string>()
   const [developing, setDeveloping] = useState<string | null>(null)
   const [viewing, setViewing] = useState<Photo | null>(null)
 
   useEffect(() => {
-    setTexture(leopardTexture(darkLeopard))
+    setGrain(grainTexture())
   }, [])
 
-  const photos = load.state === 'ready' ? load.data : []
+  // Efecto elegido en el carrete: se ve al instante en la polaroid y en el carrete, hasta que llega la fila guardada
+  const [chosen, setChosen] = useState<Record<string, PhotoEffect>>({})
+  const photos = (load.state === 'ready' ? load.data : []).map((p) => (p.id in chosen ? { ...p, effect: chosen[p.id] } : p))
   const likes = likesLoad.state === 'ready' ? likesLoad.data : []
 
   // Me encanta: optimista, un toque a la vez por foto
@@ -47,8 +50,8 @@ export default function RedCarpet() {
 
   return (
     <Section id="alfombra" className="red-carpet">
-      <div className="carpet-ground" style={texture ? ({ '--leopard': `url(${texture})` } as CSSProperties) : undefined} aria-hidden="true" />
-      <div className="section-body">
+      <div className="carpet-ground" aria-hidden="true" />
+      <div className="section-body" style={grain ? ({ '--grain': `url(${grain})` } as CSSProperties) : undefined}>
         <Camera
           userId={session.user.id}
           sounds={me?.sounds_enabled ?? true}
@@ -89,7 +92,16 @@ export default function RedCarpet() {
         </section>
       </div>
 
-      {viewing && <PhotoDialog photo={viewing} mine={isMe(viewing.author_id)} by={nameOf(viewing.author_id)} onClose={() => setViewing(null)} />}
+      {viewing && (
+        <PhotoDialog
+          photo={photos.find((p) => p.id === viewing.id) ?? viewing}
+          mine={isMe(viewing.author_id)}
+          by={nameOf(viewing.author_id)}
+          onEffect={(effect) => setChosen((c) => ({ ...c, [viewing.id]: effect }))}
+          onEffectFailed={(previous) => setChosen((c) => ({ ...c, [viewing.id]: previous }))}
+          onClose={() => setViewing(null)}
+        />
+      )}
     </Section>
   )
 }
@@ -98,12 +110,26 @@ function Polaroid({ photo, developing, by, onOpen }: { photo: Photo; developing:
   const url = useSignedUrl('photos', photo.storage_path)
   return (
     <button type="button" className={`polaroid${developing ? ' is-developing' : ''}`} onClick={onOpen}>
-      <span className="polaroid-frame">{url ? <img src={url} alt={photo.caption || `Foto de ${by}`} loading="lazy" decoding="async" /> : null}</span>
+      <PhotoFrame url={url} alt={photo.caption || `Foto de ${by}`} effect={photo.effect} date={photo.created_at} lazy />
       <span className="polaroid-caption">{photo.caption || (developing ? 'revelando…' : 'escribe algo')}</span>
       <span className="polaroid-meta">
         {by} · {formatShort(photo.created_at)}
       </span>
     </button>
+  )
+}
+
+/** La foto con su efecto de revelado (filtro + capa .fx-<id>); Digicam lleva la fecha estampada. */
+function PhotoFrame({ url, alt, effect, date, lazy }: { url: string | null; alt: string; effect: PhotoEffect; date: string; lazy?: boolean }) {
+  return (
+    <span className={`polaroid-frame fx-${effect}`}>
+      {url ? <img src={url} alt={alt} loading={lazy ? 'lazy' : undefined} decoding="async" /> : null}
+      {effect === 'digicam' && (
+        <span className="fx-stamp" aria-hidden="true">
+          {digicamStamp(date)}
+        </span>
+      )}
+    </span>
   )
 }
 
@@ -142,6 +168,8 @@ function Camera({ userId, sounds, onShot }: { userId: string; sounds: boolean; o
   }, [])
 
   async function start(mode = facing) {
+    // El toque que enciende la cámara también desbloquea el audio en iOS y precarga el sonido de la prensa
+    if (sounds) prepareShutter()
     setState('starting')
     stop()
     try {
@@ -276,13 +304,40 @@ function Camera({ userId, sounds, onShot }: { userId: string; sounds: boolean; o
   )
 }
 
-function PhotoDialog({ photo, mine, by, onClose }: { photo: Photo; mine: boolean; by: string; onClose: () => void }) {
+function PhotoDialog({
+  photo,
+  mine,
+  by,
+  onEffect,
+  onEffectFailed,
+  onClose,
+}: {
+  photo: Photo
+  mine: boolean
+  by: string
+  onEffect: (effect: PhotoEffect) => void
+  onEffectFailed: (previous: PhotoEffect) => void
+  onClose: () => void
+}) {
   const ref = useRef<HTMLDialogElement>(null)
   const url = useSignedUrl('photos', photo.storage_path)
   const [caption, setCaption] = useState(photo.caption)
   useEffect(() => {
     ref.current?.showModal()
   }, [])
+
+  const [effectError, setEffectError] = useState<string | null>(null)
+  async function chooseEffect(effect: PhotoEffect) {
+    if (effect === photo.effect) return
+    const previous = photo.effect
+    onEffect(effect)
+    setEffectError(null)
+    const { error } = await supabase.from('photos').update({ effect }).eq('id', photo.id)
+    if (error) {
+      onEffectFailed(previous)
+      setEffectError('No se guardó el efecto. Intenta otra vez.')
+    }
+  }
 
   async function saveCaption() {
     if (caption !== photo.caption) await supabase.from('photos').update({ caption: caption.trim() }).eq('id', photo.id)
@@ -291,7 +346,7 @@ function PhotoDialog({ photo, mine, by, onClose }: { photo: Photo; mine: boolean
   return (
     <dialog ref={ref} className="photo-dialog" onClose={onClose} aria-label={`Foto de ${by}`}>
       <div className="photo-dialog-polaroid">
-        {url && <img src={url} alt={photo.caption || `Foto de ${by}`} />}
+        <PhotoFrame url={url} alt={photo.caption || `Foto de ${by}`} effect={photo.effect} date={photo.created_at} />
         {mine ? (
           <input
             className="photo-dialog-caption"
@@ -309,6 +364,21 @@ function PhotoDialog({ photo, mine, by, onClose }: { photo: Photo; mine: boolean
           {by} · {formatShort(photo.created_at)}
         </p>
       </div>
+      {mine && (
+        <div className="reel" role="group" aria-label="Efecto de la foto">
+          {EFFECTS.map((fx) => (
+            <button key={fx.id} type="button" className="reel-frame" aria-pressed={photo.effect === fx.id} onClick={() => chooseEffect(fx.id)}>
+              <PhotoFrame url={url} alt="" effect={fx.id} date={photo.created_at} />
+              <span className="reel-name">{fx.name}</span>
+            </button>
+          ))}
+        </div>
+      )}
+      {effectError && (
+        <p className="section-error reel-error" role="alert">
+          {effectError}
+        </p>
+      )}
       <button
         type="button"
         className="photo-dialog-close"
