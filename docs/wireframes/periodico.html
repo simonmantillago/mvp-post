@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wireframe Periódico</title>
+<style>
+  :root {
+    --ink: #1c1c1c;
+    --mute: #6b6b6b;
+    --line: #9a9a9a;
+    --fill: #e4e4e4;
+    --fill-2: #cfcfcf;
+    --paper: #f6f5f1;
+    --bg: #dcdad4;
+    --note: #b0472f;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--ink); font: 13px/1.4 Georgia, "Times New Roman", serif; padding: 32px 16px 64px; }
+  h1.doc { font-size: 28px; text-align: center; letter-spacing: .02em; }
+  p.lede { max-width: 760px; margin: 8px auto 32px; text-align: center; color: var(--mute); font-size: 14px; }
+  .flow { display: flex; flex-wrap: wrap; gap: 40px 28px; justify-content: center; }
+  .screen { width: 300px; }
+  .label { font: 700 11px/1.2 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
+  .label span { color: var(--note); }
+  .phone { height: 620px; border: 2px solid var(--ink); border-radius: 28px; background: var(--paper); overflow: hidden; position: relative; display: flex; flex-direction: column; }
+  .notes { margin-top: 10px; font: 12px/1.45 system-ui, sans-serif; color: var(--mute); }
+  .notes li { margin-left: 16px; margin-bottom: 3px; }
+  .notes b { color: var(--ink); }
+
+  /* piezas de wireframe */
+  .pad { padding: 14px; }
+  .box { border: 1.5px dashed var(--line); background: var(--fill); display: flex; align-items: center; justify-content: center; text-align: center; color: var(--mute); font: 11px/1.3 system-ui, sans-serif; padding: 6px; }
+  .solid { border-style: solid; }
+  .rule { border-top: 1px solid var(--ink); margin: 6px 0; }
+  .rule2 { border-top: 3px double var(--ink); margin: 6px 0; }
+  .mast { text-align: center; font: 700 30px/1 "Old English Text MT", Georgia, serif; letter-spacing: .01em; }
+  .dateline { display: flex; justify-content: space-between; font: 9px/1 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .06em; color: var(--mute); }
+  .kicker { font: 700 9px/1 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .12em; color: var(--note); }
+  .hed { font-size: 20px; line-height: 1.1; font-weight: 700; }
+  .hed.sm { font-size: 14px; }
+  .text { height: 6px; background: var(--fill-2); margin: 5px 0; border-radius: 2px; }
+  .text.s { width: 70%; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .teaser { border-top: 1px solid var(--ink); padding-top: 6px; }
+  .tap { position: absolute; font: 700 10px/1 system-ui, sans-serif; background: var(--note); color: #fff; border-radius: 10px; padding: 3px 7px; }
+  .corner { position: absolute; right: 0; top: 0; width: 46px; height: 46px; background: linear-gradient(225deg, var(--bg) 50%, var(--fill-2) 50%); }
+  .corner + .cornerlbl { position: absolute; right: 4px; top: 48px; font: 9px system-ui, sans-serif; color: var(--mute); }
+  .btn { border: 1.5px solid var(--ink); border-radius: 4px; padding: 6px; text-align: center; font: 700 11px system-ui, sans-serif; }
+  .dark { background: #2a2a2a; color: #eee; }
+  .dark .box { background: #3a3a3a; border-color: #777; color: #bbb; }
+  .dark .text { background: #555; }
+  .dark .kicker { color: #e99; }
+  .grow { flex: 1; }
+  .row { display: flex; gap: 8px; align-items: center; }
+  .chip { border: 1px solid var(--line); border-radius: 12px; padding: 3px 8px; font: 10px system-ui, sans-serif; }
+  .tagnote { position: absolute; font: italic 10px/1.2 system-ui, sans-serif; color: var(--note); }
+  .refs { display: flex; gap: 8px; margin-top: 10px; }
+  .refs figure { flex: 1; }
+  .refs img { width: 100%; border: 1.5px solid var(--ink); display: block; }
+  .refs figcaption { font: 700 10px/1.3 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .06em; margin-top: 3px; }
+  .pin { position: absolute; font-size: 11px; background: var(--paper); border: 1px solid var(--ink); border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; }
+  .handle { position: absolute; width: 10px; height: 10px; background: var(--paper); border: 2px solid var(--note); }
+  .iosmenu { position: absolute; display: flex; background: rgba(44,44,46,.94); border-radius: 9px; box-shadow: 0 6px 20px rgba(0,0,0,.3); font: 500 11px/1 -apple-system, "SF Pro Text", system-ui, sans-serif; color: #fff; white-space: nowrap; }
+  .iosmenu::before { content: ""; position: absolute; top: -6px; left: 104px; border: 6px solid transparent; border-top: 0; border-bottom-color: rgba(44,44,46,.94); }
+  .iosmenu span { padding: 9px 7px; border-left: 1px solid rgba(255,255,255,.18); }
+  .iosmenu span:first-child { border-left: 0; }
+  .iosmenu .del { color: #ff6961; }
+  .selbar { position: absolute; font: 700 10px/1 system-ui, sans-serif; background: var(--ink); color: var(--paper); border-radius: 12px; padding: 6px 8px; white-space: nowrap; }
+  .polaroid { flex: 1; background: #f4f1ea; padding: 4px 4px 6px; color: var(--ink); }
+  .polaroid .box { height: 64px; background: #ccc; color: #555; }
+  .polaroid .cap { font: italic 11px/1.2 "Segoe Print", "Comic Sans MS", cursive; margin-top: 4px; }
+  .polaroid .meta { font: 9px system-ui, sans-serif; color: var(--mute); margin-top: 2px; }
+  .stack { margin-top: 8px; display: flex; flex-direction: column; }
+  .sleeve { display: flex; gap: 8px; align-items: center; background: #4a453e; border: 1px solid #6d665c; border-radius: 2px; padding: 6px; margin-top: -4px; box-shadow: 0 -2px 4px rgba(0,0,0,.35); color: #eee; font: 11px/1.25 system-ui, sans-serif; }
+  .sleeve span { color: #bbb; }
+  .sleeve.on { border-color: #e9c46a; transform: translateX(8px); }
+  .sleeve .art { width: 34px; height: 34px; background: #777; flex: none; }
+  .who { font: 700 9px system-ui, sans-serif; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; flex: none; }
+  .who.her { background: #c76b8a; color: #fff; }
+  .who.him { background: #b8963e; color: #1c1c1c; }
+  .legend { max-width: 980px; margin: 48px auto 0; background: var(--paper); border: 1.5px solid var(--ink); padding: 20px 24px; font: 13px/1.55 system-ui, sans-serif; }
+  .legend h2 { font: 700 18px Georgia, serif; margin-bottom: 8px; }
+  .legend table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+  .legend td, .legend th { border-top: 1px solid var(--line); padding: 6px 8px; text-align: left; vertical-align: top; }
+  .legend th { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; color: var(--mute); }
+</style>
+</head>
+<body>
+
+<h1 class="doc">The MVP Post · wireframe de dirección</h1>
+<p class="lede">La app deja de ser un sistema operativo y se vuelve un periódico neoyorquino de 2003. La portada es la columna de él para ella; cada sección del periódico es una puerta: al tocarla se pasa la página y cambia toda la estética. Gris = estructura; rojo = interacción.</p>
+
+<div class="flow">
+
+  <!-- 0 · Llegada -->
+  <div class="screen">
+    <div class="label">0 · Llegada <span>(carga)</span></div>
+    <div class="phone">
+      <div class="pad grow" style="display:flex;flex-direction:column;justify-content:center;gap:14px;">
+        <div class="box solid" style="height:230px;transform:rotate(-4deg);">Periódico doblado con faja/cinta<br>"Edición especial"<br>cae y aterriza en la puerta (animación)</div>
+        <div class="box" style="height:34px;">Barra de carga = rotativa imprimiendo (tira de papel)</div>
+      </div>
+      <div class="pad" style="text-align:center;font:9px system-ui;color:var(--mute);">SMG Development®</div>
+    </div>
+    <ul class="notes">
+      <li>Reemplaza el boot de XP. Sonido de papel + tipografía al imprimir.</li>
+      <li>Reduced motion: aparece ya desdoblado.</li>
+    </ul>
+  </div>
+
+  <!-- 1 · Suscriptora -->
+  <div class="screen">
+    <div class="label">1 · ¿Quién lee hoy? <span>(login)</span></div>
+    <div class="phone">
+      <div class="pad">
+        <div class="mast">The MVP Post</div>
+        <div class="rule2"></div>
+        <div class="kicker" style="text-align:center;">Solo para suscriptores</div>
+      </div>
+      <div class="pad grow" style="display:flex;flex-direction:column;gap:14px;justify-content:center;">
+        <div class="row"><div class="box solid" style="width:84px;height:100px;">Foto ella<br>(credencial de prensa)</div><div class="grow"><div class="hed sm">María Victoria</div><div class="kicker">Lectora de honor</div><div class="box" style="height:28px;margin-top:8px;">Contraseña</div></div></div>
+        <div class="row" style="opacity:.6"><div class="box solid" style="width:84px;height:100px;">Foto él</div><div class="grow"><div class="hed sm">Simón</div><div class="kicker">El columnista</div></div></div>
+      </div>
+      <div class="tap" style="left:110px;top:212px;">toca → contraseña</div>
+    </div>
+    <ul class="notes">
+      <li>Dos "credenciales de prensa" con foto. Tocar → se voltea y pide contraseña.</li>
+      <li>Mismo Supabase email+contraseña.</li>
+    </ul>
+  </div>
+
+  <!-- 2 · Portada -->
+  <div class="screen">
+    <div class="label">2 · Portada <span>(scroll)</span></div>
+    <div class="phone">
+      <div class="pad">
+        <div class="dateline"><span>Sáb. 24 oct. 2026</span><span>Edición n.º 1</span><span>$0.00</span></div>
+        <div class="rule"></div>
+        <div class="mast">The MVP Post</div>
+        <div class="rule2"></div>
+        <div class="kicker">La columna</div>
+        <div class="hed">"¿Y si el amor fuera una suscripción de por vida?"</div>
+        <div class="row" style="margin:8px 0;align-items:flex-start;">
+          <div class="box solid" style="width:110px;height:130px;flex:none;">Foto de ella en la columna (como la de Carrie)</div>
+          <div class="grow"><div class="text"></div><div class="text"></div><div class="text"></div><div class="text"></div><div class="text s"></div><div class="btn" style="margin-top:8px;">Leer la columna →</div></div>
+        </div>
+        <div class="kicker" style="margin-top:6px;">En esta edición</div>
+        <div class="cols" style="margin-top:6px;">
+          <div class="teaser"><div class="box" style="height:52px;">collage</div><div class="hed sm">Estilo · Y2K</div><div class="kicker" style="color:var(--mute)">pág. 2</div></div>
+          <div class="teaser"><div class="box" style="height:52px;">flash</div><div class="hed sm">Alfombra roja</div><div class="kicker" style="color:var(--mute)">pág. 3</div></div>
+          <div class="teaser"><div class="box" style="height:52px;">vinilo</div><div class="hed sm">Los vinilos de Big</div><div class="kicker" style="color:var(--mute)">pág. 4</div></div>
+          <div class="teaser"><div class="box" style="height:52px;">VHS</div><div class="hed sm">Cartelera</div><div class="kicker" style="color:var(--mute)">pág. 5</div></div>
+        </div>
+      </div>
+      <div class="tap" style="left:150px;top:392px;">toca → pasa la página</div>
+    </div>
+    <ul class="notes">
+      <li><b>El centro de todo.</b> Fecha real; cada vez que él publica una columna nueva, sale una edición nueva.</li>
+      <li>Abajo (scroll): "Cartas" (chat), "Ediciones anteriores", clima del día en clave de amor, pie SMG Development®.</li>
+    </ul>
+  </div>
+
+  <!-- 3 · La columna -->
+  <div class="screen">
+    <div class="label">3 · La columna <span>(lectura)</span></div>
+    <div class="phone">
+      <div class="corner"></div><div class="cornerlbl">Portada</div>
+      <div class="pad">
+        <div class="kicker">La columna · por Simón</div>
+        <div class="hed">"¿Y si el amor fuera una suscripción de por vida?"</div>
+        <div class="rule"></div>
+        <div class="row" style="align-items:flex-start;margin-top:6px;"><div style="font:700 44px/0.9 Georgia;">E</div><div class="grow"><div class="text"></div><div class="text"></div><div class="text s"></div></div></div>
+        <div class="text"></div><div class="text"></div><div class="text"></div>
+        <div style="border-left:3px solid var(--ink);padding:6px 10px;margin:10px 0;font-style:italic;font-size:15px;">Cita destacada: la frase "no pude evitar preguntarme…" escrita a máquina en vivo</div>
+        <div class="text"></div><div class="text"></div><div class="text s"></div>
+        <div class="box" style="height:90px;margin-top:8px;">Foto de los dos con pie de foto</div>
+        <div class="rule" style="margin-top:10px;"></div>
+        <div class="kicker">Sigue en pág. 4 →  Los vinilos de Big</div>
+      </div>
+    </div>
+    <ul class="notes">
+      <li>La pregunta del título se teclea letra a letra (guiño a Carrie en su laptop).</li>
+      <li>Al final enlaza con una sección: la columna "dirige" la lectura.</li>
+      <li>Esquina doblada = volver a portada, presente en todas las secciones.</li>
+    </ul>
+  </div>
+
+  <!-- 4 · Y2K -->
+  <div class="screen">
+    <div class="label">4 · Estilo · Y2K <span>(collage editable)</span></div>
+    <div class="phone">
+      <div class="corner"></div><div class="cornerlbl">Portada</div>
+      <div class="pad" style="padding-bottom:6px;">
+        <div class="kicker">pág. 2 · Estilo</div>
+      </div>
+      <div class="grow" style="position:relative;margin:0 8px;">
+        <div class="box" style="position:absolute;inset:0;border-style:dotted;align-items:flex-start;padding-top:4px;">lienzo libre · fondo leopardo + brillo</div>
+        <div class="box solid" style="position:absolute;left:8px;right:8px;top:22px;height:64px;font:900 32px/1 system-ui;letter-spacing:.04em;color:var(--ink);">XOXO</div>
+        <div class="pin" style="left:12px;top:26px;">🔒</div>
+        <div class="box solid" style="position:absolute;left:4px;top:100px;width:108px;height:150px;transform:rotate(-3deg);">foto sin fondo<br>(silueta)</div>
+        <div class="pin" style="left:90px;top:104px;">🔒</div>
+        <div class="box solid" style="position:absolute;right:4px;top:96px;width:84px;height:120px;transform:rotate(2deg);">recorte pegado</div>
+        <div class="pin" style="right:8px;top:100px;">🔒</div>
+        <!-- elemento seleccionado -->
+        <div style="position:absolute;left:96px;top:196px;width:120px;height:120px;transform:rotate(5deg);border:2px solid var(--note);">
+          <div class="box solid" style="width:100%;height:100%;">foto recién subida<br>(seleccionada)</div>
+          <div class="handle" style="left:-6px;top:-6px;"></div><div class="handle" style="right:-6px;top:-6px;"></div><div class="handle" style="left:-6px;bottom:-6px;"></div><div class="handle" style="right:-6px;bottom:-6px;"></div>
+          <div class="handle" style="left:54px;top:-22px;border-radius:50%;"></div>
+        </div>
+        <div class="iosmenu" style="left:36px;top:334px;"><span>Al frente</span><span>Fijar</span><span>Duplicar</span><span class="del">Eliminar</span><span>▸</span></div>
+        <div class="box" style="position:absolute;left:10px;top:270px;width:56px;height:56px;border-radius:50%;">sticker</div>
+        <div class="pin" style="left:50px;top:272px;">🔒</div>
+        <div class="box solid" style="position:absolute;left:8px;top:356px;width:66px;height:52px;font:900 11px/1 system-ui;color:var(--ink);">YOLO<br>YOLO</div>
+        <div class="box solid" style="position:absolute;right:8px;top:362px;width:120px;height:52px;transform:rotate(-2deg);">foto sin fondo</div>
+        <div class="tap" style="left:120px;top:176px;">arrastra · pellizca · gira</div>
+      </div>
+      <div class="pad row" style="gap:5px;"><div class="btn grow">+ Foto</div><div class="btn grow">★ Sticker</div><div class="btn grow">✂ Recorte</div><div class="btn">Aa</div></div>
+    </div>
+    <ul class="notes">
+      <li><b>Para fotos de la galería.</b> Al subir una, se le quita el fondo automáticamente (con opción de dejarla con fondo).</li>
+      <li><b>Agregar:</b> foto, sticker de la hoja de stickers, recorte (pegar una imagen copiada o subir un PNG) y texto pop.</li>
+      <li><b>Editar:</b> arrastrar mueve; pellizcar con dos dedos escala y gira (también con las agarraderas). Tocar una pieza abre la <b>burbuja tipo iOS</b> (como la de Copiar/Pegar): Al frente · Fijar · Duplicar · Eliminar · ▸ (Atrás, Quitar fondo). La flecha apunta a la pieza; si no cabe abajo, sale arriba.</li>
+      <li>En una pieza fijada la burbuja solo muestra <b>Desfijar</b>.</li>
+      <li><b>Fijar:</b> lo bloquea en su lugar (candado pequeño) y ya no se mueve por accidente. Tocar el candado lo desbloquea.</li>
+      <li>El lienzo crece hacia abajo; ambos ven el mismo collage (posiciones guardadas).</li>
+    </ul>
+    <div class="refs"><figure><img src="../inspiration/periodico/y2k-swag-collage.webp" alt="Referencia collage Y2K"><figcaption>Referencia Y2K</figcaption></figure><figure><img src="../inspiration/periodico/stickers.webp" alt="Hoja de stickers"><figcaption>Stickers (compartidos)</figcaption></figure></div>
+  </div>
+
+  <!-- 5 · Glam -->
+  <div class="screen">
+    <div class="label">5 · Sociedad · Alfombra roja <span>(cámara)</span></div>
+    <div class="phone dark">
+      <div class="corner"></div><div class="cornerlbl" style="color:#bbb">Portada</div>
+      <div class="pad" style="padding-bottom:6px;">
+        <div class="kicker">pág. 3 · Sociedad</div>
+      </div>
+      <div style="position:relative;margin:0 8px;height:330px;flex:none;">
+        <div class="box" style="position:absolute;inset:0;border-style:dotted;align-items:flex-start;padding-top:4px;">fondo: leopardo oscuro + recortes dorados</div>
+        <div class="box solid" style="position:absolute;left:40px;right:40px;top:20px;height:40px;font:italic 700 20px/1 Georgia;color:#eee;">Alfombra roja</div>
+        <div class="box" style="position:absolute;left:4px;top:74px;width:66px;height:170px;border-radius:50% 0 0 50%;">ala</div>
+        <div class="box" style="position:absolute;right:4px;top:74px;width:66px;height:170px;border-radius:0 50% 50% 0;">ala</div>
+        <div class="box solid" style="position:absolute;left:74px;right:74px;top:70px;height:180px;">visor de cámara<br>(en vivo)<br><br>⟲ frontal/trasera</div>
+        <div class="box solid" style="position:absolute;left:112px;top:262px;width:58px;height:58px;border-radius:50%;color:#eee;">FLASH</div>
+        <div class="box" style="position:absolute;left:8px;top:270px;width:52px;height:46px;transform:rotate(-8deg);">labios</div>
+        <div class="box" style="position:absolute;right:10px;top:268px;width:48px;height:48px;border-radius:50%;">bola 8</div>
+      </div>
+      <div class="pad" style="padding-bottom:0;"><div class="kicker">Recuerdos</div></div>
+      <div class="pad row" style="gap:8px;align-items:flex-start;padding-top:6px;">
+        <div class="polaroid" style="transform:rotate(-3deg);"><div class="box">foto</div><div class="cap">"nuestra 1.ª cena"</div><div class="meta">ella · 12 oct</div></div>
+        <div class="polaroid" style="transform:rotate(2deg);"><div class="box">foto</div><div class="cap">"ese vestido…"</div><div class="meta">él · 18 oct ♥</div></div>
+        <div class="polaroid" style="transform:rotate(-1deg);"><div class="box">foto</div><div class="cap">+ escribe algo</div><div class="meta">ahora</div></div>
+      </div>
+    </div>
+    <ul class="notes">
+      <li><b>Para fotos tomadas en el momento</b> desde la PWA (no de la galería).</li>
+      <li>Al disparar: flash blanco con destellos de diamante → la foto sale revelándose como polaroid y cae arriba de la lista.</li>
+      <li>Cada polaroid lleva un texto escrito a mano, quién la tomó, fecha y ♥. Tocar = verla en grande y editar el texto.</li>
+      <li>Los recuerdos siguen hacia abajo en scroll (grilla de polaroids de 3 por fila).</li>
+    </ul>
+    <div class="refs"><figure><img src="../inspiration/periodico/glam-dark-leopard.webp" alt="Referencia dark leopard"><figcaption>Referencia Alfombra roja</figcaption></figure></div>
+  </div>
+
+  <!-- 6 · Los vinilos de Big -->
+  <div class="screen">
+    <div class="label">6 · Los vinilos de Big <span>(música)</span></div>
+    <div class="phone dark" style="background:#33302b;">
+      <div class="corner"></div><div class="cornerlbl" style="color:#bbb">Portada</div>
+      <div class="pad" style="padding-bottom:6px;">
+        <div class="kicker">pág. 4 · Cultura</div>
+        <div class="hed" style="font-style:italic;">Los vinilos de Big</div>
+      </div>
+      <div class="pad" style="padding-top:0;">
+        <div class="box solid" style="height:150px;position:relative;">
+          <div class="box" style="position:absolute;left:14px;top:10px;width:128px;height:128px;border-radius:50%;">vinilo girando<br>(portada de la canción)</div>
+          <div class="box" style="position:absolute;right:14px;top:16px;width:10px;height:96px;transform:rotate(18deg);">brazo</div>
+        </div>
+        <div style="margin-top:6px;color:#eee;"><b>Canción · Artista</b></div>
+        <div style="font-style:italic;color:#ddd;font-size:12px;">"Esta me recuerda a ti…" — dedicada por <b>Simón</b></div>
+        <div class="box" style="height:28px;margin-top:6px;">▶ ━━━━○──── reproductor discreto</div>
+      </div>
+      <div class="pad" style="padding-top:2px;">
+        <div class="row" style="justify-content:space-between;"><div class="kicker">La pila de discos</div><div class="row" style="gap:4px;"><span class="chip" style="color:#ddd;border-color:#777;">Todas</span><span class="chip" style="color:#ddd;border-color:#777;">De ella</span><span class="chip" style="color:#ddd;border-color:#777;">De él</span></div></div>
+        <div class="stack">
+          <div class="sleeve on"><div class="art"></div><div class="grow"><b>Canción sonando</b><br><span>Artista</span></div><div class="who her">ELLA</div></div>
+          <div class="sleeve"><div class="art"></div><div class="grow"><b>Canción</b><br><span>Artista</span></div><div class="who him">ÉL</div></div>
+          <div class="sleeve"><div class="art"></div><div class="grow"><b>Canción</b><br><span>Artista</span></div><div class="who her">ELLA</div></div>
+          <div class="sleeve"><div class="art"></div><div class="grow"><b>Canción</b><br><span>Artista</span></div><div class="who him">ÉL</div></div>
+        </div>
+      </div>
+      <div class="pad" style="margin-top:auto;padding-top:0;"><div class="btn" style="border-color:#bbb;">+ Dedicar un vinilo</div></div>
+    </div>
+    <ul class="notes">
+      <li><b>Lista, no estante:</b> cada canción es la funda (cajita) de un vinilo, apiladas una encima de otra con el borde de cartón visible.</li>
+      <li>Cada funda muestra portada, título, artista y <b>quién la dedicó</b> con una marca propia (p. ej. sello de lacre rosa = ella, sello dorado = él) + filtro De ella / De él.</li>
+      <li>Tocar una funda: el disco sale de la caja y cae en el tocadiscos de arriba, con su dedicatoria.</li>
+    </ul>
+  </div>
+
+  <!-- 7 · Cartelera -->
+  <div class="screen">
+    <div class="label">7 · Cartelera <span>(videoclub)</span></div>
+    <div class="phone">
+      <div class="corner"></div><div class="cornerlbl">Portada</div>
+      <div class="pad">
+        <div class="kicker">pág. 5 · Cartelera</div>
+        <div class="hed">Esta noche elige: María Victoria</div>
+      </div>
+      <div class="pad" style="padding-top:0;">
+        <div class="kicker" style="color:var(--mute)">Estantería · por ver</div>
+        <div class="row" style="margin-top:6px;gap:5px;">
+          <div class="box solid" style="width:44px;height:120px;">VHS</div><div class="box solid" style="width:44px;height:120px;">VHS</div><div class="box solid" style="width:44px;height:120px;">VHS</div><div class="box solid" style="width:44px;height:120px;">VHS</div><div class="box solid" style="width:44px;height:120px;">VHS</div>
+        </div>
+        <div class="row" style="margin-top:10px;"><span class="chip">Por ver</span><span class="chip">Viendo</span><span class="chip">Vistas</span></div>
+        <div class="rule" style="margin-top:10px;"></div>
+        <div class="kicker">Crítica de la semana</div>
+        <div class="row" style="margin-top:6px;align-items:flex-start;"><div class="box" style="width:60px;height:86px;">póster</div><div class="grow"><div class="hed sm">Título</div><div>★★★★☆ ella · ★★★☆☆ él</div><div class="text"></div><div class="text s"></div></div></div>
+      </div>
+      <div class="pad" style="margin-top:auto;"><div class="btn">+ Agregar a la estantería</div></div>
+    </div>
+    <ul class="notes">
+      <li>Turnos para elegir, estados, ratings de ambos (TMDB opcional).</li>
+      <li>Estética: videoclub con estantería de VHS + página de cartelera.</li>
+    </ul>
+  </div>
+
+  <!-- 8 · Cartas -->
+  <div class="screen">
+    <div class="label">8 · Cartas al editor <span>(chat)</span></div>
+    <div class="phone">
+      <div class="corner"></div><div class="cornerlbl">Portada</div>
+      <div class="pad">
+        <div class="kicker">pág. 6 · Correo</div>
+        <div class="hed">Cartas al editor</div>
+      </div>
+      <div class="pad grow" style="padding-top:0;display:flex;flex-direction:column;gap:8px;">
+        <div class="box solid" style="align-self:flex-start;width:70%;height:46px;justify-content:flex-start;">"Querido columnista…"</div>
+        <div class="box solid" style="align-self:flex-end;width:62%;height:40px;justify-content:flex-start;">respuesta</div>
+        <div class="box" style="height:56px;background:var(--fill-2);">ZUMBIDO = titular "¡EXTRA! ¡EXTRA!" que sacude la pantalla</div>
+        <div class="box solid" style="align-self:flex-start;width:55%;height:40px;justify-content:flex-start;">mensaje</div>
+      </div>
+      <div class="pad row"><div class="box grow" style="height:32px;">Escribe tu carta…</div><div class="btn">¡Extra!</div></div>
+    </div>
+    <ul class="notes">
+      <li>MVP Messenger, ahora como correspondencia de papel (Realtime).</li>
+      <li>El zumbido es un titular de edición extraordinaria + sonido.</li>
+    </ul>
+  </div>
+
+</div>
+
+<div class="legend">
+  <h2>Cómo se mueve ella por el periódico</h2>
+  <p>Portada → toca un titular → <b>transición de pasar la página</b> (doblez de papel) → la sección ocupa toda la pantalla con su propia estética. La <b>esquina doblada</b> arriba a la derecha siempre vuelve a la portada. La portada en sí conserva la estética de papel de periódico (blanco hueso, tinta negra, un acento rosa) y es lo único constante; cada sección rompe con ella.</p>
+  <table>
+    <tr><th>Sección del periódico</th><th>Módulo anterior</th><th>Estética propia</th></tr>
+    <tr><td>Portada + La columna</td><td>(nuevo) Boot/escritorio</td><td>Papel periódico NY 2003, serif editorial, tinta, toque rosa</td></tr>
+    <tr><td>Estilo · Y2K</td><td>Paparazzi (álbum)</td><td>Collage editable de fotos de la galería sin fondo + stickers + recortes; mover, girar, escalar y fijar con candado</td></tr>
+    <tr><td>Sociedad · Alfombra roja</td><td>Paparazzi (cámara + flash)</td><td>Fotos tomadas en la app que quedan como polaroids con texto. Dark leopard: leopardo, dorado, pedrería, perlas, alas de ángel, flash, collage de recortes</td></tr>
+    <tr><td>Los vinilos de Big</td><td>CD Player</td><td>Penthouse de noche: tocadiscos + lista de fundas de vinilo apiladas, marcadas por quién la dedicó</td></tr>
+    <tr><td>Cartelera</td><td>Blockbuster</td><td>Videoclub: estantería de VHS, neón, tickets</td></tr>
+    <tr><td>Cartas al editor</td><td>MVP Messenger</td><td>Papel de carta, máquina de escribir, edición extra</td></tr>
+    <tr><td>Suscripción (ajustes)</td><td>Panel de control</td><td>Formulario de suscripción del periódico</td></tr>
+  </table>
+</div>
+
+</body>
+</html>

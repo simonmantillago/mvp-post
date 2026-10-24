@@ -32,7 +32,7 @@ create table public.profiles (
   display_name text not null default '',
   nick text not null default '',               -- frase de estado estilo MSN
   avatar_path text,                            -- ruta en bucket "avatars"
-  theme text not null default 'leopardo'
+  theme text not null default 'bliss'
     check (theme in ('bliss', 'manhattan', 'leopardo')),
   sounds_enabled boolean not null default true,
   updated_at timestamptz not null default now()

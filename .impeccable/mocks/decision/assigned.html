@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Pedrería OS</title>
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0}
+  body{width:390px;height:844px;overflow:hidden;font-family:Tahoma,Verdana,sans-serif;color:#1a0a10;
+    background:
+      radial-gradient(120% 60% at 30% 100%, #6fae4a 0 45%, transparent 46%),
+      radial-gradient(140% 55% at 90% 104%, #4f9a3a 0 44%, transparent 45%),
+      linear-gradient(#f7b2d2 0%, #f9c7c2 38%, #ffd9b8 58%, #c9a8e8 100%);}
+  .top{padding:70px 28px 0;text-align:left}
+  .logo{font-family:'Pinyon Script',cursive;font-size:76px;line-height:1;color:#b0206e;
+    text-shadow:0 2px 0 #fff}
+  .gems{display:flex;gap:6px;margin:6px 0 0 8px}
+  .gems i{width:8px;height:8px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff,#ffd6e8 40%,#ff5fa8);box-shadow:0 1px 1px rgba(0,0,0,.3)}
+  .lead{margin-top:18px;font-size:15px;color:#3a1830}
+  .tiles{margin:34px 18px 0;display:grid;gap:18px}
+  .tile{position:relative;display:flex;gap:14px;align-items:center;padding:14px;border-radius:16px;
+    background:linear-gradient(#ffe6f1,#ffb6d6);border:3px solid #fff;
+    box-shadow:0 0 0 2px #c7ccd8,0 6px 16px rgba(91,42,134,.25)}
+  .tile.sel{background:linear-gradient(#ff8cc0,#ff5fa8);}
+  .ph{width:64px;height:64px;border-radius:10px;border:3px solid #fff;background:linear-gradient(135deg,#d8b4e8,#8f6bb8)}
+  .name{font-size:22px;font-weight:bold;color:#3a0a2a}
+  .tile:not(.sel) .name{color:#5b2a86;text-shadow:none}
+  .pw{display:flex;gap:8px;margin-top:8px}
+  .pw span{flex:1;height:30px;border-radius:6px;background:#fff;border:2px solid #5b2a86}
+  .pw b{width:34px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,#7ee07e 45%,#2e8b2e);border:2px solid #fff}
+  .charm{position:absolute;right:22px;top:100%;display:flex;flex-direction:column;align-items:center}
+  .charm::before{content:"";width:2px;height:22px;background:repeating-linear-gradient(#fff 0 3px,#c7ccd8 3px 6px)}
+  .charm em{font-style:normal;font-size:22px;filter:drop-shadow(0 2px 2px rgba(0,0,0,.3))}
+  .charm.b{right:70px}.charm.b::before{height:14px}
+  .bar{position:absolute;left:0;right:0;bottom:0;height:64px;display:flex;justify-content:space-between;align-items:center;padding:0 22px;
+    background:linear-gradient(#ff8cc0,#d9468c);border-top:2px solid #fff;color:#fff;font-size:15px}
+  .off{display:flex;gap:8px;align-items:center}
+  .off i{width:28px;height:28px;border-radius:7px;background:linear-gradient(#ff9a7a,#e0442a);border:2px solid #fff}
+</style></head><body>
+  <div class="top">
+    <div class="logo">MVP OS</div>
+    <div class="gems"><i></i><i></i><i></i><i></i><i></i></div>
+    <p class="lead">Para empezar, toca tu nombre</p>
+  </div>
+  <div class="tiles">
+    <div class="tile sel"><div class="ph"></div><div style="flex:1"><div class="name">María Victoria</div><div class="pw"><span></span><b></b></div></div>
+      <div class="charm"><em>💗</em></div><div class="charm b"><em>🍒</em></div></div>
+    <div class="tile"><div class="ph" style="background:linear-gradient(135deg,#c7ccd8,#7a8296)"></div><div class="name">Simón</div>
+      <div class="charm"><em>⭐</em></div></div>
+  </div>
+  <div class="bar"><div class="off"><i></i>Apagar</div><div>SMG Development®</div></div>
+</body></html>

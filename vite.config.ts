@@ -6,28 +6,31 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      // Service worker propio en src/sw.ts para poder recibir Web Push.
+      strategies: 'injectManifest',
+      srcDir: 'src',
+      filename: 'sw.ts',
       registerType: 'autoUpdate',
-      // Íconos definitivos se producen en la Fase 2 (dirección visual).
+      // Íconos definitivos se producen con la dirección visual del periódico.
       includeAssets: ['icons/apple-touch-icon.png'],
       manifest: {
-        name: 'MVP OS',
-        short_name: 'MVP OS',
-        description: 'El sistema operativo de María Victoria.',
+        name: 'The MVP Post',
+        short_name: 'MVP Post',
+        description: 'El periódico de María Victoria.',
         lang: 'es',
         display: 'standalone',
         orientation: 'portrait',
         start_url: '/',
-        background_color: '#1a0a10',
-        theme_color: '#5c0f24',
+        background_color: '#f4f1ea',
+        theme_color: '#1c1c1c',
         icons: [
           { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' },
           { src: 'icons/icon-512.png', sizes: '512x512', type: 'image/png' },
           { src: 'icons/icon-512-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
         ],
       },
-      workbox: {
+      injectManifest: {
         globPatterns: ['**/*.{js,css,html,png,webp,svg,woff2,mp3}'],
-        navigateFallback: '/index.html',
       },
     }),
   ],

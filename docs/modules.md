@@ -1,68 +1,91 @@
-# Módulos de MVP OS
+# Secciones de The MVP Post
 
-Cada módulo es una "aplicación" del escritorio: ícono en el escritorio, entrada en el menú Inicio y una ventana. En el celular la ventana ocupa la pantalla (con barra de título y botones minimizar/cerrar); en escritorio flota, se arrastra y se apila.
+Wireframe de referencia: [wireframes/periodico.html](wireframes/periodico.html) (abrir con `npm run dev` → `localhost:5173/docs/wireframes/periodico.html` para que carguen las imágenes). Referencias visuales: [inspiration/periodico/](inspiration/periodico/).
 
-Todos los módulos deben cubrir: **vacío** (primer uso, con un texto tierno que invite a crear algo), **cargando**, **error** (en tono del sistema: diálogo tipo "Error" Y2K con salida clara) y **sin conexión** (el shell abre desde caché; los datos dicen que no hay red).
+La app es un periódico neoyorquino de 2003. La **portada** es lo único constante (papel, tinta negra, un acento rosa). Cada sección es una puerta: al tocar su titular se pasa la página (View Transition con doblez de papel) y la sección ocupa toda la pantalla con su propia estética. Una **esquina doblada** arriba a la derecha vuelve siempre a la portada. Cada sección tiene ruta propia para que las notificaciones abran directo ahí.
+
+Todas cubren: **vacío** (texto tierno que invita a crear), **cargando**, **error** y **sin conexión** (la app abre desde caché; los datos avisan que no hay red). Animaciones respetan `prefers-reduced-motion`.
+
+| Ruta | Sección | Antes (MVP OS) | Tablas |
+|---|---|---|---|
+| `/` | Portada + La columna | Boot / Escritorio | `editions`, `activity` |
+| `/y2k` | Estilo · Y2K | Paparazzi (álbum) | `collage_items` |
+| `/alfombra-roja` | Sociedad · Alfombra roja | Paparazzi (cámara) | `photos`, `photo_likes` |
+| `/vinilos` | Los vinilos de Big | CD Player | `songs` |
+| `/cartelera` | Cartelera | Blockbuster | `watch_items`, `watch_ratings` |
+| `/cartas` | Cartas al editor | MVP Messenger | `messages` |
+| `/suscripcion` | Suscripción (ajustes) | Panel de control | `profiles`, `push_subscriptions` |
+
+---
+
+## 0. Llegada + login
+- **Llegada:** el periódico atado con cinta rosa cae en la puerta; la barra de carga es una tira de papel saliendo de la rotativa; abajo "SMG Development®". Saltable con un toque tras la primera vez.
+- **¿Quién lee hoy?:** dos credenciales de prensa con foto ("María Victoria — Lectora de honor", "Simón — El columnista"). Tocar una la voltea y pide contraseña. Nombres y fotos de las credenciales son assets estáticos (antes del login no se puede leer `profiles`).
+- `supabase.auth.signInWithPassword`.
+
+## 1. Portada + La columna
+- Fecha real, "Edición n.º" = `editions.number` de la última publicada, cabecera gótica "The MVP Post".
+- Historia principal: la columna (titular-pregunta, foto, primeras líneas, "Leer la columna →").
+- "En esta edición": un teaser por sección con su propia estética y un sello **"Nuevo"** si hay actividad sin ver (`unseen_by_section()`).
+- Más abajo: Cartas, ediciones anteriores, pie SMG Development®.
+- **La columna** (lectura): el titular se teclea letra a letra, letra capital, cita destacada, foto con pie, y al final "Sigue en pág. N → <sección>" (`continues_to`).
+- **Escribir una edición:** solo quien escribe (él) ve el editor; guarda borrador (`published_at` null) y publica. Publicar = notificación a ella.
+
+## 2. Estilo · Y2K (collage editable)
+- **Para fotos de la galería.** Lienzo libre que crece hacia abajo; ambos ven y editan el mismo collage (Realtime).
+- **Agregar:** `+ Foto` (galería; se le quita el fondo en el teléfono, con opción de dejarlo), `★ Sticker` (catálogo estático en `public/stickers/`), `✂ Recorte` (pegar imagen copiada o subir PNG), `Aa` texto pop.
+- **Editar:** arrastrar mueve; dos dedos escalan y giran; agarraderas en la pieza seleccionada.
+- **Burbuja tipo iOS** al tocar una pieza (como la de Copiar/Pegar): `Al frente · Fijar · Duplicar · Eliminar · ▸` (página 2: `Atrás · Quitar fondo`). Flecha apuntando a la pieza; sale abajo o arriba según el espacio. Es un componente propio: el menú nativo de iOS no admite acciones personalizadas en la web, así que en el lienzo se desactiva el nativo (`-webkit-touch-callout: none; user-select: none`).
+- **Fijar:** la pieza queda con un candado pequeño y no se mueve ni se borra (lo garantiza también la BD). Tocar el candado → burbuja con `Desfijar`.
+- Posiciones relativas al ancho del lienzo (`x`, `width` en 0–1; `y` en anchos) para que se vea igual en ambos teléfonos. Guardar al soltar (no en cada frame).
+- Fondo: leopardo + brillo, letreros de brillo gigantes, cuadros pop. Referencias: `y2k-swag-collage.webp`, `stickers.webp`.
+
+## 3. Sociedad · Alfombra roja (cámara)
+- **Para fotos tomadas en el momento** dentro de la PWA.
+- Visor en vivo con `getUserMedia` (frontal/trasera) enmarcado por alas de ángel sobre el collage dark leopard; si la cámara no abre, fallback a `<input type="file" accept="image/*" capture="environment">`.
+- Disparo: flash blanco de corte duro con destellos de diamante + sonido de obturador (tras gesto) → la foto sale revelándose como **polaroid** y cae arriba de "Recuerdos".
+- Cada polaroid: texto escrito a mano (`caption`), quién la tomó, fecha, ♥ (`photo_likes`). Tocar = verla en grande y editar el texto (solo el autor).
+- Compresión en cliente (máx. ~1600 px, JPEG ~0.82). Referencia: `glam-dark-leopard.webp`.
+
+## 4. Los vinilos de Big (música)
+- Penthouse de noche, classy: nogal, cuero, ámbar, sin brillo.
+- Arriba: tocadiscos con el disco sonando (portada de la canción en la etiqueta), título, artista, dedicatoria escrita a pluma y "dedicada por X", reproductor discreto (embed oficial de Spotify/YouTube).
+- Abajo: **"La pila de discos"**, una lista de fundas de vinilo apiladas; cada una con portada, título, artista y un **sello de lacre** de quién la dedicó (rosa = ella, dorado = él). Filtros Todas / De ella / De él. Tocar una funda la saca y la pone en el tocadiscos.
+- Agregar: pegar link → oEmbed (`open.spotify.com/oembed`, `youtube.com/oembed`) para título y `cover_url` → dedicatoria → guardar.
+
+## 5. Cartelera (videoclub)
+- Estantería de VHS, ticket "Esta noche elige: <nombre>", pestañas Por ver · Viendo · Vistas, crítica con estrellas de ambos.
+- Turno: le toca a quien **no** fue `picked_by` del último item que pasó a "watching" (ver data-model.md). TMDB opcional.
+
+## 6. Cartas al editor (chat)
+- Cartas en papel; las de ella con lacre rosa, las de él en máquina de escribir. Realtime, paginación de 50 hacia atrás, "Visto".
+- **¡Extra!** (antes zumbido): `messages.kind = 'nudge'` → titular "¡EXTRA! ¡EXTRA!" que sacude la pantalla + sonido. En iPhone no hay vibración. Límite: uno cada 10 s.
+
+## 7. Suscripción (ajustes)
+- Formulario de suscripción recortado del periódico: nombre, foto, sonidos, **notificaciones** (activar; silenciar por sección → `profiles.muted_sections`), cerrar sesión.
+- Si la app no está instalada en iPhone, explicar cómo agregarla a la pantalla de inicio (Compartir → "Agregar a inicio"), porque sin eso no hay notificaciones.
 
 ---
 
-## 0. Boot + Login
-- **Boot:** pantalla negra → logo **MVP OS** en script fino → barra de progreso de "bloques" animada (estilo arranque XP) → ~2–3 s, saltable con un toque tras la primera vez.
-- **Bienvenida:** fondo del tema activo; a la izquierda/arriba el logo MVP OS y "Para empezar, haz clic en tu nombre"; las dos tarjetas de usuario con foto. Al tocar una se despliega el campo de contraseña. Al pie: "Apagar" (cierra/recarga) y **SMG Development®**.
-- Sonido de inicio (opcional por usuario; iOS exige gesto antes de reproducir audio → se reproduce al tocar el usuario).
-- Tras login: animación "Bienvenido/a" → escritorio.
-- Datos: `supabase.auth.signInWithPassword`. Las tarjetas de usuario son públicas en la UI pero sin datos de la BD (antes del login no se puede leer `profiles`): nombres y fotos de las tarjetas viven en `src/os/login/users.ts` como assets estáticos.
+## Notificaciones push
+Cada cosa nueva genera una fila en `activity` (triggers) → Edge Function `notify` → Web Push al otro. Detalle en [data-model.md](data-model.md#notificaciones-push).
 
-## 1. Escritorio / Shell
-- Wallpaper del tema, íconos con etiqueta (grilla en celular, columna izquierda en escritorio), barra de tareas inferior: botón **Inicio** (logo MVP), ventanas abiertas, bandeja (sonido, "now playing", notificación de mensajes, reloj).
-- Menú Inicio: avatar + nombre, apps, Panel de control, Cerrar sesión ("Apagar").
-- Notificaciones del sistema estilo globito de la bandeja ("Tienes (1) mensaje nuevo").
-- Window manager (Zustand): `open(appId)`, `close`, `minimize`, `focus`, z-order; en móvil solo una ventana visible a la vez.
+| Evento | Notificación |
+|---|---|
+| Edición publicada | "The MVP Post · nueva edición" — titular |
+| Pieza nueva en el collage | "Estilo · Y2K" — X pegó algo nuevo (máx. 1 cada 10 min) |
+| Foto tomada | "Alfombra roja" — X tomó una foto nueva |
+| ♥ a tu foto | "A X le encantó tu foto" (máx. 1 cada 10 min) |
+| Canción dedicada | "Los vinilos de Big" — X te dedicó "título" |
+| Carta | "Carta de X" — texto |
+| ¡Extra! | "¡EXTRA! ¡EXTRA!" — X te está buscando |
+| Película agregada / elegida / calificada | "Cartelera" — … |
 
-## 2. Paparazzi (Fotos + Flash)
-- Vistas: **Álbum** (grilla de polaroids con fecha digital estilo cámara 2003 — `'03 10 23`) y **Detalle** (foto grande, pie, corazones de ambos, autor).
-- **Tomar foto:** botón grande de cámara → `<input type="file" accept="image/*" capture="environment">` (funciona en iPhone). Al volver: destello blanco de flash + sonido de obturador + ráfaga de "flashes de paparazzi" alrededor; previsualización con marco; pie de foto opcional; subir.
-- Subir desde galería: mismo input sin `capture`, permite varias.
-- Compresión en cliente antes de subir (máx. ~1600 px, JPEG 0.82) para no gastar Storage gratis (1 GB).
-- Datos: `photos`, `photo_likes`, bucket `photos/<uid>/`.
-
-## 3. MVP Messenger
-- Ventana estilo MSN: cabecera con avatar y nick/estado del otro, historial, caja de texto, botones de emoticones y **Zumbido**.
-- **Zumbido:** inserta `messages(kind='nudge')`. El receptor (si tiene la app abierta) ve la ventana temblar + sonido; en Android además `navigator.vibrate`. Límite: un zumbido cada 10 s.
-- Emoticones Y2K propios (no los de MSN): set pequeño de PNG/SVG en `src/apps/messenger/emotes/`.
-- Leído: al abrir la conversación se marca `read_at` en los mensajes del otro; "Visto" bajo el último.
-- Notas: el chat es Realtime (`postgres_changes` sobre `messages`). Paginación de 50 en 50 hacia atrás.
-
-## 4. CD Player (Música)
-- Ventana estilo CD Player / Winamp con skin del tema: disco girando, "Pista 01 · título — artista", controles.
-- Lista de canciones con quién la agregó y su **dedicatoria**.
-- **Agregar:** pegar link de Spotify o YouTube → se detecta plataforma → título/artista (oEmbed: `https://open.spotify.com/oembed?url=` y `https://www.youtube.com/oembed?url=`; si falla, se escriben a mano) → dedicatoria → guardar.
-- Reproducir: embed oficial de Spotify/YouTube dentro de la ventana. "Now playing" en la bandeja.
-- Datos: `songs`.
-
-## 5. Blockbuster (Series y Películas)
-- Ventana estilo videoclub/Windows Media Player con tres pestañas: **Queremos ver** · **Viendo** · **Ya vimos**.
-- Banner de **turno**: "Le toca elegir a ___ 🎬". Botón "Elegir esta" en items de *Queremos ver* → pasa a *Viendo* con `picked_by` = quien elige y el turno pasa al otro.
-- Series en *Viendo*: temporada/episodio con +/−.
-- Al marcar *Ya vimos*: cada uno califica 1–5 (estrellas/corazones) y comentario corto.
-- Pósters: búsqueda opcional en TMDB (`VITE_TMDB_API_KEY`); sin key, se agrega solo con título.
-- Datos: `watch_items`, `watch_ratings`.
-
-## 6. Panel de control
-- Tema: **Bliss Rosa · Manhattan 2003 · Leopardo & Lirios** (vista previa en miniatura, como "Propiedades de pantalla").
-- Mi perfil: nombre, nick/estado, foto (sube a `avatars/<uid>/`).
-- Sonidos on/off. Notificaciones: activar Web Push (en iPhone solo si la PWA está instalada; si no, explicar cómo instalarla).
-- Datos: `profiles`, `push_subscriptions`.
-
----
+El ícono de la app muestra el número de cosas sin ver (Badging API). Tocar la notificación abre la sección.
 
 ## Backlog v2+
-- **Metas / bucket list** ("Things to do in NY" de pareja), con checks y fotos de cuando se cumple.
-- Contador de días juntos y próximas fechas especiales.
-- Post-its en el escritorio que el otro ve.
-- **Paint** compartido para dibujarse cosas.
-- **Carrie's Column**: diario/columna ("I couldn't help but wonder…").
+- Bucket list ("Cosas por hacer en NY") con fotos cuando se cumple.
+- Contador de días juntos y fechas especiales.
+- Horóscopo del día en clave de amor en la portada.
 - Frasco de citas al azar.
-- Tamagotchi de pareja.
-- Horóscopo del día.
-- Empaquetar con Capacitor si se necesita algo nativo que la PWA no da.
+- Capacitor si algún día hace falta algo nativo que la PWA no da.

@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
+<title>Collage Leopardo & Lirios</title>
+<link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0}
+  body{width:390px;height:844px;overflow:hidden;font-family:Tahoma,Verdana,sans-serif;color:#f6e7ea;background:#1c0a0e;position:relative}
+  /* boceto: el collage real será un raster propio */
+  .leo{position:absolute;inset:0;background-color:#b88a5a;
+    background-image:
+      radial-gradient(ellipse 14px 10px at 20px 20px,#2a160c 60%,transparent 62%),
+      radial-gradient(ellipse 10px 14px at 60px 48px,#2a160c 60%,transparent 62%),
+      radial-gradient(ellipse 12px 9px at 38px 70px,#2a160c 60%,transparent 62%),
+      radial-gradient(ellipse 22px 18px at 20px 20px,#7a4a22 60%,transparent 62%),
+      radial-gradient(ellipse 18px 22px at 60px 48px,#7a4a22 60%,transparent 62%);
+    background-size:80px 84px}
+  .flowers{position:absolute;inset:0;background:
+      radial-gradient(circle at 12% 30%,#6b1424 0 40px,transparent 41px),
+      radial-gradient(circle at 18% 26%,#d8a7b1 0 22px,transparent 23px),
+      radial-gradient(circle at 88% 62%,#3a0b14 0 60px,transparent 61px),
+      radial-gradient(circle at 84% 58%,#8a1a2c 0 26px,transparent 27px),
+      radial-gradient(circle at 92% 70%,#8a1a2c 0 22px,transparent 23px),
+      radial-gradient(circle at 10% 86%,#6b1424 0 50px,transparent 51px),
+      radial-gradient(circle at 70% 12%,#d8a7b1 0 30px,transparent 31px),
+      linear-gradient(180deg,rgba(28,10,14,.15),rgba(28,10,14,.55))}
+  .top{position:relative;padding:64px 28px 0}
+  .logo{font-family:'Pinyon Script',cursive;font-size:80px;line-height:1;color:#e9c766;text-shadow:0 2px 0 #3a0b14}
+  .lead{display:inline-block;margin-top:14px;padding:6px 10px;background:#f3e6dc;color:#3a0b14;font-size:15px;transform:rotate(-1.5deg)}
+  .tiles{position:relative;margin:30px 20px 0;display:grid;gap:20px}
+  .tile{position:relative;display:flex;gap:14px;align-items:center;padding:14px;background:#f3e6dc;color:#3a0b14;
+    box-shadow:0 8px 18px rgba(0,0,0,.45);transform:rotate(1deg)}
+  .tile:nth-child(2){transform:rotate(-2deg);margin-right:30px}
+  .tile.sel{background:#5c0f24;color:#f6e7ea;outline:3px solid #c9a227;outline-offset:-7px;transform:none}
+  .ph{width:64px;height:64px;border:3px solid #c9a227;background:linear-gradient(135deg,#d8a7b1,#6b1424)}
+  .name{font-size:22px;font-weight:bold}
+  .pw{display:flex;gap:8px;margin-top:8px}
+  .pw span{flex:1;height:30px;background:#f6e7ea;border:2px solid #c9a227}
+  .pw b{width:34px;height:30px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3c4,#c9a227 55%,#7a5a10)}
+  .seal{position:absolute;right:-10px;top:-12px;width:38px;height:38px;border-radius:50%;
+    background:radial-gradient(circle at 35% 35%,#b0303f,#6b1424 60%,#3a0b14);box-shadow:0 2px 4px rgba(0,0,0,.5)}
+  .bar{position:absolute;left:0;right:0;bottom:0;height:64px;display:flex;justify-content:space-between;align-items:center;padding:0 22px;
+    background:#3a0b14;border-top:2px solid #c9a227;font-size:15px}
+  .off{display:flex;gap:8px;align-items:center}
+  .off i{width:28px;height:28px;border-radius:50%;border:2px solid #c9a227;background:#6b1424}
+  .smg{color:#e9c766}
+</style></head><body>
+  <div class="leo"></div><div class="flowers"></div>
+  <div class="top">
+    <div class="logo">MVP OS</div>
+    <p class="lead">Para empezar, toca tu nombre</p>
+  </div>
+  <div class="tiles">
+    <div class="tile sel"><div class="ph"></div><div style="flex:1"><div class="name">María Victoria</div><div class="pw"><span></span><b></b></div></div><div class="seal"></div></div>
+    <div class="tile"><div class="ph" style="background:linear-gradient(135deg,#b88a5a,#3a0b14)"></div><div class="name">Simón</div><div class="seal"></div></div>
+  </div>
+  <div class="bar"><div class="off"><i></i>Apagar</div><div class="smg">SMG Development®</div></div>
+</body></html>

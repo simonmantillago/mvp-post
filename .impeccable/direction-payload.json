@@ -1,0 +1,240 @@
+{
+  "title": "Elige el mundo visual de MVP OS",
+  "question": "Los tres temas (Bliss Rosa, Manhattan, Leopardo & Lirios) existirán igual. Aquí eliges la gramática que viste todo el sistema y el tema con el que arranca. Quédate con la tirada, toma una alternativa o vuelve a tirar.",
+  "options": [
+    {
+      "id": "assigned",
+      "kind": "assigned",
+      "label": "Pedrería OS",
+      "kicker": "THE ROLL",
+      "lineage": "Celulares Razr y Sidekick bedazzled, charms y gel pens de 2003",
+      "thesis": "Su XP, enchapado en pedrería: ventanas, íconos y botones con brillantes y charms colgando como un Razr de 2003.",
+      "palette": [
+        "#ff5fa8",
+        "#ffd6e8",
+        "#c7ccd8",
+        "#5b2a86",
+        "#1a0a10"
+      ],
+      "materials": [
+        "pedrería y brillantes",
+        "plástico cromado",
+        "charms colgantes",
+        "glitter de gel pen"
+      ],
+      "viewport": "Bienvenida XP sobre colina Bliss en atardecer rosa: logo MVP OS en script con brillantes, dos tarjetas de usuario con charms colgando, SMG Development® al pie.",
+      "risk": "Se vuelve juguete ruidoso si la pedrería se riega; debe vivir en bordes, botones y charms, nunca sobre el contenido.",
+      "raised": [
+        {
+          "from": "challenger-cutting-bench",
+          "raise": "Estados como marcas, no colores: en Blockbuster un ticket perforado es «ya vimos» y una cinta doblada marca dónde quedaron."
+        },
+        {
+          "from": "challenger-cabaret",
+          "raise": "El flash de Paparazzi es un corte duro encendido/apagado, sin fundidos."
+        },
+        {
+          "from": "challenger-daylight",
+          "raise": "El wallpaper sigue la hora real: mañana clara de día, atardecer rosa de noche."
+        },
+        {
+          "from": "challenger-generative",
+          "raise": "Un solo set de tokens por tema reviste todo a la vez; cambiar de tema cambia cada átomo en bloque."
+        }
+      ],
+      "html": ".impeccable/mocks/decision/assigned.html",
+      "htmlFrame": "390x844"
+    },
+    {
+      "id": "model-pick",
+      "kind": "pick",
+      "label": "Collage Leopardo & Lirios",
+      "kicker": "IMPECCABLE’S PICK",
+      "lineage": "Sus moodboards: leopardo, lirios, cerezas, dorado barroco, lacre",
+      "thesis": "Su moodboard hecho escritorio: ventanas pegadas como recortes sobre un collage de leopardo, lirios y cerezas.",
+      "palette": [
+        "#1c0a0e",
+        "#6b1424",
+        "#c9a227",
+        "#d8a7b1",
+        "#b88a5a"
+      ],
+      "materials": [
+        "recortes de revista",
+        "lacre",
+        "marcos dorados barrocos",
+        "vinilo en corazón"
+      ],
+      "viewport": "Bienvenida sobre collage de leopardo y lirios vino: logo MVP OS en script dorado, tarjetas de usuario como recortes sellados con lacre, SMG Development® al pie.",
+      "risk": "Es la lectura más literal de su gusto y es densa: el contenido necesita ventanas sólidas para leerse.",
+      "html": ".impeccable/mocks/decision/model-pick.html",
+      "htmlFrame": "390x844"
+    },
+    {
+      "id": "challenger-cutting-bench",
+      "kind": "challenger",
+      "catalogId": "operate-a-cutting-bench-select-rail",
+      "label": "Mesa de corte",
+      "verdict": "declined",
+      "lineage": "Mesa de edición de película",
+      "thesis": "Cada módulo como fotograma colgado de un riel perforado.",
+      "palette": [
+        "#0a0a0a",
+        "#ff6a13",
+        "#ffffff"
+      ],
+      "materials": [
+        "grano de película",
+        "cinta naranja"
+      ],
+      "viewport": "Un riel perforado cruza la pantalla con las apps como fotogramas.",
+      "case": "Ella no se identifica con una sala de edición y rompe el escritorio XP pedido.",
+      "kept": "Estados como marcas, no colores (en Blockbuster).",
+      "risk": "Frío y técnico para un regalo.",
+      "hero": "https://impeccable.style/worlds/cards/operate-a-cutting-bench-select-rail-hero.webp"
+    },
+    {
+      "id": "challenger-cabaret",
+      "kind": "challenger",
+      "catalogId": "posters-covers-sleeves-weimar-cabaret-bill",
+      "label": "Cartel de cabaret",
+      "verdict": "declined",
+      "lineage": "Carteles de cabaret de Berlín",
+      "thesis": "La app como programa de una noche, en dos tintas duras.",
+      "palette": [
+        "#e8ff1a",
+        "#000000"
+      ],
+      "materials": [
+        "papel barato",
+        "tinta plana"
+      ],
+      "viewport": "Programa escalonado en amarillo ácido sobre negro.",
+      "case": "Ni amarillo ácido ni expresionismo están en su mundo; pierde ambos ejes.",
+      "kept": "Corte de luz duro de dos estados (flash de Paparazzi).",
+      "risk": "Agresivo, nada glamuroso.",
+      "hero": "https://impeccable.style/worlds/cards/posters-covers-sleeves-weimar-cabaret-bill-hero.webp"
+    },
+    {
+      "id": "challenger-daylight",
+      "kind": "challenger",
+      "catalogId": "architecture-inhabitable-space-daylight-section",
+      "label": "Sección de luz",
+      "verdict": "declined",
+      "lineage": "Cortes arquitectónicos con trayectoria solar",
+      "thesis": "La casa en corte, con la luz del día recorriendo los cuartos.",
+      "palette": [
+        "#f3efe6",
+        "#2b2b2e",
+        "#e2b34a",
+        "#7d93b2"
+      ],
+      "materials": [
+        "cal",
+        "poché carbón"
+      ],
+      "viewport": "Un corte de casa con un haz de sol que marca la hora.",
+      "case": "Bonito pero ajeno al Y2K y al glamour que pidió.",
+      "kept": "El wallpaper cambia con la hora real.",
+      "risk": "Sereno de más para este regalo.",
+      "hero": "https://impeccable.style/worlds/cards/architecture-inhabitable-space-daylight-section-hero.webp"
+    },
+    {
+      "id": "challenger-generative",
+      "kind": "challenger",
+      "catalogId": "generative-parametric-identity",
+      "label": "Identidad generativa",
+      "verdict": "declined",
+      "lineage": "Marcas paramétricas",
+      "thesis": "Un logo que se redibuja y arrastra la paleta de todo.",
+      "palette": [
+        "#3b5bdb",
+        "#f8f9fa",
+        "#212529"
+      ],
+      "materials": [
+        "vector plano"
+      ],
+      "viewport": "Marca animada que retiñe la interfaz.",
+      "case": "Vector plano y neutro: lo opuesto a su maximalismo.",
+      "kept": "Un set de tokens por tema que reviste todo en bloque.",
+      "risk": "Tech-startup, sin calidez.",
+      "hero": "https://impeccable.style/worlds/cards/generative-parametric-identity-hero.webp"
+    },
+    {
+      "id": "challenger-streetwear",
+      "kind": "challenger",
+      "catalogId": "textiles-weave-drape-fashion-industrial-quote-grammar",
+      "label": "Streetwear industrial",
+      "verdict": "declined",
+      "lineage": "Moda industrial con comillas y franjas de peligro",
+      "thesis": "Todo rotulado entre comillas, con franjas de peligro.",
+      "palette": [
+        "#ffffff",
+        "#111111",
+        "#ff6a00"
+      ],
+      "materials": [
+        "algodón",
+        "nylon",
+        "precintos"
+      ],
+      "viewport": "Rótulos BIENVENIDA entre comillas y franjas a 45°.",
+      "case": "Industrial, no glamour; pierde ambos ejes.",
+      "kept": "Rotular cada zona con su nombre literal y tierno.",
+      "risk": "Irónico donde debe ser cariñoso.",
+      "hero": "https://impeccable.style/worlds/cards/textiles-weave-drape-fashion-industrial-quote-grammar-hero.webp"
+    },
+    {
+      "id": "challenger-ascii",
+      "kind": "challenger",
+      "catalogId": "medium-native-ascii-live-scene-render",
+      "label": "Escena ASCII",
+      "verdict": "declined",
+      "lineage": "Arte de caracteres en fósforo",
+      "thesis": "Sus fotos renderizadas en caracteres.",
+      "palette": [
+        "#000000",
+        "#33ff66"
+      ],
+      "materials": [
+        "fósforo",
+        "monoespaciado"
+      ],
+      "viewport": "Una foto de ella hecha de @ y puntos.",
+      "case": "Hacker, no glamour; ella no se reconoce ahí.",
+      "kept": "Cambiar el ánimo sin mover la geometría (como los temas).",
+      "risk": "Ilegible y frío.",
+      "hero": "https://impeccable.style/worlds/cards/medium-native-ascii-live-scene-render-hero.webp"
+    }
+  ],
+  "reroll": {
+    "registers": [
+      "safer",
+      "bolder"
+    ]
+  },
+  "buildPath": {
+    "value": "code"
+  },
+  "canon": true,
+  "canonCard": {
+    "kind": "canon",
+    "label": "App de pareja estándar",
+    "thesis": "Lo que hacen las apps de pareja, bien hecho: tarjetas suaves y pestañas abajo.",
+    "palette": [
+      "#fff5f7",
+      "#2d2a32",
+      "#f06292"
+    ],
+    "materials": [
+      "tarjetas redondeadas",
+      "íconos de línea"
+    ],
+    "viewport": "Saludo, contador de días juntos y tarjetas de módulos con barra de pestañas.",
+    "risk": "Pierde el escritorio XP que pediste; indistinguible de cualquier app.",
+    "html": ".impeccable/mocks/decision/canon.html",
+    "htmlFrame": "390x844"
+  },
+  "steer": true
+}

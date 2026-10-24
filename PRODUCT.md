@@ -8,53 +8,54 @@ web
 
 ## Stack
 
-React + Vite + TypeScript, instalada como PWA (`vite-plugin-pwa`). Backend: Supabase (Auth, Postgres con RLS, Storage, Realtime). Deploy gratuito en Netlify. Ionic descartado a propósito: toda la UI es un "sistema operativo" propio y sus componentes no aportan. Capacitor queda como opción futura si se necesitan funciones nativas que la PWA no da.
+React + Vite + TypeScript, instalada como PWA (`vite-plugin-pwa`, service worker propio para Web Push). Backend: Supabase (Auth, Postgres con RLS, Storage, Realtime, Edge Functions). Deploy gratuito en Netlify. Sin librerías de UI: toda la interfaz es propia. Capacitor queda como opción futura si se necesita algo nativo que la PWA no da.
 
 ## Users
 
-Exactamente dos personas: MVP y su novio (autor del regalo, firma como SMG Development). La usan sobre todo desde el celular, con la PWA instalada en la pantalla de inicio; ella usa **iPhone**. Contexto: ratos sueltos del día, en la cama, en la fila, viendo series juntos o a distancia. Estado de ánimo: cariñoso, juguetón, nostálgico.
+Exactamente dos personas: MVP y su novio Simón (autor del regalo, firma como SMG Development). **Los dos usan iPhone**, con la PWA instalada en la pantalla de inicio. Contexto: ratos sueltos del día, en la cama, en la fila, viendo series juntos o a distancia. Estado de ánimo: cariñoso, juguetón, nostálgico, glamoroso.
 
 ## Product Purpose
 
-Un regalo: un espacio digital privado de la pareja con forma de sistema operativo Y2K ("MVP OS") donde cada módulo es una "aplicación" del escritorio. Sirve para compartir fotos, escribirse, dedicarse canciones y organizar qué series y películas ver (y de quién es el turno de elegir). Éxito: que ella lo abra seguido por gusto, que sienta que fue hecho para ella, y que resuelva cosas reales de la pareja (como la pelea de qué ver).
+Un regalo: **The MVP Post**, un periódico neoyorquino de 2003 hecho solo para ella. La portada es la columna que él le escribe (al estilo de la columnista de Manhattan de la TV de esos años) y cada sección del periódico es un mundo con su propia estética donde comparten cosas: un collage Y2K de sus fotos, una alfombra roja de fotos tomadas en el momento, los vinilos que se dedican, la cartelera de qué ver (con turnos) y cartas entre los dos. Éxito: que ella lo abra seguido por gusto, que sienta que fue hecho para ella, que las notificaciones la traigan de vuelta y que resuelva cosas reales de la pareja.
 
 ## Positioning
 
-No es una app de pareja genérica: es *su* computador de los 2000 — lleva su nombre como sistema operativo, sus gustos (glamour Y2K, Sex and the City, Victoria's Secret, leopardo con lirios) como temas de escritorio, y rituales que solo ellos tienen (zumbidos, turnos para elegir serie, dedicatorias).
+No es una app de pareja genérica: es *su* periódico. Lleva su nombre en la cabecera, sus gustos (Sex and the City, Y2K, dark leopard, glamour de pasarela, vinilos de Big) como secciones, y rituales que solo ellos tienen (la columna, el ¡Extra!, los turnos para elegir película, las dedicatorias).
 
 ## Operating Context
 
-- Uso principal: celular en vertical, PWA instalada (standalone). Secundario: navegador de escritorio, donde se comporta como un XP con ventanas flotantes.
-- Interacción en tiempo real entre los dos (chat, zumbido, playlist).
-- Fotos tomadas en el momento con la cámara del celular o subidas desde la galería.
+- Celular en vertical, PWA instalada (standalone) en iPhone. Escritorio es secundario: el periódico se centra como una página.
+- Tiempo real entre los dos (cartas, collage, actividad) + notificaciones push de todo lo nuevo.
+- Fotos de la galería (collage, con fondo quitado) y fotos tomadas en el momento con la cámara (alfombra roja).
 
 ## Capabilities and Constraints
 
-- Solo dos cuentas; registro deshabilitado. Login con email + contraseña desde una pantalla de bienvenida estilo XP.
-- v1: Boot + Login, Escritorio/Shell, Paparazzi (fotos + flash), MVP Messenger (chat + zumbido), CD Player (playlist con links de Spotify/YouTube + dedicatoria), Blockbuster (watchlist con turnos), Panel de control (temas, perfil, sonidos, notificaciones).
-- iOS: Web Push solo funciona con la PWA instalada (iOS 16.4+); no existe Vibration API → el zumbido es visual + sonido en iPhone.
-- Sin archivos de audio subidos (solo links/embeds).
-- Plazo: 2–3 semanas desde el 2026-10-23.
-- Idioma de la interfaz: español.
+- Solo dos cuentas; registro deshabilitado. Login con email + contraseña desde "¿Quién lee hoy?" (credenciales de prensa).
+- v1: Llegada + login, Portada + La columna, Estilo · Y2K, Sociedad · Alfombra roja, Los vinilos de Big, Cartelera, Cartas al editor, Suscripción (ajustes). Spec en `docs/modules.md`.
+- iOS: Web Push solo con la PWA instalada (iOS 16.4+); sin Vibration API (el ¡Extra! es visual + sonido); el audio solo suena tras un gesto.
+- Sin archivos de audio subidos (solo links/embeds de Spotify y YouTube).
+- Storage gratis de 1 GB: fotos comprimidas en el cliente.
+- Plazo: 2–3 semanas desde el 2026-10-23. Idioma de la interfaz: español.
 
 ## Brand Commitments
 
-- Nombre del sistema: **MVP OS** (por MVP), escrito en cursiva fina y delicada al estilo de la marca Victoria's Secret — nunca "XP".
-- Pie de la pantalla de bienvenida: **"SMG Development®"**.
-- Animaciones de arranque y bienvenida al estilo Windows.
-- Tres temas de escritorio intercambiables: **Bliss Rosa**, **Manhattan 2003** (Sex and the City) y **Leopardo & Lirios** (su gusto personal).
-- Referencias explícitas del usuario: Windows XP/98 Y2K, Sex and the City, Kardashians, Pamela Anderson, Victoria's Secret. Imágenes en `docs/inspiration/`.
-- No usar logos ni marcas reales (Microsoft, Hello Kitty, Victoria's Secret, etc.): todo propio e "inspirado en".
+- Nombre: **The MVP Post** (cabecera en letra gótica de periódico). Pie: **"SMG Development®"**.
+- La portada es papel de periódico (blanco hueso, tinta negra, un solo acento rosa); cada sección rompe con ella y tiene estética propia: Y2K (collage de recortes, brillo, leopardo, stickers), Alfombra roja (dark leopard, dorado, pedrería, alas de ángel, flash), Los vinilos de Big (penthouse classy: nogal, cuero, ámbar), Cartelera (videoclub de noche), Cartas (papel y máquina de escribir).
+- Referencias del usuario: Sex and the City (la columna, Big y sus vinilos), Kardashians, Victoria's Secret, Y2K/2010 swag, dark leopard. Imágenes en `docs/inspiration/periodico/`.
+- No usar logos ni marcas reales (Sex and the City, Victoria's Secret, Chanel, Blockbuster, Spotify como marca, etc.): todo propio e "inspirado en". "Big" se usa solo como guiño en el nombre de la sección.
 
 ## Evidence on Hand
 
-- Referencias visuales: `docs/inspiration/xp-y2k/`, `docs/inspiration/manhattan/`, `docs/inspiration/leopardo-lirios/`.
-- Pendiente del usuario: nombre/nick de su usuario, fotos de perfil de ambos, fotos reales para contenido inicial. No inventar fotos de ellos; usar placeholders marcados hasta tenerlas.
+- Wireframe aprobado por el usuario: `docs/wireframes/periodico.html`.
+- Referencias visuales: `docs/inspiration/periodico/` (collage Y2K, collage dark leopard, hoja de stickers).
+- La dirección anterior (MVP OS) está archivada en `docs/archivo-mvp-os/` y no es referencia.
+- Pendiente del usuario: fotos de perfil de ambos, fotos reales para contenido inicial. No inventar fotos de ellos; usar placeholders marcados hasta tenerlas.
 
 ## Product Principles
 
 1. Hecho para ella: cada detalle debe sentirse personal, no plantilla.
-2. Jugar es la función: la nostalgia del escritorio Y2K es la experiencia, no decoración.
-3. Útil de verdad: los módulos resuelven cosas reales de la pareja (qué ver, compartir momentos, hablar).
-4. Celular primero, y que en iPhone instalado se sienta como una app.
-5. Privado: solo ellos dos ven el contenido.
+2. Leer es la experiencia: navegar el periódico (pasar páginas, la columna que lleva a las secciones) es parte del regalo, no un menú.
+3. Cada sección es un mundo: cambiar de estética al entrar es la sorpresa.
+4. Útil de verdad: qué ver, compartir momentos, hablar, dedicarse música.
+5. Celular primero: en iPhone instalado debe sentirse como una app nativa (gestos, burbujas tipo iOS, notificaciones).
+6. Privado: solo ellos dos ven el contenido.

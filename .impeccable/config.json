@@ -1,0 +1,71 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "ai-color-palette",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-10-23T06:15:00.372Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; gradients stand in for photo and wallpaper rasters"
+      },
+      {
+        "rule": "radial-halo",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-23T06:15:00.619Z",
+        "reason": "Claude: unchosen decision-round sketch; radial blobs are placeholders for the flower collage raster"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          "docs/wireframes/periodico.html"
+        ],
+        "createdAt": "2026-10-24T05:10:32.726Z",
+        "reason": "Claude: grayscale wireframe, placeholder annotations are intentionally muted/small; not shipped UI"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          "docs/wireframes/periodico.html"
+        ],
+        "createdAt": "2026-10-24T05:10:32.986Z",
+        "reason": "Claude: grayscale wireframe, placeholder annotations are intentionally muted/small; not shipped UI"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          "docs/wireframes/periodico.html"
+        ],
+        "createdAt": "2026-10-24T05:11:53.219Z",
+        "reason": "Claude: grayscale wireframe mockups at phone scale; tiny labels are schematic annotations, not shipped UI"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          "docs/wireframes/periodico.html"
+        ],
+        "createdAt": "2026-10-24T05:24:49.591Z",
+        "reason": "Claude: grayscale wireframe; tight leading is on stacked display placeholders and the off-white is a schematic newsprint stand-in, not the final palette"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          "docs/wireframes/periodico.html"
+        ],
+        "createdAt": "2026-10-24T05:24:49.846Z",
+        "reason": "Claude: grayscale wireframe; tight leading is on stacked display placeholders and the off-white is a schematic newsprint stand-in, not the final palette"
+      }
+    ]
+  }
+}
