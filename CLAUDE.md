@@ -25,7 +25,7 @@ PWA privada de pareja, regalo para **MVP**. Es un **periódico neoyorquino de 20
 - **React 19 + Vite 6 + TypeScript.** Node local es 20.13 → mantener Vite 6 (Vite 7 pide Node ≥ 20.19).
 - **PWA:** `vite-plugin-pwa` en modo `injectManifest` con service worker propio [src/sw.ts](src/sw.ts) (precache + push + badge + abrir sección al tocar). Suscripción en [src/lib/push.ts](src/lib/push.ts).
 - **Supabase:** Auth (email+contraseña, sign-ups off), Postgres + RLS, Storage (buckets privados + signed URLs), Realtime, Edge Function [`notify`](supabase/functions/notify/index.ts), `pg_net` + Vault.
-- **Netlify** gratis (`netlify.toml` listo).
+- **Netlify** gratis: sitio `mvp-post` → https://mvp-post.netlify.app (vinculado en `.netlify/`, variables `VITE_*` cargadas). Repo: https://github.com/simonmantillago/mvp-post (privado, rama `main`).
 - Para instalar al construir la UI (aún no instaladas):
   - `react-router` 7 — rutas por sección.
   - `zustand` (ya instalado) — estado de cliente (selección del collage, reproductor).
@@ -52,7 +52,13 @@ npx supabase functions deploy notify --no-verify-jwt
 npx supabase secrets set NOMBRE=valor
 npx supabase config diff                # revisar antes de cualquier config push
 ```
-`supabase/config.toml` está alineado con la nube; nunca hacer `config push` sin revisar `config diff`. Al tener la URL de Netlify, agregarla a `site_url`/`additional_redirect_urls`.
+GitHub y Netlify (CLIs ya autenticados en la terminal del usuario; `gh` está en `%LOCALAPPDATA%\Programs\ghin`, Netlify CLI es dev dependency). Desde el sandbox de Claude no se ven las sesiones: correr `gh`/`netlify` sin sandbox o en la terminal.
+```bash
+git push                                 # sube a GitHub
+npx netlify deploy --prod                # build + deploy a producción desde esta carpeta
+npx netlify env:set VITE_X valor         # variable nueva en Netlify (luego redeploy)
+```
+`supabase/config.toml` está alineado con la nube (`site_url` = Netlify, localhost en redirects); nunca hacer `config push` sin revisar `config diff`.
 
 Variables en `.env.local` (ver `.env.example`): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `VITE_VAPID_PUBLIC_KEY`, opcional `VITE_TMDB_API_KEY`.
 
@@ -95,7 +101,9 @@ docs/                     # specs, wireframe, inspiración
 - [x] Service worker propio con push + badge; `src/lib/push.ts`; Edge Function `notify` escrita
 - [ ] Aplicar 0002 a la nube (`db push`) — esperando OK del usuario
 - [ ] Push: llaves VAPID, secretos, deploy de `notify`, secretos en Vault
-- [ ] Usuario: conectar repo a Netlify con variables de entorno; primer deploy
+- [x] GitHub CLI + repo privado `mvp-post`; Netlify CLI + sitio `mvp-post`, variables y primer deploy; `site_url` de Supabase apuntando a Netlify (2026-10-24)
+- [ ] Deploy automático en cada push: vincular el repo en Netlify (UI) — mientras tanto `npx netlify deploy --prod`
+- [ ] Cargar `VITE_VAPID_PUBLIC_KEY` en Netlify al configurar push
 
 ### Fase 2 — Dirección visual (Impeccable)
 - [ ] Tokens de portada y de cada sección, tipografías
@@ -121,5 +129,4 @@ docs/                     # specs, wireframe, inspiración
 ## Pendientes del usuario
 - OK para aplicar la migración 0002 y configurar push en Supabase.
 - Fotos de perfil de ambos.
-- Cuenta Netlify.
 - Fotos reales para el contenido inicial (opcional).
