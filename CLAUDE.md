@@ -52,7 +52,7 @@ npx supabase functions deploy notify --no-verify-jwt
 npx supabase secrets set NOMBRE=valor
 npx supabase config diff                # revisar antes de cualquier config push
 ```
-GitHub y Netlify (CLIs ya autenticados en la terminal del usuario; `gh` está en `%LOCALAPPDATA%\Programs\ghin`, Netlify CLI es dev dependency). Desde el sandbox de Claude no se ven las sesiones: correr `gh`/`netlify` sin sandbox o en la terminal.
+GitHub y Netlify (CLIs ya autenticados en la terminal del usuario; `gh` está en `%LOCALAPPDATA%\Programs\gh\bin`, Netlify CLI es dev dependency). Desde el sandbox de Claude no se ven las sesiones: correr `gh`/`netlify` sin sandbox o en la terminal.
 ```bash
 git push                                 # sube a GitHub
 npx netlify deploy --prod                # build + deploy a producción desde esta carpeta
