@@ -55,7 +55,7 @@ npx supabase config diff                # revisar antes de cualquier config push
 GitHub y Netlify (CLIs ya autenticados en la terminal del usuario; `gh` está en `%LOCALAPPDATA%\Programs\gh\bin`, Netlify CLI es dev dependency). Desde el sandbox de Claude no se ven las sesiones: correr `gh`/`netlify` sin sandbox o en la terminal.
 ```bash
 git push                                 # sube a GitHub
-npx netlify deploy --prod                # build + deploy a producción desde esta carpeta
+npx netlify deploy --prod                # deploy manual (normalmente no hace falta: cada push a main despliega solo)
 npx netlify env:set VITE_X valor         # variable nueva en Netlify (luego redeploy)
 ```
 `supabase/config.toml` está alineado con la nube (`site_url` = Netlify, localhost en redirects); nunca hacer `config push` sin revisar `config diff`.
@@ -102,7 +102,7 @@ docs/                     # specs, wireframe, inspiración
 - [ ] Aplicar 0002 a la nube (`db push`) — esperando OK del usuario
 - [ ] Push: llaves VAPID, secretos, deploy de `notify`, secretos en Vault
 - [x] GitHub CLI + repo privado `mvp-post`; Netlify CLI + sitio `mvp-post`, variables y primer deploy; `site_url` de Supabase apuntando a Netlify (2026-10-24)
-- [ ] Deploy automático en cada push: vincular el repo en Netlify (UI) — mientras tanto `npx netlify deploy --prod`
+- [x] Deploy automático: cada push a `main` publica en producción (Netlify CI/CD vinculado al repo, 2026-10-24)
 - [ ] Cargar `VITE_VAPID_PUBLIC_KEY` en Netlify al configurar push
 
 ### Fase 2 — Dirección visual (Impeccable)
