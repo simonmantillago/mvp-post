@@ -1,0 +1,18 @@
+.press-note {
+  display: grid;
+  justify-items: center;
+  gap: var(--s3);
+  padding: var(--s7) var(--gutter);
+  text-align: center;
+  color: var(--text);
+}
+.press-note-title {
+  font: 700 var(--size-h2) / 1.05 var(--face-head);
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+.press-note-body {
+  max-width: 28ch;
+  font: italic var(--size-body) / 1.45 var(--face-body);
+  color: var(--text-soft);
+}

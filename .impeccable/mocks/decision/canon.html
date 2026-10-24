@@ -1,28 +1,31 @@
 <!doctype html>
-<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=390">
-<title>App de pareja estándar</title>
+<html lang="es"><head><meta charset="utf-8">
 <style>
-  *{box-sizing:border-box;margin:0}
-  body{width:390px;height:844px;overflow:hidden;font-family:system-ui,-apple-system,sans-serif;color:#2d2a32;background:#fff5f7;position:relative}
-  .head{padding:60px 22px 0;display:flex;justify-content:space-between;align-items:center}
-  h1{font-size:26px}
-  .av{display:flex}.av i{width:36px;height:36px;border-radius:50%;background:#f8bbd0;border:2px solid #fff;margin-left:-8px}
-  .days{margin:22px 22px 0;padding:22px;border-radius:20px;background:#fff;box-shadow:0 4px 14px rgba(45,42,50,.08)}
-  .days b{display:block;font-size:40px;color:#c2185b}
-  .grid{margin:18px 22px 0;display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .card{height:130px;padding:16px;border-radius:18px;background:#fff;box-shadow:0 4px 14px rgba(45,42,50,.08);display:flex;flex-direction:column;justify-content:space-between}
-  .card i{width:34px;height:34px;border-radius:10px;background:#fce4ec}
-  .card strong{font-size:17px}
-  .tabs{position:absolute;left:0;right:0;bottom:0;height:78px;background:#fff;border-top:1px solid #f3d6de;display:flex;justify-content:space-around;align-items:center;font-size:12px}
-  .tabs span:first-child{color:#c2185b;font-weight:600}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:390px;height:844px;overflow:hidden;background:#fff6f9;color:#1f1f24;font-family:-apple-system,"SF Pro Text",system-ui,sans-serif}
+.top{padding:56px 20px 16px;display:flex;align-items:center;gap:12px}
+.av{width:44px;height:44px;border-radius:50%;background:#ffc6d8;border:3px solid #fff}
+.av+.av{margin-left:-22px;background:#d7c6ff}
+.top h1{font-size:22px;font-weight:700}
+.top p{font-size:13px;color:#7a7a85}
+.days{margin:0 20px;background:#ff8fb1;color:#fff;border-radius:20px;padding:18px}
+.days b{font-size:34px;display:block}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:16px 20px}
+.card{background:#fff;border-radius:18px;padding:16px;height:120px;box-shadow:0 4px 14px rgba(255,143,177,.15)}
+.card i{display:block;width:28px;height:28px;border-radius:8px;background:#ffe1ea;margin-bottom:22px}
+.card b{font-size:15px}
+.card span{display:block;font-size:12px;color:#7a7a85;margin-top:2px}
+.tab{position:absolute;left:0;right:0;bottom:0;height:84px;background:#fff;border-top:1px solid #f0e3e8;display:flex;justify-content:space-around;padding-top:12px}
+.tab div{width:26px;height:26px;border-radius:8px;background:#f3e6eb}
+.tab div:first-child{background:#ff8fb1}
 </style></head><body>
-  <div class="head"><h1>Hola, María Victoria</h1><div class="av"><i></i><i></i></div></div>
-  <div class="days">Juntos hace<b>412 días</b></div>
-  <div class="grid">
-    <div class="card"><i></i><strong>Paparazzi</strong></div>
-    <div class="card"><i></i><strong>Mensajes</strong></div>
-    <div class="card"><i></i><strong>CD Player</strong></div>
-    <div class="card"><i></i><strong>Blockbuster</strong></div>
-  </div>
-  <div class="tabs"><span>Inicio</span><span>Fotos</span><span>Chat</span><span>Música</span><span>Ajustes</span></div>
+<div class="top"><div class="av"></div><div class="av"></div><div><h1>Hola, María Victoria</h1><p>Simón te escribió algo nuevo</p></div></div>
+<div class="days"><b>365 días</b>juntos y contando</div>
+<div class="cards">
+  <div class="card"><i></i><b>Fotos</b><span>12 recuerdos</span></div>
+  <div class="card"><i></i><b>Música</b><span>3 dedicatorias</span></div>
+  <div class="card"><i></i><b>Películas</b><span>Elige ella</span></div>
+  <div class="card"><i></i><b>Chat</b><span>2 sin leer</span></div>
+</div>
+<div class="tab"><div></div><div></div><div></div><div></div></div>
 </body></html>

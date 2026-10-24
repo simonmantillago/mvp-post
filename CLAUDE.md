@@ -7,7 +7,7 @@ PWA privada de pareja, regalo para **MVP**. Es un **periódico neoyorquino de 20
 - Base de datos, RLS, push y setup de Supabase: [docs/data-model.md](docs/data-model.md)
 - **Wireframe aprobado (2026-10-24):** [docs/wireframes/periodico.html](docs/wireframes/periodico.html) — abrir con `npm run dev` en `localhost:5173/docs/wireframes/periodico.html`
 - Referencias visuales: [docs/inspiration/periodico/](docs/inspiration/periodico/) · prompts Nano Banana (opcionales): [docs/prompts/nano-banana-periodico.md](docs/prompts/nano-banana-periodico.md)
-- Sistema de diseño: `DESIGN.md` (se escribe al terminar la dirección visual con Impeccable; aún no existe)
+- **Sistema de diseño: [DESIGN.md](DESIGN.md)** (+ `.impeccable/design.json`), escrito desde lo construido. Contrato de dirección «Estilos del domingo»: `.impeccable/surfaces/src-app-tsx.md`.
 - La dirección anterior (**MVP OS**, estilo Windows XP) se descartó el 2026-10-24 y está en [docs/archivo-mvp-os/](docs/archivo-mvp-os/). No es referencia.
 
 ## Decisiones tomadas (no reabrir sin que el usuario lo pida)
@@ -43,6 +43,7 @@ npm run build      # tsc -b && vite build → dist/ (incluye dist/sw.js)
 npm run preview    # sirve dist/ (para probar el service worker)
 npm run lint       # tsc --noEmit
 ```
+Modo demo (solo `npm run dev`): `?demo` (como ella), `?demo=el` (como él, ve la Redacción), `?demo=fuera` (login). Datos falsos en memoria (`src/lib/demo.ts`), excluidos del build; sirve para revisar pantallas sin usar contraseñas reales.
 Supabase CLI (dev dependency, proyecto ya vinculado; el login es por máquina):
 ```bash
 npx supabase migration new <nombre>     # nueva migración en supabase/migrations/
@@ -106,24 +107,27 @@ docs/                     # specs, wireframe, inspiración
 - [x] `VITE_VAPID_PUBLIC_KEY` en `.env.local` y Netlify
 
 ### Fase 2 — Dirección visual (Impeccable)
-- [ ] Tokens de portada y de cada sección, tipografías
-- [ ] Assets: papel, leopardo, stickers, alas, vinilos, VHS, íconos PWA, sonidos
+- [x] Dirección «Estilos del domingo» elegida en ronda Impeccable; tokens por sección, fuentes autoalojadas (2026-10-24)
+- [x] Texturas raster generadas en canvas (leopardo, pedrería, nogal, cuero); stickers y sellos en SVG propio
+- [ ] **Alas de ángel** para Alfombra roja: `public/sections/alfombra/alas.png` (sin generador de imágenes; hay un hueco marcado)
+- [ ] Fotos de ambos en `public/readers/` y íconos PWA definitivos; sonidos
 
 ### Fase 3 — El periódico
-- [ ] Llegada + login (credenciales de prensa)
-- [ ] Portada, La columna, editor de ediciones, transición de página, esquina doblada, "Nuevo"
-- [ ] Suscripción (perfil, notificaciones, silenciar secciones, guía de instalación en iPhone)
+- [x] Llegada + login (credenciales de prensa)
+- [x] Portada, La columna, redacción, transición de página, esquina doblada, "Nuevo"
+- [x] Suscripción (perfil, notificaciones, silenciar secciones, guía de instalación en iPhone)
 
 ### Fase 4 — Secciones
-- [ ] Cartas al editor (Realtime + ¡Extra!)
-- [ ] Estilo · Y2K (collage, quitar fondo, gestos, burbuja iOS, fijar)
-- [ ] Alfombra roja (cámara, flash, polaroids, ♥)
-- [ ] Los vinilos de Big (oEmbed, tocadiscos, pila de fundas)
-- [ ] Cartelera (turnos, ratings, TMDB opcional)
+- [x] Cartas al editor (Realtime + ¡Extra!)
+- [x] Estilo · Y2K (collage, gestos, burbuja iOS, fijar) — falta **quitar fondo** a las fotos
+- [x] Alfombra roja (cámara, flash, polaroids, ♥)
+- [x] Los vinilos de Big (oEmbed, tocadiscos, pila de fundas)
+- [x] Cartelera (turnos, ratings) — TMDB opcional pendiente
 
 ### Fase 5 — Cierre
 - [ ] Pruebas en ambos iPhone instalados (cámara, audio, push, badge)
-- [ ] `/impeccable polish` + `audit`, finish review, DESIGN.md
+- [x] Auditoría técnica (agente) + finish review (agente, 4 rondas) + DESIGN.md (2026-10-24). Único pendiente del review: las alas.
+- [ ] Volver a pasar `/impeccable audit` tras las alas y las fotos reales
 - [ ] Contenido real: fotos de perfil, primera edición, primeras fotos
 
 ## Pendientes del usuario

@@ -1,0 +1,59 @@
+html[data-section] { background: var(--ground); }
+
+.section {
+  min-height: 100dvh;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding-bottom: calc(var(--safe-bottom) + var(--s7));
+  background: var(--ground);
+  color: var(--text);
+}
+.section-body {
+  padding: 0 var(--gutter);
+}
+
+/* Botones de sección: heredan la voz y el color de su mundo */
+.section-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s2);
+  min-height: 2.75rem;
+  padding: 0 var(--s4);
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--on-accent);
+  font: 700 var(--size-body) / 1 var(--face-head);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.section-button--ghost {
+  background: transparent;
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px var(--text-soft);
+}
+.section-button:disabled { opacity: 0.5; cursor: default; }
+
+.section-field {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: var(--s2) var(--s3);
+  border: 1px solid var(--text-soft);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+}
+.section-field:focus-visible { outline: 2px solid var(--focus); outline-offset: 1px; }
+.section-label {
+  display: block;
+  margin-bottom: var(--s1);
+  font: 500 var(--size-folio) / 1.2 var(--face-head);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+.section-error {
+  font: italic var(--size-small) / 1.35 var(--face-body);
+  color: var(--accent-text);
+}

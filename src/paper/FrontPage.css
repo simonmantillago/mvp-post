@@ -1,0 +1,289 @@
+/* Retícula del periódico: 6 columnas sobre el ancho útil; todo se alinea a ella */
+.front {
+  --cols: repeat(6, 1fr);
+  min-height: 100dvh;
+  padding: calc(var(--safe-top) + var(--s4)) var(--gutter) calc(var(--safe-bottom) + var(--s6));
+  color: var(--ink);
+  max-width: 40rem;
+  margin: 0 auto;
+}
+.front-dateline {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--s3);
+  font: 500 var(--size-folio) / 1.2 var(--face-head);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.front-mast {
+  margin-top: var(--s2);
+  text-align: center;
+  font: 700 var(--size-mast) / 1 var(--face-mast);
+  white-space: nowrap;
+}
+.front-rules {
+  height: 6px;
+  margin-top: var(--s2);
+  border-top: 3px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+}
+/* Banda de sección en segunda tinta, levemente fuera de registro */
+.front-flag {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: var(--s3);
+  padding: var(--s1) var(--s3);
+  background: var(--spot);
+  color: var(--on-spot);
+  font: 700 1.6rem/1.1 var(--face-head);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  /* segunda plancha corrida: la tinta rosa no cae exacta sobre el registro negro */
+  translate: 2px -1px;
+  box-shadow: -3px 2px 0 rgba(194, 37, 92, 0.28);
+}
+.front-flag-day {
+  font: italic 400 var(--size-small) / 1 var(--face-body);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* Nota principal: la columna */
+.front-lead {
+  position: relative;
+  margin-top: var(--s4);
+}
+.front-lead--pending {
+  height: 26rem;
+  background: var(--paper-shade);
+  animation: pending 1.4s ease-in-out infinite alternate;
+}
+@keyframes pending { to { opacity: 0.55; } }
+.front-lead-link {
+  display: block;
+  position: relative;
+  text-decoration: none;
+  color: inherit;
+}
+.front-cover .halftone-plate {
+  margin: 0 calc(var(--gutter) * -1);
+  height: min(38svh, 20rem);
+}
+.front-lead-link .front-cover .halftone-plate::before {
+  content: "";
+  position: absolute;
+  inset: 45% 0 0;
+  z-index: 1;
+  background: linear-gradient(transparent, rgba(226, 228, 229, 0.94) 62%);
+}
+.front-lead-link .front-hed {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--s2);
+  z-index: 2;
+}
+.front-hed {
+  font: 700 var(--size-hed) / 1.1 var(--face-head);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.front-lead--empty .front-hed { margin-top: var(--s4); }
+.front-byline {
+  margin-top: var(--s3);
+  font: italic var(--size-small) / 1.3 var(--face-body);
+}
+.front-caption {
+  margin-top: var(--s1);
+  font: italic var(--size-folio) / 1.35 var(--face-body);
+  color: var(--ink-soft);
+}
+.front-lede {
+  margin-top: var(--s4);
+  columns: 2;
+  column-gap: var(--s4);
+  column-rule: 1px solid rgba(20, 20, 20, 0.25);
+  font-size: var(--size-small);
+  line-height: 1.5;
+  hyphens: auto;
+}
+.front-lede::first-letter {
+  float: left;
+  margin: 0.1rem var(--s1) 0 0;
+  font: 700 3.1rem/0.82 var(--face-head);
+  color: var(--spot);
+  text-shadow: 1.5px -1px 0 rgba(20, 20, 20, 0.2);
+}
+.front-more,
+.front-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  min-height: 2.75rem;
+  margin-top: var(--s3);
+  font: 700 var(--size-body) / 1 var(--face-head);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--ink);
+}
+.front-cta {
+  padding: 0 var(--s4);
+  background: var(--ink);
+  color: var(--paper);
+}
+.front-standfirst {
+  margin-top: var(--s3);
+  max-width: 32ch;
+  font: italic 1.125rem/1.4 var(--face-body);
+}
+
+/* Los pliegos de las secciones: un cuadernillo en negro */
+.front-sections {
+  margin: var(--s5) calc(var(--gutter) * -1) 0;
+  padding: var(--s5) var(--gutter) var(--s4);
+  background: var(--ink);
+  color: var(--paper);
+}
+.front-sections-title {
+  padding-bottom: var(--s2);
+  border-bottom: 3px solid var(--spot);
+  font: 700 var(--size-h3) / 1 var(--face-head);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.pliego {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr auto;
+  grid-template-areas:
+    "thumb name new"
+    "thumb teaser arrow";
+  align-items: center;
+  column-gap: var(--s3);
+  padding: var(--s4) 0;
+  border-bottom: 1px solid rgba(230, 230, 226, 0.22);
+  color: var(--paper);
+  text-decoration: none;
+}
+.pliego > svg { grid-area: arrow; justify-self: end; transition: translate 300ms var(--ease-out); }
+.pliego:hover > svg,
+.pliego:focus-visible > svg { translate: 4px 0; }
+.pliego-page {
+  font-style: normal;
+  font: 500 var(--size-folio) / 1 var(--face-head);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #b9b9b3;
+  white-space: nowrap;
+}
+/* Miniatura en medio tono del material de cada mundo */
+.pliego-thumb {
+  grid-area: thumb;
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  overflow: hidden;
+  background: #333;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+.pliego--y2k .pliego-thumb { background: var(--thumb-y2k, #f6c3d8) 0 0 / 180px 180px; }
+.pliego--alfombra .pliego-thumb {
+  background: var(--thumb-alfombra, #3a2614) 0 0 / 150px 150px;
+  box-shadow: inset 0 0 0 3px #c9a24a;
+}
+.pliego--vinilos .pliego-thumb {
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, #e8a64b 0 22%, #1f1610 22.5% 25%, transparent 25.5%),
+    repeating-radial-gradient(circle, #111 0 1.5px, #262626 1.5px 3px);
+}
+.pliego--cartelera .pliego-thumb {
+  background: linear-gradient(90deg, #c2255c 0 18%, #0f1630 18% 21%, #2f6fd6 21% 39%, #0f1630 39% 42%, #ffd23f 42% 60%, #0f1630 60% 63%, #3ddc97 63% 81%, #0f1630 81% 84%, #ff4f8b 84%);
+  box-shadow: inset 0 -0.6rem 0 #3b2a1e;
+}
+.pliego--cartas .pliego-thumb {
+  background: repeating-linear-gradient(#f2ede2 0 7px, #d9d2c2 7px 8px);
+}
+/* Cada pliego anuncia su sección con la voz y el color de su mundo, como los logos de sección de un diario */
+.pliego-name {
+  grid-area: name;
+  align-self: end;
+  font: 400 1.75rem/1.05 var(--face-display);
+  color: var(--pliego-ink, var(--accent));
+}
+.pliego--y2k .pliego-name { -webkit-text-stroke: 1px #fff; paint-order: stroke fill; letter-spacing: 0.01em; }
+.pliego--alfombra .pliego-name { font-style: italic; }
+.pliego--cartelera .pliego-name { font-size: 1.5rem; }
+.pliego--cartas { --pliego-ink: #f2ede2; }
+.pliego-teaser {
+  grid-area: teaser;
+  align-self: start;
+  margin-top: var(--s1);
+  font: italic var(--size-small) / 1.3 var(--face-body);
+  color: #cfcfca;
+}
+/* Sello "Nuevo" en segunda tinta: cambia en su sitio, sin mover la fila */
+.pliego-new {
+  grid-area: new;
+  justify-self: end;
+  padding: 0.1rem var(--s2);
+  background: var(--spot);
+  color: var(--on-spot);
+  font: 700 var(--size-folio) / 1.3 var(--face-head);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  rotate: -4deg;
+  box-shadow: -2px 1px 0 rgba(20, 20, 20, 0.35);
+}
+
+.front-foot {
+  margin-top: var(--s6);
+}
+.front-foot-title {
+  font: 700 var(--size-h3) / 1 var(--face-head);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding-bottom: var(--s2);
+  border-bottom: 1px solid var(--ink);
+}
+.front-archive li a {
+  display: block;
+  padding: var(--s3) 0;
+  border-bottom: 1px solid rgba(20, 20, 20, 0.2);
+  font: var(--size-small) / 1.35 var(--face-body);
+  text-decoration: none;
+}
+.front-archive li span {
+  font: 700 var(--size-small) / 1 var(--face-head);
+  margin-right: var(--s2);
+}
+.front-foot-links {
+  display: flex;
+  justify-content: center;
+  gap: var(--s5);
+  margin-top: var(--s5);
+}
+.front-foot-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  font: italic var(--size-body) / 1 var(--face-body);
+}
+.front-sign {
+  margin-top: var(--s4);
+  text-align: center;
+  font: 500 var(--size-folio) / 1 var(--face-head);
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
+}
+
+/* En escritorio el periódico es una página sobre la mesa */
+@media (min-width: 48rem) {
+  html:not([data-section]),
+  html:not([data-section]) body { background: #cfcfca; }
+  .front { margin-block: var(--s6); box-shadow: 0 30px 60px -30px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(20, 20, 20, 0.08); }
+}

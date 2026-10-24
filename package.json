@@ -10,10 +10,19 @@
     "lint": "tsc -b --noEmit"
   },
   "dependencies": {
+    "@fontsource/antonio": "^5.3.0",
+    "@fontsource/bagel-fat-one": "^5.3.0",
+    "@fontsource/bodoni-moda": "^5.3.0",
+    "@fontsource/gloock": "^5.3.0",
+    "@fontsource/homemade-apple": "^5.3.0",
+    "@fontsource/libre-caslon-text": "^5.3.0",
+    "@fontsource/monoton": "^5.3.0",
+    "@fontsource/special-elite": "^5.3.0",
+    "@fontsource/unifrakturcook": "^5.3.0",
     "@supabase/supabase-js": "^2.57.4",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
-    "zustand": "^5.0.8"
+    "react-router": "^7.18.4"
   },
   "devDependencies": {
     "@types/react": "^19.1.12",

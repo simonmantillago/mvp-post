@@ -40,7 +40,7 @@ No es una app de pareja genérica: es *su* periódico. Lleva su nombre en la cab
 ## Brand Commitments
 
 - Nombre: **The MVP Post** (cabecera en letra gótica de periódico). Pie: **"SMG Development®"**.
-- La portada es papel de periódico (blanco hueso, tinta negra, un solo acento rosa); cada sección rompe con ella y tiene estética propia: Y2K (collage de recortes, brillo, leopardo, stickers), Alfombra roja (dark leopard, dorado, pedrería, alas de ángel, flash), Los vinilos de Big (penthouse classy: nogal, cuero, ámbar), Cartelera (videoclub de noche), Cartas (papel y máquina de escribir).
+- La portada es papel de periódico (gris claro frío, tinta negra, un solo acento rosa como segunda tinta); cada sección rompe con ella y tiene estética propia: Y2K (collage de recortes, brillo, leopardo, stickers), Alfombra roja (dark leopard, dorado, pedrería, alas de ángel, flash), Los vinilos de Big (penthouse classy: nogal, cuero, ámbar), Cartelera (videoclub de noche), Cartas (papel y máquina de escribir).
 - Referencias del usuario: Sex and the City (la columna, Big y sus vinilos), Kardashians, Victoria's Secret, Y2K/2010 swag, dark leopard. Imágenes en `docs/inspiration/periodico/`.
 - No usar logos ni marcas reales (Sex and the City, Victoria's Secret, Chanel, Blockbuster, Spotify como marca, etc.): todo propio e "inspirado en". "Big" se usa solo como guiño en el nombre de la sección.
 

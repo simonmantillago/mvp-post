@@ -1,0 +1,186 @@
+/* Videoclub de noche: azul de neón, letrero amarillo y estantería de VHS */
+.section--cartelera {
+  background:
+    radial-gradient(90% 40% at 50% 0%, rgba(255, 79, 139, 0.18), transparent 70%),
+    var(--ground);
+}
+.section--cartelera .folio-title {
+  color: var(--accent);
+  font-size: clamp(2.2rem, 11vw, 3.2rem);
+  text-shadow: 0 0 18px rgba(255, 210, 63, 0.45);
+}
+
+/* Ticket perforado con el turno */
+.ticket {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--s3);
+  padding: var(--s3) var(--s4);
+  background: var(--accent);
+  color: var(--on-accent);
+  -webkit-mask: radial-gradient(circle at 0 50%, transparent 0.6rem, #000 0.62rem) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 50%, transparent 0.6rem, #000 0.62rem) right / 51% 100% no-repeat;
+  mask: radial-gradient(circle at 0 50%, transparent 0.6rem, #000 0.62rem) left / 51% 100% no-repeat,
+    radial-gradient(circle at 100% 50%, transparent 0.6rem, #000 0.62rem) right / 51% 100% no-repeat;
+}
+.ticket-label {
+  font: 500 var(--size-small) / 1 var(--face-head);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.ticket-name {
+  font: 700 var(--size-h2) / 1 var(--face-head);
+  text-transform: uppercase;
+}
+
+.cartelera-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: var(--s5);
+  border-bottom: 1px solid var(--rule);
+}
+.cartelera-tab {
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: var(--s2);
+  min-height: 2.75rem;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: none;
+  color: var(--text-soft);
+  font: 700 var(--size-body) / 1 var(--face-head);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.cartelera-tab[aria-selected="true"] {
+  color: var(--accent);
+  border-bottom-color: var(--neon);
+}
+.cartelera-count {
+  font: var(--size-folio) / 1 var(--face-body);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.cartelera-panel { padding-top: var(--s4); }
+
+/* Lomos de VHS en el estante */
+.shelf {
+  display: flex;
+  align-items: end;
+  gap: 0.3rem;
+  overflow-x: auto;
+  padding: var(--s3) var(--s1) 0;
+  border-bottom: 0.6rem solid #3b2a1e;
+  box-shadow: 0 0.6rem 0 #24180f;
+}
+.vhs {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 3rem;
+  height: 12rem;
+  padding: var(--s2) 0;
+  border: 0;
+  border-radius: 2px 2px 0 0;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.35), transparent 18%, transparent 82%, rgba(0, 0, 0, 0.35)), #111;
+  box-shadow: inset 0 0.5rem 0 var(--spine), inset 0 -2.5rem 0 var(--spine);
+  color: #f4efe6;
+  transition: translate 300ms var(--ease-out);
+}
+.vhs[aria-expanded="true"] { translate: 0 -0.8rem; }
+.vhs-title {
+  writing-mode: vertical-rl;
+  rotate: 180deg;
+  max-height: 8rem;
+  overflow: hidden;
+  font: 700 var(--size-small) / 1 var(--face-head);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.vhs-kind {
+  font: 500 0.6875rem/1 var(--face-head);
+  color: #111;
+  text-transform: uppercase;
+}
+.vhs-detail {
+  display: grid;
+  gap: var(--s2);
+  justify-items: start;
+  margin-top: var(--s5);
+  padding: var(--s4);
+  background: var(--surface);
+}
+.vhs-detail-title { font: 700 var(--size-h2) / 1.05 var(--face-head); text-transform: uppercase; }
+.vhs-detail-meta,
+.vhs-detail-wait,
+.playing-meta,
+.review-theirs {
+  font: italic var(--size-small) / 1.35 var(--face-body);
+  color: var(--text-soft);
+}
+
+.playing,
+.reviews { display: grid; gap: var(--s4); }
+.playing-item,
+.review {
+  display: grid;
+  gap: var(--s2);
+  justify-items: start;
+  padding: var(--s4);
+  background: var(--surface);
+}
+.playing-title,
+.review-title { font: 700 var(--size-h2) / 1.05 var(--face-head); text-transform: uppercase; }
+.episode { display: flex; gap: var(--s5); }
+.stepper-row { display: flex; align-items: center; gap: var(--s2); }
+.stepper-row button {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--text);
+}
+.stepper-row output {
+  min-width: 2ch;
+  text-align: center;
+  font: 700 var(--size-h2) / 1 var(--face-head);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+.stars { display: flex; gap: var(--s1); color: var(--accent); }
+.stars button {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 0;
+  background: none;
+  color: inherit;
+}
+
+.cartelera-add { margin-top: var(--s6); }
+.add-tape {
+  display: grid;
+  gap: var(--s4);
+  margin-top: var(--s6);
+  padding: var(--s4);
+  background: var(--surface);
+}
+.add-tape-kind {
+  display: flex;
+  gap: var(--s5);
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+.add-tape-kind label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+  min-height: 2.75rem;
+}
+.add-tape-kind input { accent-color: var(--accent); width: 1.1rem; height: 1.1rem; }
+.add-tape-actions { display: flex; justify-content: space-between; gap: var(--s3); }

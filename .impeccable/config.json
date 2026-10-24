@@ -65,6 +65,186 @@
         ],
         "createdAt": "2026-10-24T05:24:49.846Z",
         "reason": "Claude: grayscale wireframe; tight leading is on stacked display placeholders and the off-white is a schematic newsprint stand-in, not the final palette"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-10-24T06:34:43.852Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; the page renders sub-22px text as bars"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-10-24T06:34:44.109Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; the page renders sub-22px text as bars"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-24T06:34:44.379Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; the page renders sub-22px text as bars"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-24T06:34:44.647Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; the page renders sub-22px text as bars"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-matchbook.html"
+        ],
+        "createdAt": "2026-10-24T06:34:45.011Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; the page renders sub-22px text as bars"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-matchbook.html"
+        ],
+        "createdAt": "2026-10-24T06:34:45.398Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; the page renders sub-22px text as bars"
+      },
+      {
+        "rule": "low-contrast",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-24T06:34:45.709Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; the page renders sub-22px text as bars"
+      },
+      {
+        "rule": "tiny-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-24T06:34:46.005Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; the page renders sub-22px text as bars"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-10-24T06:59:36.051Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; the decision page renders sub-22px text as bars"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-10-24T06:59:36.510Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; the decision page renders sub-22px text as bars"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-10-24T06:59:36.845Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; the decision page renders sub-22px text as bars"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-24T06:59:37.160Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; the decision page renders sub-22px text as bars"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-24T06:59:37.531Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; the decision page renders sub-22px text as bars"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-24T06:59:38.047Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; the decision page renders sub-22px text as bars"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-matchbook.html"
+        ],
+        "createdAt": "2026-10-24T06:59:38.369Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; the decision page renders sub-22px text as bars"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-matchbook.html"
+        ],
+        "createdAt": "2026-10-24T06:59:38.709Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; the decision page renders sub-22px text as bars"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-matchbook.html"
+        ],
+        "createdAt": "2026-10-24T06:59:39.026Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; the decision page renders sub-22px text as bars"
+      },
+      {
+        "rule": "undersized-ui-text",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-24T06:59:39.325Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; the decision page renders sub-22px text as bars"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-24T06:59:39.681Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; the decision page renders sub-22px text as bars"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-24T06:59:40.005Z",
+        "reason": "Claude: decision-round sketch, not shipping UI; the decision page renders sub-22px text as bars"
       }
     ]
   }

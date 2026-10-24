@@ -1,0 +1,139 @@
+/* Tokens de The MVP Post.
+   El periódico (portada, columna, login, franjas) usa :root.
+   Cada sección redefine los mismos roles bajo [data-section="…"]: los componentes
+   solo leen roles (--ground, --ink, --spot…), nunca colores sueltos. */
+
+:root {
+  /* Papel prensa frío, tinta negra y rosa de segunda plancha */
+  --paper: #e2e4e5;
+  --paper-shade: #d3d6d8;
+  --ink: #141414;
+  --ink-soft: #4a4945;
+  --spot: #c2255c;          /* segunda tinta: lo nuevo, la sección, la capitular */
+  --spot-text: #b01f53;     /* rosa para texto pequeño (≥4.5:1 sobre papel) */
+  --on-spot: #ffffff;
+  --halftone: rgba(20, 20, 20, 0.07);
+
+  /* Roles genéricos (los redefine cada sección) */
+  --ground: var(--paper);
+  --surface: var(--paper-shade);
+  --text: var(--ink);
+  --text-soft: var(--ink-soft);
+  --accent: var(--spot);
+  --accent-text: var(--spot-text);
+  --on-accent: var(--on-spot);
+  --rule: var(--ink);
+  --focus: var(--spot);
+
+  /* Tipografía */
+  --face-mast: "UnifrakturCook", serif;
+  --face-head: "Antonio", sans-serif;
+  --face-body: "Libre Caslon Text", Georgia, serif;
+  --face-hand: "Homemade Apple", cursive;
+  --face-type: "Special Elite", "Courier New", monospace;
+  --face-display: var(--face-head);
+
+  --size-mast: clamp(2.9rem, 13.5vw, 4.6rem);
+  --size-hed: clamp(2.5rem, 11.8vw, 3.6rem);
+  --size-h2: 1.6rem;
+  --size-h3: 1.15rem;
+  --size-body: 1rem;
+  --size-small: 0.875rem;
+  --size-folio: 0.75rem;
+
+  /* Espaciado (múltiplos de 4) */
+  --s1: 0.25rem;
+  --s2: 0.5rem;
+  --s3: 0.75rem;
+  --s4: 1rem;
+  --s5: 1.5rem;
+  --s6: 2rem;
+  --s7: 3rem;
+  --gutter: 1rem;
+  --measure: 34rem;
+
+  --radius: 2px;
+  --shadow-lift: 0 10px 24px -12px rgba(0, 0, 0, 0.45);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Estilo · Y2K: collage chillón sobre leopardo con brillo */
+[data-section="y2k"] {
+  --ground: #f4c9dc;
+  --surface: #ffffff;
+  --text: #1a1a1a;
+  --text-soft: #3a2a33;
+  --accent: #ff3ea5;
+  --accent-text: #b0126a;
+  --on-accent: #1a1a1a;
+  --mint: #3ddc97;
+  --chrome: #d9dde3;
+  --rule: #1a1a1a;
+  --focus: #1a1a1a;
+  --face-display: "Bagel Fat One", sans-serif;
+}
+
+/* Sociedad · Alfombra roja: dark leopard, dorado y pedrería */
+[data-section="alfombra"] {
+  --ground: #0b0a09;
+  --surface: #17140f;
+  --text: #f3eee4;
+  --text-soft: #c9bfae;
+  --accent: #c9a24a;
+  --accent-text: #d9b65c;
+  --on-accent: #0b0a09;
+  --wine: #6b1424;
+  --rule: #c9a24a;
+  --focus: #d9b65c;
+  --polaroid: #f6f3ec;
+  --face-display: "Bodoni Moda", serif;
+}
+
+/* Los vinilos de Big: penthouse de noche */
+[data-section="vinilos"] {
+  --ground: #1f1610;
+  --surface: #2a1d15;
+  --leather: #4a2f22;
+  --text: #efe4d2;
+  --text-soft: #c7b49a;
+  --accent: #e8a64b;
+  --accent-text: #e8a64b;
+  --on-accent: #1f1610;
+  --seal-her: #c2255c;
+  --seal-him: #b8963e;
+  --rule: #5a4030;
+  --focus: #e8a64b;
+  --face-display: "Gloock", serif;
+}
+
+/* Cartelera: videoclub de noche */
+[data-section="cartelera"] {
+  --ground: #0f1630;
+  --surface: #18214a;
+  --text: #f4efe6;
+  --text-soft: #b9bdd6;
+  --accent: #ffd23f;
+  --accent-text: #ffd23f;
+  --on-accent: #0f1630;
+  --neon: #ff4f8b;
+  --rule: #2c3768;
+  --focus: #ffd23f;
+  --face-display: "Monoton", sans-serif;
+}
+
+/* Cartas al editor: papel de carta y máquina de escribir */
+[data-section="cartas"] {
+  --ground: #dcd6ca;
+  --surface: #f2ede2;
+  --text: #1d1d1f;
+  --text-soft: #4b4740;
+  --accent: #b01f53;
+  --accent-text: #b01f53;
+  --on-accent: #ffffff;
+  --seal-him: #8a6d2c;
+  --rule: #1d1d1f;
+  --focus: #b01f53;
+  --face-display: "Special Elite", monospace;
+}

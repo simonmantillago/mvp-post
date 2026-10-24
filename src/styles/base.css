@@ -1,17 +1,104 @@
+/* Solo el subconjunto latino (cubre á, é, ñ, ¿, ¡): el periódico está en español.
+   La portada usa todas las caras: el índice anuncia cada sección con la voz de su mundo. */
+@import "@fontsource/unifrakturcook/latin-700.css";
+@import "@fontsource/antonio/latin-500.css";
+@import "@fontsource/antonio/latin-700.css";
+@import "@fontsource/libre-caslon-text/latin-400.css";
+@import "@fontsource/libre-caslon-text/latin-400-italic.css";
+@import "@fontsource/libre-caslon-text/latin-700.css";
+@import "@fontsource/homemade-apple/latin-400.css";
+@import "@fontsource/special-elite/latin-400.css";
+@import "@fontsource/bagel-fat-one/latin-400.css";
+@import "@fontsource/bodoni-moda/latin-400.css";
+@import "@fontsource/bodoni-moda/latin-400-italic.css";
+@import "@fontsource/gloock/latin-400.css";
+@import "@fontsource/monoton/latin-400.css";
+@import "./tokens.css";
+
 *, *::before, *::after { box-sizing: border-box; }
-html, body, #root { height: 100%; margin: 0; }
-body {
-  background: #1a0a10;
-  color: #f6e7ea;
-  font-family: Tahoma, Verdana, system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  overscroll-behavior: none;
+
+html, body, #root { min-height: 100%; margin: 0; }
+
+html {
+  -webkit-text-size-adjust: 100%;
+  background: var(--paper);
 }
-.placeholder {
-  height: 100%;
-  display: grid;
-  place-content: center;
-  text-align: center;
-  gap: 0.5rem;
-  padding: 1rem;
+
+body {
+  background: var(--ground);
+  color: var(--text);
+  font: var(--size-body)/1.5 var(--face-body);
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+  font-variant-numeric: oldstyle-nums;
+}
+
+h1, h2, h3, p, figure, blockquote, ul, ol { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+img { display: block; max-width: 100%; }
+button, input, textarea, select { font: inherit; color: inherit; }
+button { cursor: pointer; }
+
+/* Superficies del navegador, teñidas con la paleta */
+::selection { background: var(--accent); color: var(--on-accent); }
+input, textarea { caret-color: var(--accent); }
+:focus { outline: none; }
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: var(--radius);
+}
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+::placeholder { color: var(--text-soft); opacity: 1; }
+* { scrollbar-width: thin; scrollbar-color: var(--text-soft) transparent; }
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Trama de medio tono del papel prensa */
+.newsprint {
+  background-color: var(--paper);
+  background-image: radial-gradient(var(--halftone) 0.6px, transparent 0.75px);
+  background-size: 3px 3px;
+}
+
+/* Pasar la página (View Transitions): la página nueva entra desdoblándose
+   desde el lomo derecho; la vieja se queda debajo. */
+::view-transition-old(root) {
+  animation: 420ms var(--ease-out) both page-under;
+}
+::view-transition-new(root) {
+  animation: 520ms var(--ease-out) both page-unfold;
+  transform-origin: 100% 50%;
+}
+html.turn-back::view-transition-new(root) {
+  animation-name: page-unfold-back;
+  transform-origin: 0% 50%;
+}
+@keyframes page-under {
+  to { filter: brightness(0.7); }
+}
+@keyframes page-unfold {
+  from { clip-path: inset(0 0 0 100%); filter: drop-shadow(-18px 0 18px rgba(0, 0, 0, 0.35)); }
+  to { clip-path: inset(0 0 0 0); }
+}
+@keyframes page-unfold-back {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) { animation: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

@@ -1,0 +1,64 @@
+/* Esquina doblada */
+.dogear {
+  --size: calc(3.5rem + var(--peel) * 9rem);
+  position: fixed;
+  top: var(--safe-top);
+  right: 0;
+  z-index: 40;
+  width: var(--size);
+  height: var(--size);
+  padding: 0;
+  border: 0;
+  background: none;
+  touch-action: none;
+  transition: width 260ms var(--ease-out), height 260ms var(--ease-out);
+}
+.dogear:active { transition: none; }
+.dogear-behind,
+.dogear-flap {
+  position: absolute;
+  inset: 0;
+}
+/* Lo que hay detrás: la portada, en papel prensa */
+.dogear-behind {
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+  background: var(--paper);
+  background-image: radial-gradient(rgba(20, 20, 20, 0.12) 0.6px, transparent 0.75px);
+  background-size: 3px 3px;
+}
+/* El revés de la página, doblado */
+.dogear-flap {
+  clip-path: polygon(0 0, 100% 100%, 0 100%);
+  background: linear-gradient(225deg, #f4f4f0 0%, #cfcfc9 70%, #b9b9b2 100%);
+  filter: drop-shadow(-4px 4px 6px rgba(0, 0, 0, 0.35));
+}
+.dogear:focus-visible { outline-offset: -4px; }
+
+/* Folio de sección */
+.folio {
+  padding: calc(var(--safe-top) + var(--s4)) calc(var(--gutter) + 3.5rem) var(--s4) var(--gutter);
+}
+.folio-line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s1) var(--s3);
+  align-items: baseline;
+  font: 500 var(--size-folio) / 1.2 var(--face-head);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+  padding-bottom: var(--s2);
+  border-bottom: 1px solid var(--rule);
+}
+.folio-mast {
+  font: 700 1rem/1 var(--face-mast);
+  letter-spacing: 0;
+  text-transform: none;
+  color: var(--text);
+}
+.folio-title {
+  margin-top: var(--s4);
+  font: 400 clamp(2.4rem, 11vw, 3.4rem) / 0.95 var(--face-display);
+  color: var(--text);
+  text-wrap: balance;
+}

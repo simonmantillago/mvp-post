@@ -1,0 +1,115 @@
+.subscription {
+  min-height: 100dvh;
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: calc(var(--safe-top) + var(--s7)) var(--gutter) calc(var(--safe-bottom) + var(--s6));
+  color: var(--ink);
+}
+/* Cupón recortado del periódico, con línea punteada */
+.coupon {
+  position: relative;
+  display: grid;
+  gap: var(--s5);
+  padding: var(--s5) var(--s4);
+  border: 2px dashed var(--ink);
+  background: #f2f2ee;
+  rotate: -0.6deg;
+}
+.coupon-cut {
+  position: absolute;
+  top: -0.65rem;
+  left: var(--s4);
+  padding: 0 var(--s2);
+  background: var(--paper);
+  font: italic var(--size-folio) / 1.2 var(--face-body);
+  color: var(--ink-soft);
+}
+.coupon-title {
+  font: 700 var(--size-hed) / 0.95 var(--face-head);
+  text-transform: uppercase;
+}
+/* Sello de goma */
+.coupon-stamp {
+  position: absolute;
+  top: var(--s5);
+  right: var(--s4);
+  padding: var(--s1) var(--s2);
+  border: 3px double var(--spot);
+  color: var(--spot-text);
+  font: 700 var(--size-small) / 1 var(--face-head);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  rotate: 8deg;
+  opacity: 0.9;
+}
+.coupon-field {
+  display: grid;
+  gap: var(--s1);
+}
+.coupon-field span,
+.coupon-sections legend {
+  font: 500 var(--size-folio) / 1 var(--face-head);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.coupon-field input {
+  min-height: 2.75rem;
+  border: 0;
+  border-bottom: 1px solid var(--ink);
+  background: transparent;
+  font: var(--size-h3) / 1.2 var(--face-body);
+}
+.coupon-field input:focus-visible { outline: none; border-bottom-color: var(--spot); }
+.coupon-block { display: grid; gap: var(--s3); }
+.coupon-block h2 {
+  font: 700 var(--size-h3) / 1 var(--face-head);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding-bottom: var(--s2);
+  border-bottom: 1px solid var(--ink);
+}
+.coupon-help {
+  font: italic var(--size-small) / 1.45 var(--face-body);
+  color: var(--ink-soft);
+}
+.coupon-help strong { font-style: normal; color: var(--ink); }
+.coupon-check {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  min-height: 2.75rem;
+  font: var(--size-body) / 1.3 var(--face-body);
+}
+.coupon-check input {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: var(--spot);
+}
+.coupon-sections {
+  display: grid;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+.coupon-note {
+  font: italic var(--size-small) / 1.3 var(--face-body);
+  color: var(--spot-text);
+}
+.coupon-signout {
+  justify-self: start;
+  min-height: 2.75rem;
+  padding: 0 var(--s4);
+  border: 1px solid var(--ink);
+  background: transparent;
+  font: 700 var(--size-body) / 1 var(--face-head);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.subscription-sign {
+  margin-top: var(--s6);
+  text-align: center;
+  font: 500 var(--size-folio) / 1 var(--face-head);
+  letter-spacing: 0.14em;
+  color: var(--ink-soft);
+}

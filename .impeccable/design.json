@@ -1,0 +1,1069 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-24T07:25:06.191Z",
+  "title": "Design System: The MVP Post",
+  "extensions": {
+    "colorMeta": {
+      "paper": {
+        "role": "neutral",
+        "displayName": "Papel Prensa Frío",
+        "canonical": "#e2e4e5",
+        "oklch": "oklch(91.8% 0.003 228.8)",
+        "tonalRamp": [
+          "#0a0b0c",
+          "#232425",
+          "#3e4041",
+          "#5c5e5f",
+          "#7c7d7e",
+          "#9d9fa0",
+          "#c2c4c5",
+          "#edeff0"
+        ],
+        "scope": ":root"
+      },
+      "paper-shade": {
+        "role": "neutral",
+        "displayName": "Papel Sombreado",
+        "canonical": "#d3d6d8",
+        "oklch": "oklch(87.4% 0.004 236.5)",
+        "tonalRamp": [
+          "#090b0d",
+          "#222426",
+          "#3e4042",
+          "#5b5e60",
+          "#7b7e7f",
+          "#9c9fa1",
+          "#c2c4c6",
+          "#eceff1"
+        ],
+        "scope": ":root"
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Tinta",
+        "canonical": "#141414",
+        "oklch": "oklch(19.1% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#404040",
+          "#5d5d5d",
+          "#7d7d7d",
+          "#9e9e9e",
+          "#c4c4c4",
+          "#eeeeee"
+        ],
+        "scope": ":root"
+      },
+      "ink-soft": {
+        "role": "neutral",
+        "displayName": "Tinta Corrida",
+        "canonical": "#4a4945",
+        "oklch": "oklch(40.5% 0.007 95.2)",
+        "tonalRamp": [
+          "#0c0b08",
+          "#252420",
+          "#41403c",
+          "#5f5e59",
+          "#7e7d79",
+          "#9f9e9a",
+          "#c5c4bf",
+          "#f0eeea"
+        ],
+        "scope": ":root"
+      },
+      "spot": {
+        "role": "primary",
+        "displayName": "Rosa Segunda Plancha",
+        "canonical": "#c2255c",
+        "oklch": "oklch(53.9% 0.193 6.5)",
+        "tonalRamp": [
+          "#1f0007",
+          "#47031c",
+          "#760c34",
+          "#ad004c",
+          "#d4396b",
+          "#fc5f8b",
+          "#fca9ba",
+          "#fee8ec"
+        ],
+        "scope": ":root"
+      },
+      "spot-text": {
+        "role": "primary",
+        "displayName": "Rosa Texto",
+        "canonical": "#b01f53",
+        "oklch": "oklch(50.0% 0.181 6.2)",
+        "tonalRamp": [
+          "#1f0007",
+          "#48021c",
+          "#770a34",
+          "#a9154d",
+          "#d0416c",
+          "#f7658d",
+          "#fda9ba",
+          "#fee8ec"
+        ],
+        "scope": ":root"
+      },
+      "on-spot": {
+        "role": "neutral",
+        "displayName": "Blanco sobre Plancha",
+        "canonical": "#ffffff",
+        "oklch": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#404040",
+          "#5d5d5d",
+          "#7d7d7d",
+          "#9e9e9e",
+          "#c4c4c4",
+          "#eeeeee"
+        ],
+        "scope": ":root"
+      },
+      "halftone": {
+        "role": "neutral",
+        "displayName": "Trama",
+        "canonical": "rgba(20, 20, 20, 0.07)",
+        "scope": ":root"
+      },
+      "y2k-ground": {
+        "role": "neutral",
+        "displayName": "Rosa Chicle",
+        "canonical": "#f4c9dc",
+        "oklch": "oklch(87.8% 0.054 349.9)",
+        "tonalRamp": [
+          "#1a020e",
+          "#371828",
+          "#553444",
+          "#755162",
+          "#977082",
+          "#b991a3",
+          "#e1b6c9",
+          "#fee7f1"
+        ],
+        "scope": "[data-section=y2k] --ground"
+      },
+      "y2k-surface": {
+        "role": "neutral",
+        "displayName": "Blanco Recorte",
+        "canonical": "#ffffff",
+        "oklch": "oklch(100.0% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#404040",
+          "#5d5d5d",
+          "#7d7d7d",
+          "#9e9e9e",
+          "#c4c4c4",
+          "#eeeeee"
+        ],
+        "scope": "[data-section=y2k] --surface"
+      },
+      "y2k-text": {
+        "role": "neutral",
+        "displayName": "Negro Contorno",
+        "canonical": "#1a1a1a",
+        "oklch": "oklch(21.8% 0.000 89.9)",
+        "tonalRamp": [
+          "#0b0b0b",
+          "#242424",
+          "#404040",
+          "#5d5d5d",
+          "#7d7d7d",
+          "#9e9e9e",
+          "#c4c4c4",
+          "#eeeeee"
+        ],
+        "scope": "[data-section=y2k] --text / --on-accent / --focus"
+      },
+      "y2k-text-soft": {
+        "role": "neutral",
+        "displayName": "Ciruela Suave",
+        "canonical": "#3a2a33",
+        "oklch": "oklch(30.7% 0.028 344.1)",
+        "tonalRamp": [
+          "#13060e",
+          "#2e1f27",
+          "#4b3a43",
+          "#6a5861",
+          "#8a7781",
+          "#ac98a3",
+          "#d2bdc8",
+          "#fde7f3"
+        ],
+        "scope": "[data-section=y2k] --text-soft"
+      },
+      "y2k-accent": {
+        "role": "primary",
+        "displayName": "Rosa Fucsia Burbuja",
+        "canonical": "#ff3ea5",
+        "oklch": "oklch(68.2% 0.241 353.2)",
+        "tonalRamp": [
+          "#1e000d",
+          "#460128",
+          "#740746",
+          "#a51266",
+          "#dd0689",
+          "#ff52aa",
+          "#fea5ca",
+          "#ffe7f0"
+        ],
+        "scope": "[data-section=y2k] --accent"
+      },
+      "y2k-accent-text": {
+        "role": "primary",
+        "displayName": "Fucsia Texto",
+        "canonical": "#b0126a",
+        "oklch": "oklch(50.1% 0.197 354.5)",
+        "tonalRamp": [
+          "#1e000d",
+          "#450327",
+          "#760044",
+          "#a90164",
+          "#cf3984",
+          "#f75fa6",
+          "#fda6c8",
+          "#fee8ef"
+        ],
+        "scope": "[data-section=y2k] --accent-text"
+      },
+      "y2k-mint": {
+        "role": "secondary",
+        "displayName": "Menta",
+        "canonical": "#3ddc97",
+        "oklch": "oklch(79.7% 0.164 159.7)",
+        "tonalRamp": [
+          "#001006",
+          "#002d19",
+          "#004d30",
+          "#047047",
+          "#199462",
+          "#24ba7d",
+          "#48e49e",
+          "#c6fede"
+        ],
+        "scope": "[data-section=y2k] --mint"
+      },
+      "y2k-chrome": {
+        "role": "secondary",
+        "displayName": "Cromo",
+        "canonical": "#d9dde3",
+        "oklch": "oklch(89.6% 0.009 258.3)",
+        "tonalRamp": [
+          "#090b0f",
+          "#212429",
+          "#3d4045",
+          "#5a5e63",
+          "#7a7d83",
+          "#9b9fa4",
+          "#c0c4ca",
+          "#ebeff5"
+        ],
+        "scope": "[data-section=y2k] --chrome"
+      },
+      "alfombra-ground": {
+        "role": "neutral",
+        "displayName": "Negro Laca",
+        "canonical": "#0b0a09",
+        "oklch": "oklch(14.6% 0.003 68.6)",
+        "tonalRamp": [
+          "#0c0b0a",
+          "#252423",
+          "#413f3e",
+          "#5f5d5c",
+          "#7e7d7b",
+          "#9f9e9c",
+          "#c5c4c2",
+          "#f0eeec"
+        ],
+        "scope": "[data-section=alfombra] --ground"
+      },
+      "alfombra-surface": {
+        "role": "neutral",
+        "displayName": "Ébano",
+        "canonical": "#17140f",
+        "oklch": "oklch(19.3% 0.011 80.5)",
+        "tonalRamp": [
+          "#0e0b06",
+          "#27241e",
+          "#433f39",
+          "#615d57",
+          "#817d76",
+          "#a29e97",
+          "#c8c3bc",
+          "#f2eee7"
+        ],
+        "scope": "[data-section=alfombra] --surface"
+      },
+      "alfombra-text": {
+        "role": "neutral",
+        "displayName": "Marfil de Gala",
+        "canonical": "#f3eee4",
+        "oklch": "oklch(95.0% 0.014 84.6)",
+        "tonalRamp": [
+          "#0e0b05",
+          "#27241c",
+          "#433f37",
+          "#615d55",
+          "#817d74",
+          "#a39e95",
+          "#c8c4ba",
+          "#f3eee4"
+        ],
+        "scope": "[data-section=alfombra] --text"
+      },
+      "alfombra-text-soft": {
+        "role": "neutral",
+        "displayName": "Champán Apagado",
+        "canonical": "#c9bfae",
+        "oklch": "oklch(80.8% 0.026 81.1)",
+        "tonalRamp": [
+          "#110a01",
+          "#2a2315",
+          "#473f30",
+          "#655c4d",
+          "#857c6c",
+          "#a79d8d",
+          "#cdc3b2",
+          "#f8eddb"
+        ],
+        "scope": "[data-section=alfombra] --text-soft"
+      },
+      "alfombra-gold": {
+        "role": "primary",
+        "displayName": "Dorado Viejo",
+        "canonical": "#c9a24a",
+        "oklch": "oklch(73.1% 0.115 85.2)",
+        "tonalRamp": [
+          "#120a00",
+          "#302100",
+          "#523c00",
+          "#775802",
+          "#9c7713",
+          "#bf9840",
+          "#e6be67",
+          "#feedc9"
+        ],
+        "scope": "[data-section=alfombra] --accent / --rule"
+      },
+      "alfombra-gold-text": {
+        "role": "primary",
+        "displayName": "Dorado Claro",
+        "canonical": "#d9b65c",
+        "oklch": "oklch(78.9% 0.116 88.3)",
+        "tonalRamp": [
+          "#110a00",
+          "#2f2200",
+          "#503d00",
+          "#745a00",
+          "#9a7810",
+          "#bc9a3e",
+          "#e3c066",
+          "#ffedc1"
+        ],
+        "scope": "[data-section=alfombra] --accent-text / --focus"
+      },
+      "alfombra-wine": {
+        "role": "secondary",
+        "displayName": "Vino",
+        "canonical": "#6b1424",
+        "oklch": "oklch(35.0% 0.120 16.2)",
+        "tonalRamp": [
+          "#200003",
+          "#490212",
+          "#711b29",
+          "#953c46",
+          "#b95d64",
+          "#df7e85",
+          "#ffa9ae",
+          "#ffe8e9"
+        ],
+        "scope": "[data-section=alfombra] --wine"
+      },
+      "alfombra-polaroid": {
+        "role": "neutral",
+        "displayName": "Blanco Polaroid",
+        "canonical": "#f6f3ec",
+        "oklch": "oklch(96.5% 0.010 87.5)",
+        "tonalRamp": [
+          "#0d0b07",
+          "#26241f",
+          "#423f3a",
+          "#605d57",
+          "#807d77",
+          "#a19e98",
+          "#c7c4bd",
+          "#f1eee7"
+        ],
+        "scope": "[data-section=alfombra] --polaroid"
+      },
+      "vinilos-ground": {
+        "role": "neutral",
+        "displayName": "Nogal Oscuro",
+        "canonical": "#1f1610",
+        "oklch": "oklch(20.9% 0.019 55.2)",
+        "tonalRamp": [
+          "#110905",
+          "#2b221b",
+          "#483d37",
+          "#665b54",
+          "#867b73",
+          "#a89c94",
+          "#cec1b9",
+          "#f9ece3"
+        ],
+        "scope": "[data-section=vinilos] --ground"
+      },
+      "vinilos-surface": {
+        "role": "neutral",
+        "displayName": "Nogal",
+        "canonical": "#2a1d15",
+        "oklch": "oklch(24.4% 0.025 52.8)",
+        "tonalRamp": [
+          "#130803",
+          "#2e2119",
+          "#4b3c34",
+          "#6a5a51",
+          "#8a7970",
+          "#ac9b90",
+          "#d2c0b5",
+          "#fdeadf"
+        ],
+        "scope": "[data-section=vinilos] --surface"
+      },
+      "vinilos-leather": {
+        "role": "secondary",
+        "displayName": "Cuero",
+        "canonical": "#4a2f22",
+        "oklch": "oklch(33.4% 0.045 46.4)",
+        "tonalRamp": [
+          "#1a0400",
+          "#361d10",
+          "#54382b",
+          "#745648",
+          "#957567",
+          "#b79687",
+          "#debcac",
+          "#feeae0"
+        ],
+        "scope": "[data-section=vinilos] --leather"
+      },
+      "vinilos-text": {
+        "role": "neutral",
+        "displayName": "Crema de Lámpara",
+        "canonical": "#efe4d2",
+        "oklch": "oklch(92.3% 0.027 80.2)",
+        "tonalRamp": [
+          "#110a01",
+          "#2b2315",
+          "#473e30",
+          "#665c4d",
+          "#867c6c",
+          "#a79d8c",
+          "#cdc3b1",
+          "#f8eddb"
+        ],
+        "scope": "[data-section=vinilos] --text"
+      },
+      "vinilos-text-soft": {
+        "role": "neutral",
+        "displayName": "Arena",
+        "canonical": "#c7b49a",
+        "oklch": "oklch(77.9% 0.042 75.7)",
+        "tonalRamp": [
+          "#140800",
+          "#30210a",
+          "#4d3d26",
+          "#6c5b43",
+          "#8c7a62",
+          "#ae9b82",
+          "#d4c1a7",
+          "#feecd3"
+        ],
+        "scope": "[data-section=vinilos] --text-soft"
+      },
+      "vinilos-amber": {
+        "role": "primary",
+        "displayName": "Ámbar de Lámpara",
+        "canonical": "#e8a64b",
+        "oklch": "oklch(77.2% 0.132 72.2)",
+        "tonalRamp": [
+          "#150800",
+          "#351f00",
+          "#593800",
+          "#805201",
+          "#a97012",
+          "#d08f31",
+          "#f8b55b",
+          "#ffebd4"
+        ],
+        "scope": "[data-section=vinilos] --accent / --accent-text / --focus"
+      },
+      "vinilos-rule": {
+        "role": "neutral",
+        "displayName": "Tabaco",
+        "canonical": "#5a4030",
+        "oklch": "oklch(39.6% 0.045 52.6)",
+        "tonalRamp": [
+          "#190500",
+          "#351d0e",
+          "#533929",
+          "#725746",
+          "#937665",
+          "#b69785",
+          "#dcbdaa",
+          "#feeade"
+        ],
+        "scope": "[data-section=vinilos] --rule"
+      },
+      "vinilos-seal-him": {
+        "role": "secondary",
+        "displayName": "Latón",
+        "canonical": "#b8963e",
+        "oklch": "oklch(68.8% 0.113 87.8)",
+        "tonalRamp": [
+          "#110a00",
+          "#2f2200",
+          "#503d02",
+          "#745906",
+          "#997818",
+          "#bc9a42",
+          "#e3c069",
+          "#ffedc3"
+        ],
+        "scope": "[data-section=vinilos] --seal-him"
+      },
+      "cartelera-ground": {
+        "role": "neutral",
+        "displayName": "Azul Medianoche",
+        "canonical": "#0f1630",
+        "oklch": "oklch(21.0% 0.052 270.1)",
+        "tonalRamp": [
+          "#040821",
+          "#1a223d",
+          "#353e5c",
+          "#525c7c",
+          "#717c9d",
+          "#929dc0",
+          "#b7c3e7",
+          "#e8eefe"
+        ],
+        "scope": "[data-section=cartelera] --ground"
+      },
+      "cartelera-surface": {
+        "role": "neutral",
+        "displayName": "Azul Estante",
+        "canonical": "#18214a",
+        "oklch": "oklch(26.5% 0.077 271.0)",
+        "tonalRamp": [
+          "#04042b",
+          "#172049",
+          "#313c68",
+          "#4e5b89",
+          "#6c7bab",
+          "#8d9ccf",
+          "#b1c2f7",
+          "#e9eefe"
+        ],
+        "scope": "[data-section=cartelera] --surface"
+      },
+      "cartelera-text": {
+        "role": "neutral",
+        "displayName": "Blanco Pantalla",
+        "canonical": "#f4efe6",
+        "oklch": "oklch(95.4% 0.013 82.4)",
+        "tonalRamp": [
+          "#0e0b06",
+          "#27241d",
+          "#433f38",
+          "#615d55",
+          "#817d75",
+          "#a29e95",
+          "#c8c3bb",
+          "#f3eee5"
+        ],
+        "scope": "[data-section=cartelera] --text"
+      },
+      "cartelera-text-soft": {
+        "role": "neutral",
+        "displayName": "Lavanda Gris",
+        "canonical": "#b9bdd6",
+        "oklch": "oklch(80.3% 0.035 278.4)",
+        "tonalRamp": [
+          "#08091a",
+          "#202235",
+          "#3b3e53",
+          "#595c72",
+          "#787c93",
+          "#999db5",
+          "#bec2db",
+          "#eaedff"
+        ],
+        "scope": "[data-section=cartelera] --text-soft"
+      },
+      "cartelera-marquee": {
+        "role": "primary",
+        "displayName": "Amarillo Marquesina",
+        "canonical": "#ffd23f",
+        "oklch": "oklch(87.9% 0.162 90.9)",
+        "tonalRamp": [
+          "#110a00",
+          "#2e2300",
+          "#4f3d00",
+          "#725b00",
+          "#977a11",
+          "#be9a1b",
+          "#ebbf1f",
+          "#ffeebe"
+        ],
+        "scope": "[data-section=cartelera] --accent / --accent-text / --focus"
+      },
+      "cartelera-neon": {
+        "role": "secondary",
+        "displayName": "Neón Rosa",
+        "canonical": "#ff4f8b",
+        "oklch": "oklch(68.8% 0.215 4.1)",
+        "tonalRamp": [
+          "#1f0008",
+          "#48021e",
+          "#760937",
+          "#a91451",
+          "#db286e",
+          "#fd5d90",
+          "#fca8bc",
+          "#fee8ec"
+        ],
+        "scope": "[data-section=cartelera] --neon"
+      },
+      "cartelera-rule": {
+        "role": "neutral",
+        "displayName": "Azul Filete",
+        "canonical": "#2c3768",
+        "oklch": "oklch(35.4% 0.086 271.8)",
+        "tonalRamp": [
+          "#04022e",
+          "#161e4d",
+          "#303b6d",
+          "#4c5a8e",
+          "#6b7ab1",
+          "#8b9bd5",
+          "#b0c1fd",
+          "#e9eefe"
+        ],
+        "scope": "[data-section=cartelera] --rule"
+      },
+      "cartas-ground": {
+        "role": "neutral",
+        "displayName": "Papel de Carta",
+        "canonical": "#dcd6ca",
+        "oklch": "oklch(87.8% 0.018 84.6)",
+        "tonalRamp": [
+          "#0f0b04",
+          "#28231a",
+          "#443f35",
+          "#625d53",
+          "#827d72",
+          "#a39e92",
+          "#c9c3b8",
+          "#f4eee2"
+        ],
+        "scope": "[data-section=cartas] --ground"
+      },
+      "cartas-surface": {
+        "role": "neutral",
+        "displayName": "Hoja Marfil",
+        "canonical": "#f2ede2",
+        "oklch": "oklch(94.7% 0.016 86.4)",
+        "tonalRamp": [
+          "#0e0b05",
+          "#27241b",
+          "#433f37",
+          "#615d54",
+          "#817d73",
+          "#a39e94",
+          "#c8c4b9",
+          "#f3eee3"
+        ],
+        "scope": "[data-section=cartas] --surface"
+      },
+      "cartas-text": {
+        "role": "neutral",
+        "displayName": "Cinta de Máquina",
+        "canonical": "#1d1d1f",
+        "oklch": "oklch(23.2% 0.004 286.1)",
+        "tonalRamp": [
+          "#0b0b0d",
+          "#242426",
+          "#3f3f42",
+          "#5d5d60",
+          "#7d7d7f",
+          "#9e9ea1",
+          "#c4c4c6",
+          "#eeeef1"
+        ],
+        "scope": "[data-section=cartas] --text / --rule"
+      },
+      "cartas-text-soft": {
+        "role": "neutral",
+        "displayName": "Grafito",
+        "canonical": "#4b4740",
+        "oklch": "oklch(40.0% 0.013 81.8)",
+        "tonalRamp": [
+          "#0e0b06",
+          "#27241d",
+          "#433f38",
+          "#615d56",
+          "#817d75",
+          "#a29e96",
+          "#c8c3bb",
+          "#f3eee5"
+        ],
+        "scope": "[data-section=cartas] --text-soft"
+      },
+      "cartas-seal-him": {
+        "role": "secondary",
+        "displayName": "Oro Viejo",
+        "canonical": "#8a6d2c",
+        "oklch": "oklch(55.0% 0.090 84.7)",
+        "tonalRamp": [
+          "#120900",
+          "#302100",
+          "#523c00",
+          "#755913",
+          "#967938",
+          "#b89a5a",
+          "#dfc07f",
+          "#feedc9"
+        ],
+        "scope": "[data-section=cartas] --seal-him"
+      }
+    },
+    "typographyMeta": {
+      "masthead": {
+        "displayName": "Cabecera",
+        "purpose": "«The MVP Post» a todo el ancho en portada y llegada; en miniatura (1–1.25rem) en folios."
+      },
+      "headline": {
+        "displayName": "Titular",
+        "purpose": "Titular-pregunta de la columna y títulos de login, redacción y cupón. Mayúsculas, text-wrap: balance."
+      },
+      "title": {
+        "displayName": "Título",
+        "purpose": "Nombres en credenciales, fichas de cinta, «Sigue leyendo»."
+      },
+      "subtitle": {
+        "displayName": "Encabezado de bloque",
+        "purpose": "«Secciones», «Ediciones anteriores»; siempre sobre un filete."
+      },
+      "body": {
+        "displayName": "Cuerpo",
+        "purpose": "Texto corrido con cifras de estilo antiguo."
+      },
+      "column-body": {
+        "displayName": "Cuerpo de la columna",
+        "purpose": "La columna: medida 34rem, sangría 1.25em desde el segundo párrafo."
+      },
+      "caption": {
+        "displayName": "Pie / firma",
+        "purpose": "Itálica: pies de foto, firmas, teasers, notas y errores."
+      },
+      "label": {
+        "displayName": "Folio / etiqueta",
+        "purpose": "Mayúsculas con tracking 0.08–0.14em: folios, fechas, etiquetas de campo, «SMG Development®»."
+      },
+      "hand": {
+        "displayName": "Manuscrita",
+        "purpose": "Dedicatorias de vinilos y pies de polaroid."
+      },
+      "section-title": {
+        "displayName": "Título de sección",
+        "purpose": "Título bajo el folio de cada sección, en la cara display del mundo (--face-display)."
+      },
+      "display-y2k": {
+        "displayName": "Display Y2K",
+        "purpose": "Letras de burbuja con contorno negro (paint-order: stroke fill)."
+      },
+      "display-alfombra": {
+        "displayName": "Display Alfombra roja",
+        "purpose": "Bodoni en itálica, dorado claro."
+      },
+      "display-vinilos": {
+        "displayName": "Display Vinilos",
+        "purpose": "Títulos de disco y de la pila; itálica en el título de sección."
+      },
+      "display-cartelera": {
+        "displayName": "Display Cartelera",
+        "purpose": "Letrero de neón con halo amarillo."
+      },
+      "display-cartas": {
+        "displayName": "Display Cartas",
+        "purpose": "Máquina de escribir: título de sección, campo de redacción y las cartas de él."
+      }
+    },
+    "shadows": [
+      {
+        "name": "lift",
+        "value": "0 10px 24px -12px rgba(0, 0, 0, 0.45)",
+        "purpose": "Token --shadow-lift: credenciales de prensa."
+      },
+      {
+        "name": "page-on-desk",
+        "value": "0 30px 60px -30px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(20, 20, 20, 0.08)",
+        "purpose": "La portada como página sobre la mesa a partir de 48rem."
+      },
+      {
+        "name": "object-on-table",
+        "value": "0 6px 14px -8px rgba(0, 0, 0, 0.35)",
+        "purpose": "Cartas sueltas sobre papel claro."
+      },
+      {
+        "name": "object-on-dark",
+        "value": "0 10px 18px -10px rgba(0, 0, 0, 0.9)",
+        "purpose": "Polaroids sobre fondo oscuro."
+      },
+      {
+        "name": "cutout",
+        "value": "drop-shadow(0 6px 6px rgba(0, 0, 0, 0.28))",
+        "purpose": "filter: piezas del collage Y2K, siguiendo la silueta."
+      },
+      {
+        "name": "misregistration",
+        "value": "-3px 2px 0 rgba(194, 37, 92, 0.28)",
+        "purpose": "Fuera de registro de la segunda plancha (con translate: 2px -1px): banda de sección y cinta. No es sombra de tarjeta."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Token --ease-out: toda transición de estado, pasar página, voltear credencial."
+      },
+      {
+        "name": "page-unfold",
+        "value": "520ms clip-path inset desde el lomo; la vieja 420ms a brightness(0.7)",
+        "purpose": "Pasar la página con View Transitions."
+      },
+      {
+        "name": "credential-flip",
+        "value": "560ms rotateY(180deg)",
+        "purpose": "La credencial se voltea para pedir la contraseña."
+      },
+      {
+        "name": "arrival",
+        "value": "land 900ms; ink-in 1100ms con 500ms de retardo; feed 1700ms",
+        "purpose": "El periódico cae a la puerta, la cabecera se imprime, la rotativa alimenta."
+      },
+      {
+        "name": "flash",
+        "value": "380ms steps(1, end) + fundido",
+        "purpose": "Flash de cámara: corte duro a blanco."
+      },
+      {
+        "name": "extra-shake",
+        "value": "600ms",
+        "purpose": "Sacudida del ¡Extra! en Cartas."
+      },
+      {
+        "name": "nudge",
+        "value": "300ms translate",
+        "purpose": "Flecha de pliego (4px) al hover/focus; fundas y VHS al seleccionarse."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "mobile",
+        "value": "390px",
+        "purpose": "Diseño base (iPhone, PWA instalada)."
+      },
+      {
+        "name": "desk",
+        "value": "48rem",
+        "purpose": "El periódico pasa a ser una página sobre la mesa."
+      }
+    ],
+    "textures": [
+      {
+        "name": "--leopard",
+        "source": "leopardTexture() en src/ui/leopard.ts",
+        "purpose": "Leopardo rosa (Y2K) y dark leopard (Alfombra, miniaturas de pliego)."
+      },
+      {
+        "name": "--frame",
+        "source": "rhinestoneFrame()",
+        "purpose": "border-image de pedrería dorada del visor."
+      },
+      {
+        "name": "--ring",
+        "source": "gemRing()",
+        "purpose": "Anillo de gemas del disparador."
+      },
+      {
+        "name": "--walnut",
+        "source": "walnutTexture()",
+        "purpose": "Plinto del tocadiscos."
+      },
+      {
+        "name": "--leather-tex",
+        "source": "leatherTexture()",
+        "purpose": "Fundas de vinilo."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Botón de tinta",
+      "kind": "button",
+      "refersTo": "button-ink",
+      "description": "Acción principal sobre el papel («Entrar», «Leer»).",
+      "html": "<button class=\"ds-btn-ink\">Entrar <svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></button>",
+      "css": ".ds-btn-ink { display: inline-flex; align-items: center; gap: 0.5rem; min-height: 2.75rem; padding: 0 1rem; border: 0; background: var(--ink, #141414); color: var(--paper, #e2e4e5); font: 700 1rem/1 Antonio, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer; } .ds-btn-ink svg { transition: translate 300ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-btn-ink:hover svg { translate: 4px 0; } .ds-btn-ink:focus-visible { outline: 2px solid var(--spot, #c2255c); outline-offset: 3px; border-radius: 2px; } .ds-btn-ink:disabled { opacity: 0.45; cursor: default; }"
+    },
+    {
+      "name": "Botón de segunda plancha",
+      "kind": "button",
+      "refersTo": "button-spot",
+      "description": "Solo para publicar una edición desde la redacción.",
+      "html": "<button class=\"ds-btn-spot\">Publicar</button>",
+      "css": ".ds-btn-spot { min-height: 3rem; padding: 0 1rem; border: 0; background: var(--spot, #c2255c); color: var(--on-spot, #fff); font: 700 1rem/1 Antonio, sans-serif; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; } .ds-btn-spot:focus-visible { outline: 2px solid var(--spot, #c2255c); outline-offset: 3px; border-radius: 2px; } .ds-btn-spot:disabled { opacity: 0.5; cursor: default; }"
+    },
+    {
+      "name": "Botón de contorno",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Acción secundaria del papel («Guardar borrador», «Cerrar sesión»).",
+      "html": "<button class=\"ds-btn-outline\">Guardar borrador</button>",
+      "css": ".ds-btn-outline { min-height: 2.75rem; padding: 0 1rem; border: 1px solid var(--ink, #141414); background: transparent; color: var(--ink, #141414); font: 700 1rem/1 Antonio, sans-serif; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; } .ds-btn-outline:focus-visible { outline: 2px solid var(--spot, #c2255c); outline-offset: 3px; border-radius: 2px; } .ds-btn-outline:disabled { opacity: 0.5; cursor: default; }"
+    },
+    {
+      "name": "Botón de sección",
+      "kind": "button",
+      "refersTo": "section-button",
+      "description": "Botón dentro de cualquier mundo de sección (aquí, Vinilos); hereda --accent y --on-accent.",
+      "html": "<div class=\"ds-world\"><button class=\"ds-section-btn\">Guardar</button> <button class=\"ds-section-btn ds-section-btn--ghost\">Cancelar</button></div>",
+      "css": ".ds-world { --accent: #e8a64b; --on-accent: #1f1610; --text: #efe4d2; --text-soft: #c7b49a; display: flex; gap: 0.75rem; padding: 1rem; background: #1f1610; } .ds-section-btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; min-height: 2.75rem; padding: 0 1rem; border: 0; border-radius: 2px; background: var(--accent); color: var(--on-accent); font: 700 1rem/1 Antonio, sans-serif; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer; } .ds-section-btn--ghost { background: transparent; color: var(--text); box-shadow: inset 0 0 0 1px var(--text-soft); } .ds-section-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; } .ds-section-btn:disabled { opacity: 0.5; cursor: default; }"
+    },
+    {
+      "name": "Campo del papel",
+      "kind": "input",
+      "refersTo": "field-underline",
+      "description": "Campo sin caja, solo filete inferior; el filete pasa a rosa al enfocar.",
+      "html": "<label class=\"ds-field\"><span>Titular</span><input value=\"¿Qué se lleva este domingo?\" /></label>",
+      "css": ".ds-field { display: grid; gap: 0.5rem; padding: 1rem; background: #e2e4e5; color: #141414; } .ds-field span { font: 500 0.75rem/1 Antonio, sans-serif; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-soft, #4a4945); } .ds-field input { width: 100%; padding: 0.5rem 0; border: 0; border-bottom: 1px solid var(--ink, #141414); background: transparent; color: inherit; font: 1.15rem/1.2 'Libre Caslon Text', Georgia, serif; caret-color: #c2255c; } .ds-field input:focus-visible { outline: none; border-bottom-color: var(--spot, #c2255c); }"
+    },
+    {
+      "name": "Pliego de sección",
+      "kind": "nav",
+      "refersTo": "pliego",
+      "description": "Fila del cuadernillo negro de la portada: el mundo se anuncia con su cara y su acento; el sello «Nuevo» cambia en su sitio.",
+      "html": "<nav class=\"ds-pliegos\"><a class=\"ds-pliego\" href=\"#\"><span class=\"ds-pliego-thumb\"></span><span class=\"ds-pliego-name\">Los vinilos de Big</span><span class=\"ds-pliego-new\">Nuevo</span><span class=\"ds-pliego-teaser\">Una dedicatoria nueva en el plato.</span><svg width=\"22\" height=\"22\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></a></nav>",
+      "css": ".ds-pliegos { padding: 0 1rem; background: #141414; color: #e2e4e5; } .ds-pliego { display: grid; grid-template-columns: 3.5rem 1fr auto; grid-template-areas: 'thumb name new' 'thumb teaser arrow'; align-items: center; column-gap: 0.75rem; padding: 1rem 0; border-bottom: 1px solid rgba(230, 230, 226, 0.22); color: inherit; text-decoration: none; } .ds-pliego-thumb { grid-area: thumb; width: 3.5rem; height: 3.5rem; border-radius: 50%; background: radial-gradient(circle, #e8a64b 0 22%, #1f1610 22.5% 25%, transparent 25.5%), repeating-radial-gradient(circle, #111 0 1.5px, #262626 1.5px 3px); } .ds-pliego-name { grid-area: name; align-self: end; font: 400 1.75rem/1.05 Gloock, serif; color: #e8a64b; } .ds-pliego-teaser { grid-area: teaser; align-self: start; margin-top: 0.25rem; font: italic 0.875rem/1.3 'Libre Caslon Text', Georgia, serif; color: #cfcfca; } .ds-pliego-new { grid-area: new; justify-self: end; padding: 0.1rem 0.5rem; background: #c2255c; color: #fff; font: 700 0.75rem/1.3 Antonio, sans-serif; letter-spacing: 0.14em; text-transform: uppercase; rotate: -4deg; box-shadow: -2px 1px 0 rgba(20, 20, 20, 0.35); } .ds-pliego svg { grid-area: arrow; justify-self: end; transition: translate 300ms cubic-bezier(0.16, 1, 0.3, 1); } .ds-pliego:hover svg, .ds-pliego:focus-visible svg { translate: 4px 0; } .ds-pliego:focus-visible { outline: 2px solid #c2255c; outline-offset: 3px; }"
+    },
+    {
+      "name": "Cabecera y banda de sección",
+      "kind": "custom",
+      "refersTo": "section-flag",
+      "description": "Cabecera gótica, doble filete y banda rosa de segunda plancha con fuera de registro, sobre papel con trama.",
+      "html": "<div class=\"ds-mast\"><div class=\"ds-mast-name\">The MVP Post</div><div class=\"ds-rules\"></div><div class=\"ds-flag\">Estilos · Domingo <span>La columna</span></div></div>",
+      "css": ".ds-mast { padding: 1rem; background-color: #e2e4e5; background-image: radial-gradient(rgba(20, 20, 20, 0.07) 0.6px, transparent 0.75px); background-size: 3px 3px; color: #141414; } .ds-mast-name { text-align: center; font: 700 3rem/1 UnifrakturCook, serif; white-space: nowrap; } .ds-rules { height: 6px; margin-top: 0.5rem; border-top: 3px solid #141414; border-bottom: 1px solid #141414; } .ds-flag { display: flex; align-items: baseline; justify-content: space-between; margin-top: 0.75rem; padding: 0.25rem 0.75rem; background: #c2255c; color: #fff; font: 700 1.6rem/1.1 Antonio, sans-serif; letter-spacing: 0.04em; text-transform: uppercase; translate: 2px -1px; box-shadow: -3px 2px 0 rgba(194, 37, 92, 0.28); } .ds-flag span { font: italic 400 0.875rem/1 'Libre Caslon Text', Georgia, serif; text-transform: none; letter-spacing: 0; }"
+    },
+    {
+      "name": "Sello de goma",
+      "kind": "chip",
+      "refersTo": "stamp-new",
+      "description": "Marca de estado impresa («Fijado», «Visto»): doble filete, tinta irregular, girada.",
+      "html": "<div class=\"ds-stamp-wrap\"><span class=\"ds-rubber-stamp\">Fijado</span></div>",
+      "css": ".ds-stamp-wrap { padding: 1.5rem; background: #f4c9dc; } .ds-rubber-stamp { display: inline-block; padding: 0.1rem 0.45rem; border: 3px double currentColor; border-radius: 3px; color: #b01f53; background: rgba(255, 255, 255, 0.55); font: 700 0.875rem/1.2 Antonio, sans-serif; letter-spacing: 0.16em; text-transform: uppercase; rotate: -9deg; mask-image: radial-gradient(circle at 30% 40%, #000 55%, rgba(0, 0, 0, 0.75) 70%, #000 85%); }"
+    },
+    {
+      "name": "Chip de filtro",
+      "kind": "chip",
+      "refersTo": "chip",
+      "description": "Filtro pill de la pila de vinilos; presionado toma el acento del mundo.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\" aria-pressed=\"true\">Todos</button><button class=\"ds-chip\" aria-pressed=\"false\">De ella</button><button class=\"ds-chip\" aria-pressed=\"false\">De él</button></div>",
+      "css": ".ds-chips { display: flex; gap: 0.25rem; padding: 1rem; background: #1f1610; } .ds-chip { min-height: 2.25rem; padding: 0 0.75rem; border: 1px solid #5a4030; border-radius: 999px; background: transparent; color: #c7b49a; font: 0.875rem/1 'Libre Caslon Text', Georgia, serif; cursor: pointer; } .ds-chip[aria-pressed='true'] { background: #e8a64b; border-color: #e8a64b; color: #1f1610; } .ds-chip:focus-visible { outline: 2px solid #e8a64b; outline-offset: 3px; border-radius: 999px; }"
+    },
+    {
+      "name": "Ticket de turno",
+      "kind": "custom",
+      "refersTo": "ticket",
+      "description": "Ticket perforado de Cartelera con a quién le toca elegir.",
+      "html": "<div class=\"ds-ticket-wrap\"><div class=\"ds-ticket\"><span class=\"ds-ticket-label\">Elige</span><span class=\"ds-ticket-name\">María Victoria</span></div></div>",
+      "css": ".ds-ticket-wrap { padding: 1rem; background: #0f1630; } .ds-ticket { display: flex; justify-content: space-between; align-items: center; gap: 0.75rem; padding: 0.75rem 1rem; background: #ffd23f; color: #0f1630; -webkit-mask: radial-gradient(circle at 0 50%, transparent 0.6rem, #000 0.62rem) left / 51% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 0.6rem, #000 0.62rem) right / 51% 100% no-repeat; mask: radial-gradient(circle at 0 50%, transparent 0.6rem, #000 0.62rem) left / 51% 100% no-repeat, radial-gradient(circle at 100% 50%, transparent 0.6rem, #000 0.62rem) right / 51% 100% no-repeat; } .ds-ticket-label { font: 500 0.875rem/1 Antonio, sans-serif; letter-spacing: 0.12em; text-transform: uppercase; } .ds-ticket-name { font: 700 1.6rem/1 Antonio, sans-serif; text-transform: uppercase; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "La sección de Estilos del domingo, impresa a dos tintas",
+    "overview": "The MVP Post es un periódico neoyorquino de 2003 hecho para una sola lectora. La portada, la columna, el login, la redacción y la suscripción son **papel prensa**: gris claro frío (no crema), trama de medio tono, tinta negra y una segunda plancha rosa que solo aparece donde hay trabajo (lo nuevo, la banda de sección, la capitular), con un leve fuera de registro. La tipografía es la de un diario: cabecera gótica, titulares en gótica condensada en mayúsculas, cuerpo en serif de periódico a dos columnas y pies de foto en itálica.\n\nCada sección rompe con el papel y es su propio mundo. Detrás del pliego viven cinco pieles (Y2K, Alfombra roja, Vinilos, Cartelera, Cartas) que redefinen **los mismos roles** (`--ground`, `--surface`, `--text`, `--text-soft`, `--accent`, `--accent-text`, `--on-accent`, `--rule`, `--focus`, `--face-display`) bajo `[data-section=\"…\"]`. El cambio de mundo es la sorpresa; la estructura de lectura (folio, título de sección, esquina doblada para volver) es fija.\n\nLos materiales son imprenta y objetos: medio tono, filetes dobles, sellos de goma, lacre, ticket perforado, polaroids, fundas de vinilo, lomos de VHS. Las texturas que no son tipografía (leopardo, marco de pedrería, anillo de gemas, nogal, cuero) son raster generadas en canvas (`src/ui/leopard.ts`) y entran como variables CSS (`--leopard`, `--frame`, `--ring`, `--walnut`, `--leather-tex`), nunca dibujadas en CSS. Se rechaza explícitamente la app de pareja con tarjetas y pestañas y la primera plana genérica de periódico crema.",
+    "keyCharacteristics": [
+      "Papel prensa frío con trama de medio tono de 3 px; tinta negra; un solo acento rosa como segunda plancha.",
+      "Una retícula de 6 columnas y una página de 40rem como máximo; 390 px primero.",
+      "Estados como marcas impresas: nuevo = sello rosa, visto = negro, fijado = sello de goma, turno = ticket perforado.",
+      "Cada sección redefine los roles de color y una cara display propia; los componentes solo leen roles.",
+      "Pasar la página es un desdoblamiento desde el lomo (View Transitions), no un deslizamiento de app."
+    ],
+    "rules": [
+      {
+        "name": "The Segunda Plancha Rule",
+        "body": "En el papel, el rosa solo marca trabajo: lo nuevo, la sección, la capitular, la acción de publicar. Si el rosa aparece en algo que no cambió ni invita a entrar, sobra.",
+        "section": "colors"
+      },
+      {
+        "name": "The Roles, Not Colors Rule",
+        "body": "Un componente lee `--accent`, `--text`, `--rule`…, nunca un hex. Un mundo nuevo se crea redefiniendo el bloque completo de roles bajo `[data-section]`, no sobrescribiendo componentes.",
+        "section": "colors"
+      },
+      {
+        "name": "The Cold Paper Rule",
+        "body": "El papel es gris frío (paper), nunca crema ni hueso. El crema es la primera plana genérica que este sistema rechaza.",
+        "section": "colors"
+      },
+      {
+        "name": "The Capitular Rule",
+        "body": "La columna y el arranque de portada abren con capitular en Antonio 700 a tinta rosa (3.1rem en portada, 4.4rem en la columna). Una por texto.",
+        "section": "typography"
+      },
+      {
+        "name": "The Voice of the World Rule",
+        "body": "Dentro de una sección, los títulos usan `--face-display`; los botones, etiquetas y fichas siguen en Antonio. El mundo cambia la voz del titular, no la de la interfaz.",
+        "section": "typography"
+      },
+      {
+        "name": "The One Page Rule",
+        "body": "No hay pestañas ni barra inferior: se navega por pliegos, titular y esquina doblada. Cada sección es una página entera, no un panel.",
+        "section": "layout"
+      },
+      {
+        "name": "The Objects Lift, Paper Doesn't Rule",
+        "body": "Solo los objetos llevan sombra. El papel, los filetes y los bloques de texto nunca.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Misregistration Rule",
+        "body": "El desplazamiento duro solo existe en la segunda plancha (rosa) y en los sellos impresos, nunca de 3 px o más en tinta negra ni como estilo de tarjeta.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** lee siempre los roles (`--ground`, `--surface`, `--text`, `--accent`, `--on-accent`, `--rule`, `--focus`, `--face-display`) y crea cada mundo nuevo redefiniendo el bloque entero bajo `[data-section]`.",
+      "**Do** pon el papel sobre la trama `.newsprint` (punto de 0,6 px cada 3 px) y las fotos del papel en medio tono.",
+      "**Do** marca los estados con objetos impresos: sello rosa para nuevo, sello de goma para fijado, ticket perforado para el turno, lacre para la autoría.",
+      "**Do** separa bloques con filetes de imprenta (doble 3 + 1 px bajo cabeceras, 1 px entre filas) en lugar de cajas.",
+      "**Do** usa `spot-text`, no `spot`, para texto rosa menor de 18 px sobre papel.",
+      "**Do** genera las texturas (leopardo, pedrería, nogal, cuero) como raster y pásalas por variable CSS; las fotos de la pareja son placeholders marcados hasta tenerlas.",
+      "**Do** mantén cada objetivo táctil de 2.75rem como mínimo y respeta `safe-area-inset` arriba y abajo."
+    ],
+    "donts": [
+      "**Don't** uses papel crema o hueso: el papel es gris frío (paper).",
+      "**Don't** pongas rosa en el papel fuera de lo nuevo, la sección, la capitular o publicar.",
+      "**Don't** construyas la UI con tarjetas redondeadas, pestañas inferiores o barras de app: se navega por pliegos y esquina doblada.",
+      "**Don't** uses el desplazamiento duro (fuera de registro) en tinta negra ni como sombra de tarjeta; es exclusivo de la segunda plancha y de los sellos.",
+      "**Don't** escribas hex en componentes; si un mundo necesita un color nuevo, añádelo como rol en su bloque de tokens.",
+      "**Don't** uses logos ni marcas reales; todo es propio e «inspirado en».",
+      "**Don't** pongas sombra al papel, a los filetes ni a los bloques de texto; solo los objetos se levantan."
+    ]
+  }
+}
