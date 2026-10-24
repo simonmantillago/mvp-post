@@ -2,6 +2,7 @@
 
 PWA privada de pareja, regalo para **MVP**. Es un **periódico neoyorquino de 2003**: la portada es la columna que Simón le escribe (guiño a la columnista de Manhattan de la TV de esos años) y cada sección del periódico es un mundo con su propia estética. Solo dos usuarios. **Ambos usan iPhone**, con la app instalada en la pantalla de inicio.
 
+- **Estado actual y próximo paso (leer primero): [docs/ESTADO.md](docs/ESTADO.md)** — MVP publicado; Alfombra roja con alas y ráfaga de paparazzi publicada (2026-10-24). Se itera módulo por módulo.
 - Producto, usuarios y compromisos de marca: [PRODUCT.md](PRODUCT.md)
 - Spec de cada sección + notificaciones: [docs/modules.md](docs/modules.md)
 - Base de datos, RLS, push y setup de Supabase: [docs/data-model.md](docs/data-model.md)
@@ -14,7 +15,7 @@ PWA privada de pareja, regalo para **MVP**. Es un **periódico neoyorquino de 20
 - **Nombre:** **The MVP Post** (cabecera gótica). Pie: **"SMG Development®"**.
 - **Navegación:** portada → tocar titular → pasar la página → sección a pantalla completa con estética propia. Esquina doblada arriba a la derecha = volver a portada. Una ruta por sección (deep links desde notificaciones).
 - **Secciones v1:** Llegada + login ("¿Quién lee hoy?", credenciales de prensa) · Portada + La columna (ediciones) · **Estilo · Y2K** (collage editable de fotos de la galería sin fondo + stickers + recortes; mover, girar, escalar, **fijar con candado**; burbuja de acciones tipo iOS) · **Sociedad · Alfombra roja** (cámara en la app → polaroids con texto) · **Los vinilos de Big** (tocadiscos + lista de fundas apiladas con sello de quién la dedicó) · **Cartelera** (videoclub, turnos, ratings) · **Cartas al editor** (chat + ¡Extra!) · Suscripción (ajustes).
-- **Estética:** portada de papel (blanco hueso, tinta negra, un acento rosa); cada sección rompe: Y2K = collage de recortes, brillo, leopardo, stickers; Alfombra roja = dark leopard, dorado, pedrería, alas de ángel, flash; Vinilos = penthouse classy (nogal, cuero, ámbar, sin brillo); Cartelera = videoclub de noche; Cartas = papel y máquina de escribir.
+- **Estética:** portada de papel (gris claro frío, tinta negra, rosa como segunda tinta); cada sección rompe: Y2K = collage de recortes, brillo, leopardo, stickers; Alfombra roja = dark leopard, dorado, pedrería, alas de ángel, flash; Vinilos = penthouse classy (nogal, cuero, ámbar, sin brillo); Cartelera = videoclub de noche; Cartas = papel y máquina de escribir.
 - **Notificaciones push de todo lo nuevo** (edición, collage, foto, ♥, canción, carta, ¡Extra!, películas) + badge numérico en el ícono. Flujo: triggers → `activity` → pg_net → Edge Function `notify` → Web Push. Ver data-model.md.
 - **iOS:** Web Push solo con la PWA instalada (iOS 16.4+), permiso pedido desde un toque. No hay Vibration API → el ¡Extra! es visual + sonido. Audio solo tras gesto. El menú nativo de copiar/pegar no admite acciones propias → la burbuja del collage es un componente propio con ese look.
 - Texturas e ilustraciones (leopardo, stickers, alas, papel, VHS, vinilos) son **assets raster**, no dibujos en CSS.
@@ -26,13 +27,8 @@ PWA privada de pareja, regalo para **MVP**. Es un **periódico neoyorquino de 20
 - **PWA:** `vite-plugin-pwa` en modo `injectManifest` con service worker propio [src/sw.ts](src/sw.ts) (precache + push + badge + abrir sección al tocar). Suscripción en [src/lib/push.ts](src/lib/push.ts).
 - **Supabase:** Auth (email+contraseña, sign-ups off), Postgres + RLS, Storage (buckets privados + signed URLs), Realtime, Edge Function [`notify`](supabase/functions/notify/index.ts), `pg_net` + Vault.
 - **Netlify** gratis: sitio `mvp-post` → https://mvp-post.netlify.app (vinculado en `.netlify/`, variables `VITE_*` cargadas). Repo: https://github.com/simonmantillago/mvp-post (privado, rama `main`).
-- Para instalar al construir la UI (aún no instaladas):
-  - `react-router` 7 — rutas por sección.
-  - `zustand` (ya instalado) — estado de cliente (selección del collage, reproductor).
-  - `@use-gesture/react` — arrastrar, pellizcar y girar piezas del collage.
-  - `@imgly/background-removal` — quitar fondo en el teléfono (WASM; baja el modelo la primera vez, luego queda en caché). Licencia AGPL: sirve para este uso privado. Si va lento en iPhone, plan B: MediaPipe Image Segmenter (solo personas, más liviano).
-  - `@fontsource/*` — fuentes propias empaquetadas (gótica de cabecera, serif editorial, máquina de escribir, manuscrita).
-  - View Transitions API (Safari 18+) para pasar la página, con fallback CSS.
+- Instalado: `react-router` 7 (rutas por sección, View Transitions para pasar la página) y `@fontsource/*` (solo subconjunto latino). Gestos del collage con Pointer Events propios (sin librería).
+- Pendiente de instalar: `@imgly/background-removal` para quitar fondo en el teléfono (AGPL, uso privado; plan B MediaPipe).
 - Sin librerías de UI de terceros.
 
 ## Comandos
@@ -89,7 +85,7 @@ docs/                     # specs, wireframe, inspiración
 - Respetar `prefers-reduced-motion` en llegada, pasar página, flash y ¡Extra!.
 
 ## Flujo de trabajo
-- **Todo trabajo de UI usa la skill Impeccable** (`/impeccable`). Siguiente paso: dirección visual del periódico (tokens, tipografías, assets) a partir del wireframe aprobado, sin rehacer la estructura. Tras construir: `/impeccable polish` y `/impeccable audit`; al final el documenter escribe `DESIGN.md`.
+- **Todo trabajo de UI usa la skill Impeccable** (`/impeccable`) y respeta `DESIGN.md` + el contrato de dirección. Ahora se itera módulo por módulo (ver docs/ESTADO.md); tras cambios grandes, `/impeccable audit`.
 - Probar en el navegador integrado a 390 px (móvil) y 1440 px; push y cámara solo se prueban de verdad en iPhone instalado.
 - Al cerrar cada sesión: actualizar el **Roadmap** de abajo (marcar `[x]`, anotar bloqueos).
 
@@ -109,7 +105,8 @@ docs/                     # specs, wireframe, inspiración
 ### Fase 2 — Dirección visual (Impeccable)
 - [x] Dirección «Estilos del domingo» elegida en ronda Impeccable; tokens por sección, fuentes autoalojadas (2026-10-24)
 - [x] Texturas raster generadas en canvas (leopardo, pedrería, nogal, cuero); stickers y sellos en SVG propio
-- [ ] **Alas de ángel** para Alfombra roja: `public/sections/alfombra/alas.png` (sin generador de imágenes; hay un hueco marcado)
+- [x] **Alas de ángel** en Alfombra roja (`public/sections/alfombra/alas.webp`), ajustadas a 390/1440 px (2026-10-24)
+- [x] Ráfaga de paparazzi + sonido de obturador en el Flash (2026-10-24). Falta oírla en el iPhone.
 - [ ] Fotos de ambos en `public/readers/` y íconos PWA definitivos; sonidos
 
 ### Fase 3 — El periódico
@@ -126,7 +123,7 @@ docs/                     # specs, wireframe, inspiración
 
 ### Fase 5 — Cierre
 - [ ] Pruebas en ambos iPhone instalados (cámara, audio, push, badge)
-- [x] Auditoría técnica (agente) + finish review (agente, 4 rondas) + DESIGN.md (2026-10-24). Único pendiente del review: las alas.
+- [x] Auditoría técnica (agente) + finish review (agente, 4 rondas) + DESIGN.md (2026-10-24). Las alas quedaron resueltas el mismo día.
 - [ ] Volver a pasar `/impeccable audit` tras las alas y las fotos reales
 - [ ] Contenido real: fotos de perfil, primera edición, primeras fotos
 

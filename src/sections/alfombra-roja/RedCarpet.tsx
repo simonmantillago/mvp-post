@@ -9,13 +9,14 @@ import { Icon } from '../../ui/Icon'
 import { darkLeopard, gemRing, leopardTexture, rhinestoneFrame } from '../../ui/leopard'
 import { PressNote } from '../../ui/PressNote'
 import { Section } from '../Section'
+import { BURST, shutterBurst } from './paparazzi'
 import './RedCarpet.css'
 
 type Like = { photo_id: string; user_id: string }
 
 /** Alfombra roja: fotos tomadas en el momento, con flash, que caen como polaroids. */
 export default function RedCarpet() {
-  const { session, isMe, nameOf } = useCouple()
+  const { session, me, isMe, nameOf } = useCouple()
   const { load } = useLive<Photo[]>('photos', () => supabase.from('photos').select('id, author_id, storage_path, caption, created_at').order('created_at', { ascending: false }))
   const { load: likesLoad } = useLive<Like[]>('photo_likes', () => supabase.from('photo_likes').select('photo_id, user_id'))
   const [texture, setTexture] = useState<string>()
@@ -50,6 +51,7 @@ export default function RedCarpet() {
       <div className="section-body">
         <Camera
           userId={session.user.id}
+          sounds={me?.sounds_enabled ?? true}
           onShot={(id) => {
             setDeveloping(id)
             window.setTimeout(() => setDeveloping(null), 4000)
@@ -106,12 +108,14 @@ function Polaroid({ photo, developing, by, onOpen }: { photo: Photo; developing:
 }
 
 /** Visor con alas, disparo con flash de corte duro. Si la cámara no abre, se usa la del sistema. */
-function Camera({ userId, onShot }: { userId: string; onShot: (photoId: string) => void }) {
+function Camera({ userId, sounds, onShot }: { userId: string; sounds: boolean; onShot: (photoId: string) => void }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
   const [state, setState] = useState<'off' | 'starting' | 'live' | 'denied' | 'saving'>('off')
   const [facing, setFacing] = useState<'user' | 'environment'>('user')
   const [flash, setFlash] = useState(false)
+  const [bursts, setBursts] = useState<{ id: number; x: number; y: number }[]>([])
+  const shooting = useRef(false)
   const [error, setError] = useState<string | null>(null)
 
   const [wingsMissing, setWingsMissing] = useState(false)
@@ -171,11 +175,33 @@ function Camera({ userId, onShot }: { userId: string; onShot: (photoId: string) 
     setState(streamRef.current ? 'live' : 'off')
   }
 
+  /**
+   * Ráfaga de paparazzi: varios flashes desde distintos puntos de la "prensa" (ta-ta-ta-ta),
+   * y el último, a pantalla completa, es la foto. Con movimiento reducido: un solo flash.
+   */
   function shoot() {
     const video = videoRef.current
-    if (!video || state !== 'live' || !video.videoWidth) return
-    setFlash(true)
-    window.setTimeout(() => setFlash(false), 380)
+    if (!video || state !== 'live' || !video.videoWidth || shooting.current) return
+    shooting.current = true
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches
+    const moments = calm ? [0] : BURST
+    if (sounds) shutterBurst(moments)
+    moments.slice(0, -1).forEach((ms, i) =>
+      window.setTimeout(() => {
+        const id = Date.now() + i
+        setBursts((b) => [...b, { id, x: 10 + Math.random() * 80, y: 15 + Math.random() * 60 }])
+        window.setTimeout(() => setBursts((b) => b.filter((x) => x.id !== id)), 140)
+      }, ms),
+    )
+    window.setTimeout(() => {
+      setFlash(true)
+      window.setTimeout(() => setFlash(false), 380)
+      capture(video)
+      shooting.current = false
+    }, moments[moments.length - 1])
+  }
+
+  function capture(video: HTMLVideoElement) {
     const canvas = document.createElement('canvas')
     canvas.width = video.videoWidth
     canvas.height = video.videoHeight
@@ -191,8 +217,8 @@ function Camera({ userId, onShot }: { userId: string; onShot: (photoId: string) 
   return (
     <section className="camera" aria-label="Cámara">
       <div className="viewfinder-stage">
-        {/* Alas de ángel: imagen propia en public/sections/alfombra/alas.png. Mientras no exista, el hueco queda marcado. */}
-        <img className="wings" src="/sections/alfombra/alas.png" alt="" aria-hidden="true" hidden={wingsMissing} onError={() => setWingsMissing(true)} />
+        {/* Alas de ángel de pedrería (imagen elegida por Simón): enmarcan el visor desde atrás */}
+        <img className="wings" src="/sections/alfombra/alas.webp" alt="" aria-hidden="true" hidden={wingsMissing} onError={() => setWingsMissing(true)} />
       <div className="viewfinder" style={{ '--frame': `url(${frame})` } as CSSProperties}>
         <video ref={videoRef} className={facing === 'user' ? 'is-mirrored' : ''} playsInline muted aria-hidden={state !== 'live'} />
         {state !== 'live' && state !== 'saving' && (
@@ -242,6 +268,9 @@ function Camera({ userId, onShot }: { userId: string; onShot: (photoId: string) 
           {error}
         </p>
       )}
+      {bursts.map((b) => (
+        <div key={b.id} className="flashbulb" style={{ '--x': `${b.x}%`, '--y': `${b.y}%` } as CSSProperties} aria-hidden="true" />
+      ))}
       {flash && <div className="flash" aria-hidden="true" />}
     </section>
   )

@@ -245,6 +245,51 @@
         ],
         "createdAt": "2026-10-24T06:59:40.005Z",
         "reason": "Claude: decision-round sketch, not shipping UI; the decision page renders sub-22px text as bars"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          "docs/wireframes/periodico.html"
+        ],
+        "createdAt": "2026-10-24T07:29:24.048Z",
+        "reason": "Claude: wireframe/decision-round sketch, not shipping UI; fonts there are placeholders predating DESIGN.md"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-10-24T07:29:24.319Z",
+        "reason": "Claude: wireframe/decision-round sketch, not shipping UI; fonts there are placeholders predating DESIGN.md"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-24T07:29:24.594Z",
+        "reason": "Claude: wireframe/decision-round sketch, not shipping UI; fonts there are placeholders predating DESIGN.md"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/challenger-matchbook.html"
+        ],
+        "createdAt": "2026-10-24T07:29:24.857Z",
+        "reason": "Claude: wireframe/decision-round sketch, not shipping UI; fonts there are placeholders predating DESIGN.md"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-24T07:29:25.177Z",
+        "reason": "Claude: wireframe/decision-round sketch, not shipping UI; fonts there are placeholders predating DESIGN.md"
       }
     ]
   }
