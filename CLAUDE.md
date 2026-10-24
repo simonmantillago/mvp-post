@@ -99,11 +99,11 @@ docs/                     # specs, wireframe, inspiración
 - [x] Cambio de dirección a The MVP Post: wireframe aprobado, docs reescritos, MVP OS archivado (2026-10-24)
 - [x] Migración `0002_mvp_post.sql` escrita y probada en transacción revertida (ediciones, collage con candado, actividad, push, bucket `collage`)
 - [x] Service worker propio con push + badge; `src/lib/push.ts`; Edge Function `notify` escrita
-- [ ] Aplicar 0002 a la nube (`db push`) — esperando OK del usuario
-- [ ] Push: llaves VAPID, secretos, deploy de `notify`, secretos en Vault
+- [x] 0002 aplicada a la nube (2026-10-24)
+- [x] Push configurado: llaves VAPID, secretos de la función, `notify` desplegada, URL + secreto en Vault; probado pg_net → notify (2026-10-24). Falta probar en iPhone cuando exista el botón de activar.
 - [x] GitHub CLI + repo privado `mvp-post`; Netlify CLI + sitio `mvp-post`, variables y primer deploy; `site_url` de Supabase apuntando a Netlify (2026-10-24)
 - [x] Deploy automático: cada push a `main` publica en producción (Netlify CI/CD vinculado al repo, 2026-10-24)
-- [ ] Cargar `VITE_VAPID_PUBLIC_KEY` en Netlify al configurar push
+- [x] `VITE_VAPID_PUBLIC_KEY` en `.env.local` y Netlify
 
 ### Fase 2 — Dirección visual (Impeccable)
 - [ ] Tokens de portada y de cada sección, tipografías
@@ -127,6 +127,5 @@ docs/                     # specs, wireframe, inspiración
 - [ ] Contenido real: fotos de perfil, primera edición, primeras fotos
 
 ## Pendientes del usuario
-- OK para aplicar la migración 0002 y configurar push en Supabase.
 - Fotos de perfil de ambos.
 - Fotos reales para el contenido inicial (opcional).

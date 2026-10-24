@@ -41,7 +41,9 @@ insert en editions/collage_items/photos/photo_likes/songs/messages/watch_items/w
 - Sin los secretos en Vault no se manda nada (la app funciona igual).
 - Suscripciones vencidas (404/410) se borran solas.
 
-### Setup de push (una vez)
+### Setup de push (hecho el 2026-10-24)
+Las llaves VAPID se generaron con Node (P-256); la privada solo vive en los secretos de Supabase. Para rotarlas: generar nuevas, `supabase secrets set`, actualizar `VITE_VAPID_PUBLIC_KEY` en `.env.local` y Netlify, y que ambos reactiven las notificaciones.
+
 1. Llaves VAPID: `npx web-push generate-vapid-keys`.
 2. Secretos de la función:
    ```bash
@@ -67,4 +69,4 @@ insert en editions/collage_items/photos/photo_likes/songs/messages/watch_items/w
 - Registro deshabilitado en Auth.
 
 ## Setup de Supabase (hecho)
-Proyecto `mvp_db` (ref `hckpqydapjlmafhurswt`), 0001 aplicada, 2 usuarios en `couple_members`, sign-ups deshabilitados. Para aplicar migraciones nuevas: `npx supabase db push --linked`.
+Proyecto `mvp_db` (ref `hckpqydapjlmafhurswt`), 0001 y 0002 aplicadas, 2 usuarios en `couple_members`, sign-ups deshabilitados. Para aplicar migraciones nuevas: `npx supabase db push --linked`.
