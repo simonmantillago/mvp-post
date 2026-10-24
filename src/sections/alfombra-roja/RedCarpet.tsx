@@ -6,7 +6,7 @@ import { supabase } from '../../lib/supabase'
 import type { Photo, PhotoEffect } from '../../lib/types'
 import { formatShort } from '../../paper/dates'
 import { Icon } from '../../ui/Icon'
-import { gemRing, grainTexture, rhinestoneFrame } from '../../ui/leopard'
+import { gemRing, grainTexture, rhinestoneFrame, sparkleTexture } from '../../ui/leopard'
 import { PressNote } from '../../ui/PressNote'
 import { Section } from '../Section'
 import { digicamStamp, EFFECTS } from './effects'
@@ -18,7 +18,7 @@ type Like = { photo_id: string; user_id: string }
 /** Alfombra roja: fotos tomadas en el momento, con flash, que caen como polaroids. */
 export default function RedCarpet() {
   const { session, me, isMe, nameOf } = useCouple()
-  const { load } = useLive<Photo[]>('photos', () => supabase.from('photos').select('id, author_id, storage_path, caption, effect, created_at').order('created_at', { ascending: false }))
+  const { load, refresh } = useLive<Photo[]>('photos', () => supabase.from('photos').select('id, author_id, storage_path, caption, effect, created_at').order('created_at', { ascending: false }))
   const { load: likesLoad } = useLive<Like[]>('photo_likes', () => supabase.from('photo_likes').select('photo_id, user_id'))
   const [grain, setGrain] = useState<string>()
   const [developing, setDeveloping] = useState<string | null>(null)
@@ -99,6 +99,10 @@ export default function RedCarpet() {
           by={nameOf(viewing.author_id)}
           onEffect={(effect) => setChosen((c) => ({ ...c, [viewing.id]: effect }))}
           onEffectFailed={(previous) => setChosen((c) => ({ ...c, [viewing.id]: previous }))}
+          onDeleted={() => {
+            setViewing(null)
+            refresh()
+          }}
           onClose={() => setViewing(null)}
         />
       )}
@@ -133,6 +137,40 @@ function PhotoFrame({ url, alt, effect, date, lazy }: { url: string | null; alt:
   )
 }
 
+/** Carrete de efectos: la misma foto revelada de cada forma; se desliza y se toca. */
+function Reel({ url, date, value, onChange }: { url: string | null; date: string; value: PhotoEffect; onChange: (effect: PhotoEffect) => void }) {
+  return (
+    <div className="reel" role="group" aria-label="Efecto de la foto">
+      {EFFECTS.map((fx) => (
+        <button key={fx.id} type="button" className="reel-frame" aria-pressed={value === fx.id} onClick={() => onChange(fx.id)}>
+          <PhotoFrame url={url} alt="" effect={fx.id} date={date} />
+          <span className="reel-name">{fx.name}</span>
+        </button>
+      ))}
+    </div>
+  )
+}
+
+/** Brillitos que salen de la pedrería de las alas: [x %, y %, deriva x px, deriva y px, retraso s, tamaño px] sobre alas.webp. */
+const SPARKS: [number, number, number, number, number, number][] = [
+  [20, 4, -6, -14, 0, 16],
+  [7, 15, -14, -8, 1.1, 12],
+  [3, 31, -16, -4, 2.3, 18],
+  [2, 46, -16, 0, 0.6, 12],
+  [6, 60, -14, 4, 1.7, 16],
+  [10, 74, -12, 8, 2.8, 12],
+  [14, 88, -10, 12, 0.3, 14],
+  [33, 2, -2, -16, 1.9, 12],
+  [80, 4, 6, -14, 1.4, 16],
+  [93, 15, 14, -8, 0.2, 12],
+  [97, 31, 16, -4, 2.6, 14],
+  [98, 46, 16, 0, 0.9, 18],
+  [94, 60, 14, 4, 2.1, 12],
+  [90, 74, 12, 8, 0.5, 16],
+  [86, 88, 10, 12, 1.5, 12],
+  [67, 2, 2, -16, 3.0, 14],
+]
+
 /** Visor con alas, disparo con flash de corte duro. Si la cámara no abre, se usa la del sistema. */
 function Camera({ userId, sounds, onShot }: { userId: string; sounds: boolean; onShot: (photoId: string) => void }) {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -143,10 +181,13 @@ function Camera({ userId, sounds, onShot }: { userId: string; sounds: boolean; o
   const [bursts, setBursts] = useState<{ id: number; x: number; y: number }[]>([])
   const shooting = useRef(false)
   const [error, setError] = useState<string | null>(null)
+  // La foto recién tomada espera aquí, sin subir, hasta que se publique o se descarte
+  const [draft, setDraft] = useState<{ blob: Blob; url: string; at: string } | null>(null)
 
   const [wingsMissing, setWingsMissing] = useState(false)
   const frame = rhinestoneFrame()
   const ring = gemRing()
+  const spark = sparkleTexture()
 
   function stop() {
     streamRef.current?.getTracks().forEach((t) => t.stop())
@@ -189,18 +230,36 @@ function Camera({ userId, sounds, onShot }: { userId: string; sounds: boolean; o
     }
   }
 
-  async function save(blob: Blob) {
-    setState('saving')
+  function review(blob: Blob) {
     setError(null)
+    setDraft({ blob, url: URL.createObjectURL(blob), at: new Date().toISOString() })
+  }
+
+  function discard() {
+    if (draft) URL.revokeObjectURL(draft.url)
+    setDraft(null)
+  }
+
+  /** Sube la foto revisada con su pie y su efecto. Devuelve un mensaje si falló. */
+  async function publish(caption: string, effect: PhotoEffect): Promise<string | null> {
+    if (!draft) return null
+    setState('saving')
     try {
-      const path = await uploadImage('photos', await compressImage(blob), userId)
-      const { data, error } = await supabase.from('photos').insert({ author_id: userId, storage_path: path, taken_with_flash: true }).select('id').single()
+      const path = await uploadImage('photos', await compressImage(draft.blob), userId)
+      const { data, error } = await supabase
+        .from('photos')
+        .insert({ author_id: userId, storage_path: path, taken_with_flash: true, caption: caption.trim(), effect })
+        .select('id')
+        .single()
       if (error || !data) throw error
       onShot(data.id)
+      discard()
+      return null
     } catch {
-      setError('La foto no se guardó. Revisa la conexión e intenta de nuevo.')
+      return 'La foto no se publicó. Revisa la conexión e intenta de nuevo.'
+    } finally {
+      setState(streamRef.current ? 'live' : 'off')
     }
-    setState(streamRef.current ? 'live' : 'off')
   }
 
   /**
@@ -239,14 +298,24 @@ function Camera({ userId, sounds, onShot }: { userId: string; sounds: boolean; o
       g.scale(-1, 1)
     }
     g.drawImage(video, 0, 0)
-    canvas.toBlob((b) => b && save(b), 'image/jpeg', 0.9)
+    canvas.toBlob((b) => b && review(b), 'image/jpeg', 0.9)
   }
 
   return (
     <section className="camera" aria-label="Cámara">
       <div className="viewfinder-stage">
         {/* Alas de ángel de pedrería (imagen elegida por Simón): enmarcan el visor desde atrás */}
-        <img className="wings" src="/sections/alfombra/alas.webp" alt="" aria-hidden="true" hidden={wingsMissing} onError={() => setWingsMissing(true)} />
+        {/* Imagen con transparencia real (sin mix-blend-mode: en iOS el negro tapaba la página) */}
+        <div className="wings" aria-hidden="true" hidden={wingsMissing} style={{ '--spark': `url(${spark})` } as CSSProperties}>
+          <img src="/sections/alfombra/alas.webp" alt="" onError={() => setWingsMissing(true)} />
+          {SPARKS.map(([x, y, dx, dy, delay, size], i) => (
+            <span
+              key={i}
+              className="spark"
+              style={{ '--x': `${x}%`, '--y': `${y}%`, '--dx': `${dx}px`, '--dy': `${dy}px`, '--delay': `${delay}s`, '--size': `${size}px` } as CSSProperties}
+            />
+          ))}
+        </div>
       <div className="viewfinder" style={{ '--frame': `url(${frame})` } as CSSProperties}>
         <video ref={videoRef} className={facing === 'user' ? 'is-mirrored' : ''} playsInline muted aria-hidden={state !== 'live'} />
         {state !== 'live' && state !== 'saving' && (
@@ -256,7 +325,7 @@ function Camera({ userId, sounds, onShot }: { userId: string; sounds: boolean; o
                 <p>No pudimos abrir la cámara.</p>
                 <label className="section-button">
                   <Icon name="camera" size={18} /> Usar la cámara del teléfono
-                  <input type="file" accept="image/*" capture="user" className="visually-hidden" onChange={(e) => e.target.files?.[0] && save(e.target.files[0])} />
+                  <input type="file" accept="image/*" capture="user" className="visually-hidden" onChange={(e) => e.target.files?.[0] && review(e.target.files[0])} />
                 </label>
               </>
             ) : (
@@ -300,6 +369,7 @@ function Camera({ userId, sounds, onShot }: { userId: string; sounds: boolean; o
         <div key={b.id} className="flashbulb" style={{ '--x': `${b.x}%`, '--y': `${b.y}%` } as CSSProperties} aria-hidden="true" />
       ))}
       {flash && <div className="flash" aria-hidden="true" />}
+      {draft && <DraftDialog url={draft.url} at={draft.at} saving={state === 'saving'} onPublish={publish} onDiscard={discard} />}
     </section>
   )
 }
@@ -310,6 +380,7 @@ function PhotoDialog({
   by,
   onEffect,
   onEffectFailed,
+  onDeleted,
   onClose,
 }: {
   photo: Photo
@@ -317,6 +388,7 @@ function PhotoDialog({
   by: string
   onEffect: (effect: PhotoEffect) => void
   onEffectFailed: (previous: PhotoEffect) => void
+  onDeleted: () => void
   onClose: () => void
 }) {
   const ref = useRef<HTMLDialogElement>(null)
@@ -337,6 +409,31 @@ function PhotoDialog({
       onEffectFailed(previous)
       setEffectError('No se guardó el efecto. Intenta otra vez.')
     }
+  }
+
+  // Borrar pide un segundo toque; el aviso se retira solo si no llega
+  const [confirming, setConfirming] = useState(false)
+  const [deleting, setDeleting] = useState(false)
+  useEffect(() => {
+    if (!confirming) return
+    const t = window.setTimeout(() => setConfirming(false), 4000)
+    return () => window.clearTimeout(t)
+  }, [confirming])
+  async function remove() {
+    if (!confirming) return setConfirming(true)
+    setDeleting(true)
+    setEffectError(null)
+    const { error } = await supabase.from('photos').delete().eq('id', photo.id)
+    if (error) {
+      setDeleting(false)
+      setConfirming(false)
+      setEffectError('No se pudo borrar la foto. Intenta otra vez.')
+      return
+    }
+    // El archivo se borra después de la fila: si falla, queda un archivo huérfano, nunca una polaroid rota
+    await supabase.storage.from('photos').remove([photo.storage_path])
+    ref.current?.close()
+    onDeleted()
   }
 
   async function saveCaption() {
@@ -363,17 +460,20 @@ function PhotoDialog({
         <p className="polaroid-meta">
           {by} · {formatShort(photo.created_at)}
         </p>
+        {mine && (
+          <button
+            type="button"
+            className={`photo-dialog-delete${confirming ? ' is-confirming' : ''}`}
+            onClick={remove}
+            disabled={deleting}
+            aria-label={confirming ? 'Confirmar: borrar la foto' : 'Borrar la foto'}
+          >
+            <Icon name={confirming ? 'check' : 'trash'} size={18} />
+            {confirming && <span>{deleting ? 'Borrando…' : '¿Borrar?'}</span>}
+          </button>
+        )}
       </div>
-      {mine && (
-        <div className="reel" role="group" aria-label="Efecto de la foto">
-          {EFFECTS.map((fx) => (
-            <button key={fx.id} type="button" className="reel-frame" aria-pressed={photo.effect === fx.id} onClick={() => chooseEffect(fx.id)}>
-              <PhotoFrame url={url} alt="" effect={fx.id} date={photo.created_at} />
-              <span className="reel-name">{fx.name}</span>
-            </button>
-          ))}
-        </div>
-      )}
+      {mine && <Reel url={url} date={photo.created_at} value={photo.effect} onChange={chooseEffect} />}
       {effectError && (
         <p className="section-error reel-error" role="alert">
           {effectError}
@@ -390,6 +490,77 @@ function PhotoDialog({
       >
         <Icon name="close" />
       </button>
+    </dialog>
+  )
+}
+
+/** La foto recién tomada, antes de subirla: se le escribe el pie, se elige el efecto y se publica o se descarta. */
+function DraftDialog({
+  url,
+  at,
+  saving,
+  onPublish,
+  onDiscard,
+}: {
+  url: string
+  at: string
+  saving: boolean
+  onPublish: (caption: string, effect: PhotoEffect) => Promise<string | null>
+  onDiscard: () => void
+}) {
+  const ref = useRef<HTMLDialogElement>(null)
+  const [caption, setCaption] = useState('')
+  const [effect, setEffect] = useState<PhotoEffect>('original')
+  const [error, setError] = useState<string | null>(null)
+  useEffect(() => {
+    ref.current?.showModal()
+  }, [])
+
+  return (
+    <dialog
+      ref={ref}
+      className="photo-dialog draft-dialog"
+      aria-label="Tu foto, antes de publicarla"
+      onCancel={(e) => {
+        // Escape descarta, salvo mientras se sube
+        e.preventDefault()
+        if (!saving) onDiscard()
+      }}
+    >
+      <div className="photo-dialog-polaroid">
+        <PhotoFrame url={url} alt="Tu foto" effect={effect} date={at} />
+        <input
+          className="photo-dialog-caption"
+          value={caption}
+          maxLength={120}
+          onChange={(e) => setCaption(e.target.value)}
+          placeholder="Escribe algo…"
+          aria-label="Texto de la polaroid"
+        />
+        <p className="polaroid-meta">{formatShort(at)}</p>
+      </div>
+      <Reel url={url} date={at} value={effect} onChange={setEffect} />
+      {error && (
+        <p className="section-error reel-error" role="alert">
+          {error}
+        </p>
+      )}
+      <div className="draft-actions">
+        <button type="button" className="section-button section-button--ghost" onClick={onDiscard} disabled={saving}>
+          <Icon name="close" size={18} /> Descartar
+        </button>
+        <button
+          type="button"
+          className="section-button"
+          disabled={saving}
+          onClick={async () => {
+            setError(null)
+            setError(await onPublish(caption, effect))
+          }}
+        >
+          <Icon name="check" size={18} /> {saving ? 'Publicando…' : 'Publicar'}
+        </button>
+      </div>
     </dialog>
   )
 }

@@ -297,3 +297,29 @@ export function grainTexture(size = 160) {
     return c.toDataURL('image/png')
   })
 }
+
+/** Destello de pedrería: estrella de cuatro puntas con halo cálido, para los brillitos que salen de las alas. */
+export function sparkleTexture(size = 64) {
+  return memo(`spark${size}`, () => {
+    const c = document.createElement('canvas')
+    c.width = c.height = size
+    const g = c.getContext('2d')!
+    const m = size / 2
+    const halo = g.createRadialGradient(m, m, 0, m, m, m * 0.45)
+    halo.addColorStop(0, 'rgba(255, 255, 255, 0.95)')
+    halo.addColorStop(0.4, 'rgba(255, 236, 190, 0.45)')
+    halo.addColorStop(1, 'rgba(255, 236, 190, 0)')
+    g.fillStyle = halo
+    g.fillRect(0, 0, size, size)
+    // Cuatro puntas finas que se curvan hacia el centro
+    g.fillStyle = '#fff'
+    g.beginPath()
+    g.moveTo(m, 0)
+    g.quadraticCurveTo(m, m, size, m)
+    g.quadraticCurveTo(m, m, m, size)
+    g.quadraticCurveTo(m, m, 0, m)
+    g.quadraticCurveTo(m, m, m, 0)
+    g.fill()
+    return c.toDataURL('image/png')
+  })
+}

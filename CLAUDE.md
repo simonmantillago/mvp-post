@@ -108,6 +108,7 @@ docs/                     # specs, wireframe, inspiración
 - [x] **Alas de ángel** en Alfombra roja (`public/sections/alfombra/alas.webp`), ajustadas a 390/1440 px (2026-10-24)
 - [x] Ráfaga de paparazzi + sonido de obturador en el Flash (2026-10-24). Falta oírla en el iPhone.
 - [x] Alfombra roja ronda 2: alas más abiertas, fondo con lirios, pie en Bodoni, efectos de revelado por foto (0003 aplicada), audio de paparazzi real (2026-10-24)
+- [x] Alfombra roja ronda 3: alas con transparencia real (arregla el negro en iPhone), brillitos, vista previa antes de publicar, borrar polaroids (2026-10-24). Falta probar en el iPhone.
 - [ ] Fotos de ambos en `public/readers/` y íconos PWA definitivos; sonidos
 
 ### Fase 3 — El periódico

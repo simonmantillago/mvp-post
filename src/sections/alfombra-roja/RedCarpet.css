@@ -41,20 +41,36 @@
   width: min(76%, 22rem);
   margin-top: var(--s6);
 }
-/* Alas de pedrería sobre negro: "screen" deja ver solo las piedras sobre el leopardo.
-   Medidas sobre alas.webp: el par ocupa el 65 % del ancho de la imagen (ancho de imagen = envergadura × 1,53)
-   con el centro en x 51,3 %, y 56 %. Abren a 240 % del visor sin pasar del ancho de la pantalla: en el teléfono
-   las puntas llegan al borde; los hombros suben hacia el título y las plumas pasan el borde inferior del marco. */
+/* Alas de pedrería: imagen con transparencia real, recortada al par de alas (757 × 846). Antes era negro + mix-blend-mode,
+   y en iOS el negro tapaba título, fondo y controles. Abren a 161,5 % del visor sin pasar del ancho de la pantalla:
+   en el teléfono las puntas llegan al borde; los hombros suben hacia el título y las plumas pasan el borde del marco. */
 .wings {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: min(240%, calc((100vw - 0.5rem) * 1.53));
-  max-width: none;
-  translate: -51.3% -57%;
-  mix-blend-mode: screen;
-  filter: brightness(1.35) contrast(1.15);
+  width: min(161.5%, calc(100vw - 0.5rem));
+  translate: -49.8% -53.2%;
   pointer-events: none;
+}
+.wings img { display: block; width: 100%; height: auto; }
+
+/* Brillitos: destellos que nacen en la pedrería y salen volando hacia fuera. Con movimiento reducido no aparecen. */
+.spark {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--size);
+  height: var(--size);
+  margin: calc(var(--size) / -2);
+  background: var(--spark) center / contain no-repeat;
+  opacity: 0;
+  animation: spark 3.2s var(--ease-out) var(--delay) infinite;
+}
+@keyframes spark {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.2) rotate(0deg); }
+  10% { opacity: 1; transform: translate(calc(var(--dx) * 0.25), calc(var(--dy) * 0.25)) scale(1) rotate(20deg); }
+  32% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.35) rotate(70deg); }
+  100% { opacity: 0; }
 }
 .viewfinder {
   position: relative;
@@ -188,6 +204,7 @@
   aspect-ratio: 1;
   position: relative;
   overflow: hidden;
+  isolation: isolate; /* el grano se mezcla solo con su foto */
   container-type: inline-size;
   background: #2b2a27;
 }
@@ -290,6 +307,40 @@
 .reel-frame[aria-pressed="true"] .polaroid-frame { outline-color: var(--accent); }
 .reel-error { margin-top: var(--s2); }
 
+/* Borrar: en la esquina inferior de la polaroid propia; el primer toque pregunta, el segundo borra */
+.photo-dialog-delete {
+  position: absolute;
+  right: -0.75rem;
+  bottom: -1.25rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--s1);
+  min-width: 2.75rem;
+  height: 2.75rem;
+  padding: 0 var(--s3);
+  border: 0;
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--accent), 0 4px 10px -4px #000;
+  color: var(--accent-text);
+  font: 500 var(--size-folio) / 1 var(--face-head);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.photo-dialog-delete.is-confirming { background: var(--wine); box-shadow: 0 4px 10px -4px #000; color: var(--text); }
+.photo-dialog-delete:disabled { opacity: 0.6; }
+
+/* Vista previa de la foto recién tomada: descartar o publicar */
+.draft-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s3);
+  margin-top: var(--s4);
+}
+.draft-actions .section-button { justify-content: center; }
+.draft-dialog .photo-dialog-polaroid { rotate: 0deg; }
+
 /* Polaroid en grande */
 .photo-dialog {
   width: min(92vw, 30rem);
@@ -300,6 +351,7 @@
 }
 .photo-dialog::backdrop { background: rgba(5, 4, 3, 0.86); }
 .photo-dialog-polaroid {
+  position: relative;
   padding: 0.75rem 0.75rem var(--s4);
   background: var(--polaroid);
   color: #1d1b17;

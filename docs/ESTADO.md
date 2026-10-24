@@ -21,6 +21,13 @@ Punto de partida para la próxima sesión. Primer MVP **publicado**; de aquí en
 - **Efectos de revelado:** columna `photos.effect` (migración `0003_photo_effects.sql`, **aplicada**). Efectos: Original, Grano, Vintage, Flash, Noir y Digicam 2003, hechos con CSS (`.fx-<id>`, `src/sections/alfombra-roja/effects.ts`, grano de `grainTexture()`). Solo quien tomó la foto ve el carrete en la polaroid grande.
 - **Audio de paparazzi:** `public/sections/alfombra/paparazzi.mp3` (1,5 s). Se precarga al tocar «Encender la cámara»; si no carga, suena el clic sintetizado. `BURST = [35, 155, 265, 470, 570, 720]` está medido sobre los clics del audio. **Falta oírlo en el iPhone.**
 
+## Alfombra roja · ronda 3 (publicado 2026-10-24)
+- **Bug del iPhone corregido:** en iOS, `mix-blend-mode: screen` no se aplicaba a las alas y su fondo negro tapaba el título, la cabecera, el fondo y los botones. Ahora `alas.webp` tiene transparencia real: el negro pasa a alfa según el brillo, y la imagen está recortada al par de alas (759 × 846). Se generó con Pillow desde la imagen original (commit 29a8095) y ya no usa ningún blend. No queda ningún `mix-blend-mode` fuera del grano de las polaroids, que está aislado en cada foto.
+- **Brillitos:** 16 destellos (`sparkleTexture()` en `src/ui/leopard.ts`) nacen en el borde de las alas y salen hacia fuera. Con movimiento reducido no aparecen.
+- **Vista previa antes de subir:** al tomar la foto, o al elegirla con la cámara del sistema, se abre la polaroid sin subir. Ahí se escribe el pie y se elige el efecto, y se **publica** o se **descarta**. Solo se sube al publicar.
+- **Borrar polaroids propias:** botón en la esquina inferior de la polaroid grande; el primer toque pregunta «¿Borrar?» y el segundo borra la fila y el archivo.
+- **Falta probar en el iPhone:** que se vean título, fondo y controles; el sonido; publicar y borrar con datos reales.
+
 ## Pendientes conocidos
 - **Fotos de perfil** de ambos en `public/readers/maria-victoria.jpg` y `simon.jpg` (hoy se ven iniciales).
 - **Quitar fondo** a las fotos del collage Y2K (plan: `@imgly/background-removal`; plan B MediaPipe). Hoy se pegan con fondo.
