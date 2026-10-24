@@ -18,6 +18,14 @@
     linear-gradient(180deg, transparent 0%, color-mix(in srgb, var(--ground) 25%, transparent) 60%, color-mix(in srgb, var(--ground) 70%, transparent) 100%),
     url(/sections/alfombra/fondo.webp) center / cover;
 }
+/* Bajada bajo el título: la dedicatoria de la sección, en la voz del mundo */
+.carpet-dek {
+  max-width: 30ch;
+  margin-top: var(--s2);
+  font: italic 400 1.0625rem / 1.4 var(--face-display);
+  color: var(--text);
+  text-wrap: balance;
+}
 .red-carpet .folio-title {
   font-style: italic;
   color: var(--accent-text);

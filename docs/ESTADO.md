@@ -26,6 +26,7 @@ Punto de partida para la próxima sesión. Primer MVP **publicado**; de aquí en
 - **Destellos de diamante** (`glintTexture()` en `src/ui/leopard.ts`): cruces finísimas que se abren y se cierran en su sitio (3,6 s, con retrasos distintos). Hay 12 sobre las alas, donde asoman fuera del marco, y 6 sobre la banda de pedrería del marco (`WING_GLINTS` / `FRAME_GLINTS`). Con movimiento reducido no aparecen.
 - **Vista previa antes de subir:** al tomar la foto, o al elegirla con la cámara del sistema, se abre la polaroid sin subir. Ahí se escribe el pie y se elige el efecto, y se **publica** o se **descarta**. Solo se sube al publicar.
 - **Borrar polaroids propias:** botón en la esquina inferior de la polaroid grande; el primer toque pregunta «¿Borrar?» y el segundo borra la fila y el archivo.
+- **Disparador con camarita** (ícono `camera`, `aria-label` «Tomar la foto») en lugar de la palabra «Flash». **Bajada** bajo el título: «Sección dedicada a tomarle fotos al ángel más hermoso que he conocido.» (`.carpet-dek`, Bodoni itálica).
 - **Falta probar en el iPhone:** que se vean título, fondo y controles; el sonido; publicar y borrar con datos reales.
 
 ## Pendientes conocidos

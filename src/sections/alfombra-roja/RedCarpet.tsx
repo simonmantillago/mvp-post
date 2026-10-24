@@ -49,7 +49,7 @@ export default function RedCarpet() {
   }
 
   return (
-    <Section id="alfombra" className="red-carpet">
+    <Section id="alfombra" className="red-carpet" header={<p className="carpet-dek">Sección dedicada a tomarle fotos al ángel más hermoso que he conocido.</p>}>
       <div className="carpet-ground" aria-hidden="true" />
       <div className="section-body" style={grain ? ({ '--grain': `url(${grain})` } as CSSProperties) : undefined}>
         <Camera
@@ -371,8 +371,8 @@ function Camera({ userId, sounds, onShot }: { userId: string; sounds: boolean; o
         >
           <Icon name="flip" />
         </button>
-        <button type="button" className="shutter" onClick={shoot} disabled={state !== 'live'} style={{ '--ring': `url(${ring})` } as CSSProperties}>
-          <span>Flash</span>
+        <button type="button" className="shutter" onClick={shoot} disabled={state !== 'live'} aria-label="Tomar la foto" style={{ '--ring': `url(${ring})` } as CSSProperties}>
+          <Icon name="camera" size={30} />
         </button>
         <span className="camera-spacer" />
       </div>
