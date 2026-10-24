@@ -54,24 +54,33 @@
 }
 .wings img { display: block; width: 100%; height: auto; }
 
-/* Brillitos: destellos que nacen en la pedrería y salen volando hacia fuera. Con movimiento reducido no aparecen. */
-.spark {
+/* Destellos de diamante: se abren rápido, giran apenas y se cierran en su sitio, como una piedra que cruza la luz.
+   Cada uno con su retraso, para que nunca brillen a la vez. Con movimiento reducido no aparecen. */
+.frame-glints {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.glint {
   position: absolute;
   left: var(--x);
   top: var(--y);
   width: var(--size);
   height: var(--size);
   margin: calc(var(--size) / -2);
-  background: var(--spark) center / contain no-repeat;
+  background: var(--glint) center / contain no-repeat;
   opacity: 0;
-  animation: spark 3.2s var(--ease-out) var(--delay) infinite;
+  scale: 0;
+  animation: glint 3.6s cubic-bezier(0.3, 0, 0.2, 1) var(--delay) infinite;
 }
-@keyframes spark {
-  0% { opacity: 0; transform: translate(0, 0) scale(0.2) rotate(0deg); }
-  10% { opacity: 1; transform: translate(calc(var(--dx) * 0.25), calc(var(--dy) * 0.25)) scale(1) rotate(20deg); }
-  32% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.35) rotate(70deg); }
-  100% { opacity: 0; }
+@keyframes glint {
+  0% { opacity: 0; scale: 0; rotate: -12deg; }
+  6% { opacity: 1; scale: 1; rotate: 0deg; }
+  13% { opacity: 0; scale: 0; rotate: 10deg; }
+  100% { opacity: 0; scale: 0; }
 }
+
 .viewfinder {
   position: relative;
   width: 100%;

@@ -6,7 +6,7 @@ import { supabase } from '../../lib/supabase'
 import type { Photo, PhotoEffect } from '../../lib/types'
 import { formatShort } from '../../paper/dates'
 import { Icon } from '../../ui/Icon'
-import { gemRing, grainTexture, rhinestoneFrame, sparkleTexture } from '../../ui/leopard'
+import { gemRing, grainTexture, rhinestoneFrame, glintTexture } from '../../ui/leopard'
 import { PressNote } from '../../ui/PressNote'
 import { Section } from '../Section'
 import { digicamStamp, EFFECTS } from './effects'
@@ -151,25 +151,42 @@ function Reel({ url, date, value, onChange }: { url: string | null; date: string
   )
 }
 
-/** Brillitos que salen de la pedrería de las alas: [x %, y %, deriva x px, deriva y px, retraso s, tamaño px] sobre alas.webp. */
-const SPARKS: [number, number, number, number, number, number][] = [
-  [20, 4, -6, -14, 0, 16],
-  [7, 15, -14, -8, 1.1, 12],
-  [3, 31, -16, -4, 2.3, 18],
-  [2, 46, -16, 0, 0.6, 12],
-  [6, 60, -14, 4, 1.7, 16],
-  [10, 74, -12, 8, 2.8, 12],
-  [14, 88, -10, 12, 0.3, 14],
-  [33, 2, -2, -16, 1.9, 12],
-  [80, 4, 6, -14, 1.4, 16],
-  [93, 15, 14, -8, 0.2, 12],
-  [97, 31, 16, -4, 2.6, 14],
-  [98, 46, 16, 0, 0.9, 18],
-  [94, 60, 14, 4, 2.1, 12],
-  [90, 74, 12, 8, 0.5, 16],
-  [86, 88, 10, 12, 1.5, 12],
-  [67, 2, 2, -16, 3.0, 14],
+/**
+ * Destellos de diamante que se abren y se cierran en su sitio, como la pedrería al moverse bajo la luz.
+ * Alas: [x %, y %, retraso s, tamaño px] sobre alas.webp, solo donde las alas asoman fuera del marco.
+ * Marco: [lado, posición % a lo largo del lado, retraso s, tamaño px], centrados en la banda de pedrería.
+ */
+const WING_GLINTS: [number, number, number, number][] = [
+  [9, 24, 0, 45],
+  [5, 41, 1.9, 33],
+  [12, 55, 0.8, 51],
+  [8, 70, 2.9, 36],
+  [15, 84, 1.4, 42],
+  [30, 6, 2.3, 39],
+  [91, 22, 1.1, 42],
+  [95, 39, 3.2, 33],
+  [88, 52, 0.4, 48],
+  [92, 68, 2.0, 36],
+  [85, 82, 2.6, 45],
+  [70, 7, 0.9, 39],
 ]
+const FRAME_GLINTS: ['top' | 'right' | 'bottom' | 'left', number, number, number][] = [
+  ['top', 0, 1.6, 39],
+  ['top', 62, 3.0, 30],
+  ['right', 34, 0.6, 33],
+  ['right', 100, 2.4, 39],
+  ['bottom', 28, 1.2, 33],
+  ['left', 55, 3.4, 30],
+]
+
+function frameGlintPosition(side: 'top' | 'right' | 'bottom' | 'left', at: number) {
+  // La banda de pedrería mide 1.4rem: el destello se centra en su línea de piedras (0.7rem del borde)
+  const along = `${at}%`
+  if (side === 'top') return { '--x': along, '--y': '0.7rem' }
+  if (side === 'bottom') return { '--x': along, '--y': 'calc(100% - 0.7rem)' }
+  if (side === 'left') return { '--x': '0.7rem', '--y': along }
+  return { '--x': 'calc(100% - 0.7rem)', '--y': along }
+}
 
 /** Visor con alas, disparo con flash de corte duro. Si la cámara no abre, se usa la del sistema. */
 function Camera({ userId, sounds, onShot }: { userId: string; sounds: boolean; onShot: (photoId: string) => void }) {
@@ -187,7 +204,7 @@ function Camera({ userId, sounds, onShot }: { userId: string; sounds: boolean; o
   const [wingsMissing, setWingsMissing] = useState(false)
   const frame = rhinestoneFrame()
   const ring = gemRing()
-  const spark = sparkleTexture()
+  const glint = glintTexture()
 
   function stop() {
     streamRef.current?.getTracks().forEach((t) => t.stop())
@@ -306,14 +323,10 @@ function Camera({ userId, sounds, onShot }: { userId: string; sounds: boolean; o
       <div className="viewfinder-stage">
         {/* Alas de ángel de pedrería (imagen elegida por Simón): enmarcan el visor desde atrás */}
         {/* Imagen con transparencia real (sin mix-blend-mode: en iOS el negro tapaba la página) */}
-        <div className="wings" aria-hidden="true" hidden={wingsMissing} style={{ '--spark': `url(${spark})` } as CSSProperties}>
+        <div className="wings" aria-hidden="true" hidden={wingsMissing} style={{ '--glint': `url(${glint})` } as CSSProperties}>
           <img src="/sections/alfombra/alas.webp" alt="" onError={() => setWingsMissing(true)} />
-          {SPARKS.map(([x, y, dx, dy, delay, size], i) => (
-            <span
-              key={i}
-              className="spark"
-              style={{ '--x': `${x}%`, '--y': `${y}%`, '--dx': `${dx}px`, '--dy': `${dy}px`, '--delay': `${delay}s`, '--size': `${size}px` } as CSSProperties}
-            />
+          {WING_GLINTS.map(([x, y, delay, size], i) => (
+            <span key={i} className="glint" style={{ '--x': `${x}%`, '--y': `${y}%`, '--delay': `${delay}s`, '--size': `${size}px` } as CSSProperties} />
           ))}
         </div>
       <div className="viewfinder" style={{ '--frame': `url(${frame})` } as CSSProperties}>
@@ -336,7 +349,11 @@ function Camera({ userId, sounds, onShot }: { userId: string; sounds: boolean; o
           </div>
         )}
       </div>
-
+        <div className="frame-glints" aria-hidden="true" style={{ '--glint': `url(${glint})` } as CSSProperties}>
+          {FRAME_GLINTS.map(([side, at, delay, size], i) => (
+            <span key={i} className="glint" style={{ ...frameGlintPosition(side, at), '--delay': `${delay}s`, '--size': `${size}px` } as CSSProperties} />
+          ))}
+        </div>
       </div>
       {wingsMissing && <p className="wings-pending">Aquí van las alas de ángel: imagen pendiente.</p>}
 

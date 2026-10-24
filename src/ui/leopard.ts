@@ -298,28 +298,43 @@ export function grainTexture(size = 160) {
   })
 }
 
-/** Destello de pedrería: estrella de cuatro puntas con halo cálido, para los brillitos que salen de las alas. */
-export function sparkleTexture(size = 64) {
-  return memo(`spark${size}`, () => {
+/**
+ * Destello de diamante: dos rayos largos y finísimos en cruz que se afinan hasta desaparecer, dos diagonales más
+ * cortas y tenues, y un núcleo blanco diminuto. Es el reflejo de una piedra bajo la luz, no una estrella dibujada.
+ */
+export function glintTexture(size = 96) {
+  return memo(`glint${size}`, () => {
     const c = document.createElement('canvas')
     c.width = c.height = size
     const g = c.getContext('2d')!
     const m = size / 2
-    const halo = g.createRadialGradient(m, m, 0, m, m, m * 0.45)
-    halo.addColorStop(0, 'rgba(255, 255, 255, 0.95)')
-    halo.addColorStop(0.4, 'rgba(255, 236, 190, 0.45)')
-    halo.addColorStop(1, 'rgba(255, 236, 190, 0)')
+    // Rayo: huso muy fino (ancho w en el centro, 0 en las puntas) con brillo que cae hacia las puntas
+    const ray = (angle: number, length: number, w: number, alpha: number) => {
+      g.save()
+      g.translate(m, m)
+      g.rotate(angle)
+      const fade = g.createLinearGradient(-length, 0, length, 0)
+      fade.addColorStop(0, 'rgba(255, 255, 255, 0)')
+      fade.addColorStop(0.5, `rgba(255, 255, 255, ${alpha})`)
+      fade.addColorStop(1, 'rgba(255, 255, 255, 0)')
+      g.fillStyle = fade
+      g.beginPath()
+      g.moveTo(-length, 0)
+      g.quadraticCurveTo(0, -w, length, 0)
+      g.quadraticCurveTo(0, w, -length, 0)
+      g.fill()
+      g.restore()
+    }
+    const halo = g.createRadialGradient(m, m, 0, m, m, size * 0.09)
+    halo.addColorStop(0, 'rgba(255, 255, 255, 0.9)')
+    halo.addColorStop(0.5, 'rgba(255, 244, 220, 0.35)')
+    halo.addColorStop(1, 'rgba(255, 244, 220, 0)')
     g.fillStyle = halo
     g.fillRect(0, 0, size, size)
-    // Cuatro puntas finas que se curvan hacia el centro
-    g.fillStyle = '#fff'
-    g.beginPath()
-    g.moveTo(m, 0)
-    g.quadraticCurveTo(m, m, size, m)
-    g.quadraticCurveTo(m, m, m, size)
-    g.quadraticCurveTo(m, m, 0, m)
-    g.quadraticCurveTo(m, m, m, 0)
-    g.fill()
+    ray(0, m, 2.6, 1)
+    ray(Math.PI / 2, m, 2.6, 1)
+    ray(Math.PI / 4, m * 0.42, 1.6, 0.55)
+    ray(-Math.PI / 4, m * 0.42, 1.6, 0.55)
     return c.toDataURL('image/png')
   })
 }
