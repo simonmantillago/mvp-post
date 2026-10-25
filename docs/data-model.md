@@ -62,6 +62,13 @@ Las llaves VAPID se generaron con Node (P-256); la privada solo vive en los secr
 - Cada push debe mostrar una notificación (iOS revoca el permiso si no).
 - El badge numérico en el ícono funciona en la app instalada (Badging API).
 
+## Búsqueda en Spotify (Edge Function `spotify-search`)
+- La app llama `supabase.functions.invoke('spotify-search', { body: { q } })` con la sesión. La función tiene `verify_jwt = true` y además exige `is_member()`: sin sesión responde 401 y con un JWT que no es de la pareja, 403. No es un proxy abierto.
+- Usa el flujo **Client Credentials** de Spotify (no hace falta que ellos inicien sesión). El token se cachea en memoria mientras la instancia vive.
+- Secretos: `npx supabase secrets set SPOTIFY_CLIENT_ID=... SPOTIFY_CLIENT_SECRET=...` (app en Spotify for Developers creada con la cuenta Premium de Simón: desde feb. 2026 Development Mode exige Premium al dueño y limita `limit` a 10).
+- Desplegar: `npx supabase functions deploy spotify-search`.
+- Devuelve `{ tracks: [{ id, uri, url, title, artist, album, cover, thumb, duration_ms }] }`; al dedicar se guarda en `songs` lo mismo que antes (`url`, `title`, `artist`, `cover_url`), así que no hubo migración.
+
 ## Seguridad
 - RLS activa en todas las tablas. Lectura: `is_member()`. Escritura: filas propias (`author_id`/`user_id = auth.uid()`), salvo `watch_items` y `collage_items`, que ambos editan.
 - `activity` no tiene políticas de escritura; `unseen_count()` solo la ejecuta el service role.

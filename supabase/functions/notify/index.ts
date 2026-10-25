@@ -42,7 +42,7 @@ function compose(a: Activity, who: string): { title: string; body: string } {
     case 'photo_liked':
       return { title: 'Los Ángeles de Victoria', body: `A ${who} le encantó tu foto ♥` }
     case 'song_dedicated':
-      return { title: 'Los vinilos de Big', body: p ? `${who} te dedicó “${p}”` : `${who} te dedicó un vinilo` }
+      return { title: 'Los vinilos de Big', body: p ? `${who} te dedicó “${p}”` : `${who} te dedicó una canción` }
     case 'letter':
       return { title: `Carta mágica de ${who}`, body: p || '…' }
     case 'extra':

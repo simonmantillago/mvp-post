@@ -27,8 +27,9 @@ export function createDemoClient(): any {
       { id: 3, author_id: HER, kind: 'nudge', body: '', created_at: ago(40), read_at: ago(30) },
       { id: 4, author_id: HER, kind: 'text', body: '¿Vemos algo esta noche?', created_at: ago(20), read_at: null },
     ],
+    // s1 apunta a un track público real para probar el embed y la aguja en dev.
     songs: [
-      { id: 's1', author_id: HIM, url: 'https://open.spotify.com/track/0', platform: 'spotify', title: 'Canción de ejemplo', artist: 'Artista de prueba', dedication: 'Esta me recuerda a ti, al domingo y al café.', cover_url: null, created_at: ago(300) },
+      { id: 's1', author_id: HIM, url: 'https://open.spotify.com/track/4uLU6hMCjMI75M1A2tKUQC', platform: 'spotify', title: 'Canción de ejemplo', artist: 'Artista de prueba', dedication: 'Esta me recuerda a ti, al domingo y al café.', cover_url: '/portada/big.webp', created_at: ago(300) },
       { id: 's2', author_id: HER, url: 'https://youtu.be/x', platform: 'youtube', title: 'Otra canción', artist: 'Otra artista', dedication: 'Para el camino.', cover_url: null, created_at: ago(900) },
       { id: 's3', author_id: HIM, url: 'https://open.spotify.com/track/1', platform: 'spotify', title: 'La del penthouse', artist: 'Trío de jazz', dedication: '', cover_url: null, created_at: ago(2000) },
     ],
@@ -123,8 +124,30 @@ export function createDemoClient(): any {
     ? { user: { id: HIM, email: import.meta.env.VITE_EMAIL_HIM ?? 'el@demo' }, access_token: 'demo' }
     : { user: { id: HER, email: import.meta.env.VITE_EMAIL_HER ?? 'ella@demo' }, access_token: 'demo' }
 
+  // Resultados falsos de `spotify-search`: «error» simula la caída y «zzz» la búsqueda vacía.
+  const tracks = [
+    ['Luz de domingo', 'Orquesta del Penthouse', 'Noches de nogal', '/portada/big.webp'],
+    ['Luz de domingo (en vivo)', 'Orquesta del Penthouse', 'En vivo en la terraza', '/portada/cartelera.webp'],
+    ['Domingo en Manhattan', 'Trío de jazz', 'Columnas', '/portada/swag.webp'],
+    ['Carta a una lectora', 'La Redacción', 'Primera edición', '/portada/cartas.webp'],
+    ['Ángel de medianoche', 'Las Polaroids', 'Flash', '/portada/angeles.webp'],
+  ].map(([title, artist, album, cover], i) => ({
+    id: `demo${i}`, uri: `spotify:track:demo${i}`, url: `https://open.spotify.com/track/demo${i}`,
+    title, artist, album, cover, thumb: cover, duration_ms: 200_000,
+  }))
+  const functions = {
+    invoke: async (_name: string, { body }: { body: { q: string } }) => {
+      await new Promise((r) => setTimeout(r, 450))
+      const q = body.q.toLowerCase()
+      if (q.includes('error')) return { data: null, error: { message: 'demo' } }
+      if (q.includes('zzz')) return { data: { tracks: [] }, error: null }
+      return { data: { tracks }, error: null }
+    },
+  }
+
   return {
     from: query,
+    functions,
     rpc: async (fn: string) => (fn === 'unseen_by_section' ? { data: [{ section: 'y2k', unseen: 2 }, { section: 'cartas', unseen: 1 }], error: null } : { data: 0, error: null }),
     channel: () => {
       const ch: any = { cb: () => {}, on: (_e: any, _f: any, cb: () => void) => ((ch.cb = cb), ch), subscribe: () => (listeners.add(() => ch.cb()), ch) }

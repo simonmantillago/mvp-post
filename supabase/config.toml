@@ -418,3 +418,7 @@ enabled = true
 [functions.notify]
 # La protege NOTIFY_SECRET (la llama pg_net desde la base, sin JWT de usuario).
 verify_jwt = false
+
+[functions.spotify-search]
+# La llama la app con la sesión de la pareja; además valida is_member() adentro.
+verify_jwt = true

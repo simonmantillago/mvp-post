@@ -349,6 +349,14 @@ Las fotos de Alfombra roja son polaroids (Blanco Polaroid, pie en Bodoni itálic
 
 Las alas de ángel son un raster con transparencia real; nunca se usa `mix-blend-mode` en elementos grandes (en iOS deja el negro opaco). Sobre la pedrería de las alas y la banda del marco hay destellos de diamante: dos rayos finísimos en cruz más dos diagonales tenues (raster) que se abren y se cierran en su sitio, sin desplazarse, en un ciclo de 3,6 s con retrasos distintos para que nunca brillen a la vez.
 
+### Tocadiscos 3D y aguja
+El tocadiscos de Los vinilos de Big es un modelo procedural en three.js (`src/sections/vinilos/turntable3d.ts`, chunk diferido de ~136 kB gzip que solo se baja en esa sección): vista fija desde arriba y al frente, plinto de nogal oscuro (`#2a170c` con vetas en canvas) con filete y patas, plato de aluminio, vinilo con surcos y clearcoat, tapa acrílica abierta con cantos que brillan, piloto ámbar y luz de lámpara cálida. La etiqueta del disco es la carátula de la canción (`cover_url`) recortada en círculo; sin carátula, ámbar a vino con el título en Gloock. El canvas mide `min(100%, 27rem)` con proporción 360/380 y entra con un fundido de 600 ms; se renderiza solo mientras algo se mueve. Sin WebGL queda el plato 2D de CSS (`.platter`).
+
+La aguja es el play/pausa: tocar el brazo (zona de toque ampliada) o el botón de cuero «Bajar la aguja / Levantar la aguja» (píldora con textura de cuero, ícono ámbar, canto ámbar cuando está abajo) mueve el brazo, y el disco gira con inercia solo cuando el reproductor dice que suena. Junto al botón, el estado en itálica: «Aguja levantada», «Poniendo la aguja…», «Sonando». Con movimiento reducido el brazo salta a su sitio y el disco no gira.
+
+### Buscador de canciones
+El formulario «Dedicar canción» es un panel `--surface` con título en Gloock. El campo «Buscar en Spotify» espera 300 ms entre teclas; los resultados son fundas de cuero como las de la pila (carátula 3rem, título en Gloock, artista · álbum en itálica) con canto ámbar al pasar o tocar. La elegida queda como funda con filete ámbar y el enlace «Cambiar». Los estados (buscando, vacío, error, sin conexión) son notas en itálica `--text-soft`. Debajo, el enlace subrayado «¿No está? Pega el enlace de Spotify o YouTube» abre los campos manuales.
+
 ### Lacre
 Sello de cera SVG (`WaxSeal`) con la inicial hundida en Bodoni italic. Rosa para ella y dorado viejo para él: firma quién escribió o dedicó en cartas y vinilos.
 

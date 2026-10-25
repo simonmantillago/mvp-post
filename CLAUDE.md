@@ -2,7 +2,7 @@
 
 PWA privada de pareja, regalo para **MVP**. Es un **periódico neoyorquino de 2003**: la portada es la columna que Simón le escribe (guiño a la columnista de Manhattan de la TV de esos años) y cada sección del periódico es un mundo con su propia estética. Solo dos usuarios. **Ambos usan iPhone**, con la app instalada en la pantalla de inicio.
 
-- **Estado actual y próximo paso (leer primero): [docs/ESTADO.md](docs/ESTADO.md)** — MVP publicado; Alfombra roja con alas y ráfaga de paparazzi publicada (2026-10-24). Se itera módulo por módulo.
+- **Estado actual y próximo paso (leer primero): [docs/ESTADO.md](docs/ESTADO.md)** — MVP publicado; Alfombra roja con alas y ráfaga de paparazzi publicada; Los vinilos de Big con Spotify y tocadiscos 3D (2026-10-24). Se itera módulo por módulo.
 - Producto, usuarios y compromisos de marca: [PRODUCT.md](PRODUCT.md)
 - Spec de cada sección + notificaciones: [docs/modules.md](docs/modules.md)
 - Base de datos, RLS, push y setup de Supabase: [docs/data-model.md](docs/data-model.md)
@@ -29,7 +29,7 @@ PWA privada de pareja, regalo para **MVP**. Es un **periódico neoyorquino de 20
 - **PWA:** `vite-plugin-pwa` en modo `injectManifest` con service worker propio [src/sw.ts](src/sw.ts) (precache + push + badge + abrir sección al tocar). Suscripción en [src/lib/push.ts](src/lib/push.ts).
 - **Supabase:** Auth (email+contraseña, sign-ups off), Postgres + RLS, Storage (buckets privados + signed URLs), Realtime, Edge Function [`notify`](supabase/functions/notify/index.ts), `pg_net` + Vault.
 - **Netlify** gratis: sitio `mvp-post` → https://mvp-post.netlify.app (vinculado en `.netlify/`, variables `VITE_*` cargadas). Repo: https://github.com/simonmantillago/mvp-post (privado, rama `main`).
-- Instalado: `react-router` 7 (rutas por sección, View Transitions para pasar la página) y `@fontsource/*` (solo subconjunto latino). Gestos del collage con Pointer Events propios (sin librería).
+- Instalado: `react-router` 7 (rutas por sección, View Transitions para pasar la página), `@fontsource/*` (solo subconjunto latino) y `three` (solo el tocadiscos 3D, en chunk diferido). Gestos del collage con Pointer Events propios (sin librería).
 - Pendiente de instalar: `@imgly/background-removal` para quitar fondo en el teléfono (AGPL, uso privado; plan B MediaPipe).
 - Sin librerías de UI de terceros.
 
@@ -48,6 +48,7 @@ npx supabase migration new <nombre>     # nueva migración en supabase/migration
 npx supabase db push --linked           # aplica migraciones pendientes a la nube
 npx supabase db query --linked "select …"  # consulta rápida (-f archivo.sql para scripts largos)
 npx supabase functions deploy notify --no-verify-jwt
+npx supabase functions deploy spotify-search   # búsqueda de Spotify (JWT + is_member)
 npx supabase secrets set NOMBRE=valor
 npx supabase config diff                # revisar antes de cualquier config push
 ```
@@ -125,6 +126,7 @@ docs/                     # specs, wireframe, inspiración
 - [x] Alfombra roja (cámara, flash, polaroids, ♥)
 - [x] Los vinilos de Big (oEmbed, tocadiscos, pila de fundas)
 - [x] Cartelera (turnos, ratings) — TMDB opcional pendiente
+- [x] Los vinilos de Big ronda 2: búsqueda en Spotify (Edge Function `spotify-search`), «Dedicar canción», tocadiscos 3D en three.js, aguja = play/pausa con la iFrame API (2026-10-24). **Faltan los secretos de Spotify** y probar en el iPhone.
 
 ### Fase 5 — Cierre
 - [ ] Pruebas en ambos iPhone instalados (cámara, audio, push, badge)

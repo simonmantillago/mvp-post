@@ -3,6 +3,8 @@ import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  // three.js (tocadiscos 3D) va en su propio chunk diferido de ~540 kB; solo se baja en Los vinilos de Big.
+  build: { chunkSizeWarningLimit: 600 },
   plugins: [
     react(),
     VitePWA({

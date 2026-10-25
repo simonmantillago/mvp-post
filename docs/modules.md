@@ -51,7 +51,8 @@ Todas cubren: **vacío** (texto tierno que invita a crear), **cargando**, **erro
 - Penthouse de noche, classy: nogal, cuero, ámbar, sin brillo.
 - Arriba: tocadiscos con el disco sonando (portada de la canción en la etiqueta), título, artista, dedicatoria escrita a pluma y "dedicada por X", reproductor discreto (embed oficial de Spotify/YouTube).
 - Abajo: **"La pila de discos"**, una lista de fundas de vinilo apiladas; cada una con portada, título, artista y un **sello de lacre** de quién la dedicó (rosa = ella, dorado = él). Filtros Todas / De ella / De él. Tocar una funda la saca y la pone en el tocadiscos.
-- Agregar: pegar link → oEmbed (`open.spotify.com/oembed`, `youtube.com/oembed`) para título y `cover_url` → dedicatoria → guardar.
+- Tocadiscos 3D (three.js, vista fija, tapa acrílica abierta) con la carátula en la etiqueta. **La aguja es play/pausa**: tocar el brazo o el botón «Bajar/Levantar la aguja» llama a `resume`/`pause` del `EmbedController` (Spotify iFrame API); el giro sigue a `playback_update`. YouTube recibe `playVideo`/`pauseVideo` por postMessage.
+- **Dedicar canción:** buscar en Spotify (Edge Function `spotify-search`, Client Credentials, máx. 10 resultados) → elegir → dedicatoria → guardar. Respaldo: pegar link → oEmbed (`open.spotify.com/oembed`, `youtube.com/oembed`) para título y `cover_url`.
 
 ## 5. Cartelera (videoclub)
 - Estantería de VHS, ticket "Esta noche elige: <nombre>", pestañas Por ver · Viendo · Vistas, crítica con estrellas de ambos.
@@ -76,7 +77,7 @@ Cada cosa nueva genera una fila en `activity` (triggers) → Edge Function `noti
 | Pieza nueva en el collage | "Estilo · Y2K" — X pegó algo nuevo (máx. 1 cada 10 min) |
 | Foto tomada | "Alfombra roja" — X tomó una foto nueva |
 | ♥ a tu foto | "A X le encantó tu foto" (máx. 1 cada 10 min) |
-| Canción dedicada | "Los vinilos de Big" — X te dedicó "título" |
+| Canción dedicada | "Los vinilos de Big" — X te dedicó "título" (sin título: "te dedicó una canción") |
 | Carta | "Carta de X" — texto |
 | ¡Extra! | "¡EXTRA! ¡EXTRA!" — X te está buscando |
 | Película agregada / elegida / calificada | "Cartelera" — … |

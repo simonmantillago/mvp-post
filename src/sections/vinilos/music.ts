@@ -1,4 +1,5 @@
 import type { Song } from '../../lib/types'
+import { supabase } from '../../lib/supabase'
 
 export function detectPlatform(url: string): Song['platform'] {
   if (/open\.spotify\.com|spotify\.link/.test(url)) return 'spotify'
@@ -41,4 +42,29 @@ export async function lookup(url: string): Promise<{ title?: string; artist?: st
   } catch {
     return {}
   }
+}
+
+export type FoundTrack = {
+  id: string
+  uri: string
+  url: string
+  title: string
+  artist: string
+  album: string
+  cover: string | null
+  thumb: string | null
+  duration_ms: number
+}
+
+/** Busca en Spotify por la Edge Function `spotify-search` (máx. 10 resultados). */
+export async function searchSpotify(q: string): Promise<FoundTrack[]> {
+  const { data, error } = await supabase.functions.invoke<{ tracks: FoundTrack[] }>('spotify-search', { body: { q } })
+  if (error || !data) throw error ?? new Error('sin respuesta')
+  return data.tracks
+}
+
+/** `spotify:track:…` a partir del enlace guardado, para el EmbedController. */
+export function spotifyUri(url: string) {
+  const m = url.match(/open\.spotify\.com\/(?:intl-[a-z]+\/)?(track|album|playlist|episode)\/([A-Za-z0-9]+)/)
+  return m ? `spotify:${m[1]}:${m[2]}` : null
 }

@@ -36,6 +36,15 @@ Punto de partida para la próxima sesión. Primer MVP **publicado**; de aquí en
 - Fotos de Simón en `public/portada/`: swag, angeles (cuadritos limpiados a blanco), big, cartelera, cartas.
 - Nombres nuevos en toda la app: **Los Ángeles de Victoria** (ruta `/alfombra-roja` e id `alfombra` sin cambios) y **Cartas mágicas** (ruta `/cartas`). Los títulos de push en `notify` también cambiaron, incluida «Carta mágica de …».
 
+## Los vinilos de Big: Spotify, aguja y tocadiscos 3D (2026-10-24)
+Brief: `docs/briefs/vinilos-spotify.md`; prototipo aprobado: `docs/briefs/tocadiscos-3d.html`.
+- **Edge Function `spotify-search`** desplegada (Client Credentials, `limit=10`). Valida el JWT y `is_member()`: sin sesión da 401 y con la llave anónima, 403. **Faltan los secretos `SPOTIFY_CLIENT_ID` / `SPOTIFY_CLIENT_SECRET`** (app de Simón en Spotify for Developers). Hasta entonces el buscador muestra «Spotify no respondió…» y queda pegar el enlace.
+- **Dedicar canción:** buscador con espera de 300 ms, resultados como fundas de cuero, estados de buscando, vacío, error y sin conexión. Al elegir se llenan `url`, `title`, `artist` y `cover_url`. Pegar el enlace sigue como respaldo. Al guardar, la canción nueva pasa al tocadiscos. El push dice «te dedicó una canción» cuando no hay título (`notify` redesplegada).
+- **Tocadiscos 3D** (`src/sections/vinilos/turntable3d.ts`, three.js 0.186 en chunk diferido de ~136 kB gzip): pasa el prototipo a módulo, con las luces ×π porque desde r155 son físicas. Tiene la carátula real en la etiqueta, render solo mientras algo se mueve y respaldo 2D sin WebGL. Con movimiento reducido el disco no gira.
+- **Aguja = play/pausa** (`player.ts`, Spotify iFrame API): bajar llama `play()` la primera vez y `resume()` después; levantar llama `pause()`. Si se pausa desde el embed o termina la muestra, el brazo se levanta solo. Probado en el navegador integrado (escritorio, sin sesión de Spotify): toca la **muestra de 30 s**, pausa y reanuda con el brazo y con el botón. **Sin gesto real, `play()` no arranca** (autoplay): tras 4 s aparece «Si no arranca, toca play en el reproductor». Cuando la duración es de unos 30 s, se avisa «Aquí suena la muestra de 30 s. La canción entera, en Spotify.» junto a «Abrir en Spotify».
+- **Falta en el iPhone instalado:** que el toque del brazo haga sonar el embed (el iframe es de otro origen), la búsqueda real y que «Abrir en Spotify» abra la app.
+- En `?demo` la canción s1 apunta a un track público real para probar el embed; la búsqueda falsa responde a todo (con «error» simula la caída y con «zzz», la búsqueda vacía).
+
 ## Pendientes conocidos
 - **Fotos de perfil** de ambos en `public/readers/maria-victoria.jpg` y `simon.jpg` (hoy se ven iniciales).
 - **Quitar fondo** a las fotos del collage Y2K (plan: `@imgly/background-removal`; plan B MediaPipe). Hoy se pegan con fondo.
