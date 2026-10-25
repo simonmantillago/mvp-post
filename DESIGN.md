@@ -91,11 +91,12 @@ typography:
     fontWeight: 500
     lineHeight: 1.2
     letterSpacing: "0.08em"
-  hand:
-    fontFamily: "Homemade Apple, cursive"
-    fontSize: "1.05rem"
+  dedication:
+    fontFamily: "EB Garamond, Georgia, serif"
+    fontSize: "1.2rem"
     fontWeight: 400
-    lineHeight: 1.9
+    fontStyle: italic
+    lineHeight: 1.5
   section-title:
     fontFamily: "var(--face-display)"
     fontSize: "clamp(2.4rem, 11vw, 3.4rem)"
@@ -251,7 +252,7 @@ Cada mundo asigna sus valores a los roles genéricos:
 **Masthead:** UnifrakturCook 700 (serif)
 **Headline / Label:** Antonio 500/700 (sans-serif)
 **Body:** Libre Caslon Text 400, 400 italic, 700 (Georgia)
-**Handwriting:** Homemade Apple (dedicatorias de vinilos). Los pies de polaroid van en Bodoni Moda itálica, la voz de Alfombra roja.
+**Dedicatoria:** EB Garamond 400 italic (`--face-dedication`, solo en Los vinilos de Big), entre comillas latinas ámbar colgadas; más clásica y fina que la itálica de Caslon del resto de la sección. Los pies de polaroid van en Bodoni Moda itálica, la voz de Alfombra roja.
 **Display por sección:** Bagel Fat One (Y2K), Bodoni Moda 400 + italic (Alfombra), Gloock (Vinilos), Monoton (Cartelera), Special Elite (Cartas y las cartas de él)
 
 **Character:** Gótica de cabecera + gótica condensada de titular + serif de periódico: la voz de un diario de gran tirada. Las caras display de sección son la voz de cada mundo y aparecen también en la portada, en el nombre de cada pliego, como los logos de sección de un diario.
@@ -350,9 +351,9 @@ Las fotos de Alfombra roja son polaroids (Blanco Polaroid, pie en Bodoni itálic
 Las alas de ángel son un raster con transparencia real; nunca se usa `mix-blend-mode` en elementos grandes (en iOS deja el negro opaco). Sobre la pedrería de las alas y la banda del marco hay destellos de diamante: dos rayos finísimos en cruz más dos diagonales tenues (raster) que se abren y se cierran en su sitio, sin desplazarse, en un ciclo de 3,6 s con retrasos distintos para que nunca brillen a la vez.
 
 ### Tocadiscos 3D y aguja
-El tocadiscos de Los vinilos de Big es un modelo procedural en three.js (`src/sections/vinilos/turntable3d.ts`, chunk diferido de ~136 kB gzip que solo se baja en esa sección): vista fija desde arriba y al frente, plinto de nogal oscuro (`#2a170c` con vetas en canvas) con filete y patas, plato de aluminio, vinilo con surcos y clearcoat, tapa acrílica abierta con cantos que brillan, piloto ámbar y luz de lámpara cálida. La etiqueta del disco es la carátula de la canción (`cover_url`) recortada en círculo; sin carátula, ámbar a vino con el título en Gloock. El canvas mide `min(100%, 27rem)` con proporción 360/380 y entra con un fundido de 600 ms; se renderiza solo mientras algo se mueve. Sin WebGL queda el plato 2D de CSS (`.platter`).
+El tocadiscos de Los vinilos de Big es un modelo procedural en three.js (`src/sections/vinilos/turntable3d.ts`, chunk diferido de ~141 kB gzip que solo se baja en esa sección): vista fija casi frontal (`CAMERA`; `?camara` activa un modo temporal para girarlo y leer el punto de vista), plinto de nogal oscuro (`#2a170c` con vetas en canvas) con filete y patas, plato de aluminio, vinilo con surcos y clearcoat, tapa acrílica abierta con cantos que brillan, piloto ámbar y luz de lámpara cálida. La etiqueta del disco es la carátula de la canción (`cover_url`) recortada en círculo; sin carátula, ámbar a vino con el título en Gloock. El canvas mide `min(100%, 27rem)` con proporción 360/380 y entra con un fundido de 600 ms; se renderiza solo mientras algo se mueve. Sin WebGL queda el plato 2D de CSS (`.platter`).
 
-La aguja es el play/pausa: tocar el brazo (zona de toque ampliada) o el botón de cuero «Bajar la aguja / Levantar la aguja» (píldora con textura de cuero, ícono ámbar, canto ámbar cuando está abajo) mueve el brazo, y el disco gira con inercia solo cuando el reproductor dice que suena. Junto al botón, el estado en itálica: «Aguja levantada», «Poniendo la aguja…», «Sonando». Con movimiento reducido el brazo salta a su sitio y el disco no gira.
+La aguja es el play/pausa: tocar el brazo (zona de toque ampliada) o el botón redondo centrado bajo el tocadiscos (3.5rem, cuero con filete tabaco, ▶/❚❚ relleno en ámbar, canto ámbar mientras suena, sin texto; `aria-label` «Reproducir»/«Pausar» y el estado solo para lectores de pantalla) mueve el brazo, y el disco gira con inercia solo cuando el reproductor dice que suena. Con movimiento reducido el brazo salta a su sitio y el disco no gira.
 
 ### Buscador de canciones
 El formulario «Dedicar canción» es un panel `--surface` con título en Gloock. El campo «Buscar en Spotify» espera 300 ms entre teclas; los resultados son fundas de cuero como las de la pila (carátula 3rem, título en Gloock, artista · álbum en itálica) con canto ámbar al pasar o tocar. La elegida queda como funda con filete ámbar y el enlace «Cambiar». Los estados (buscando, vacío, error, sin conexión) son notas en itálica `--text-soft`. Debajo, el enlace subrayado «¿No está? Pega el enlace de Spotify o YouTube» abre los campos manuales.

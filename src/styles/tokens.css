@@ -29,7 +29,6 @@
   --face-mast: "UnifrakturCook", serif;
   --face-head: "Antonio", sans-serif;
   --face-body: "Libre Caslon Text", Georgia, serif;
-  --face-hand: "Homemade Apple", cursive;
   --face-type: "Special Elite", "Courier New", monospace;
   --face-display: var(--face-head);
 
@@ -113,6 +112,7 @@
   --rule: #5a4030;
   --focus: #e8a64b;
   --face-display: "Gloock", serif;
+  --face-dedication: "EB Garamond", Georgia, serif;
 }
 
 /* Cartelera: videoclub de noche */

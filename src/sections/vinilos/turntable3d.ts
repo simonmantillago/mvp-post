@@ -3,6 +3,7 @@
 // nogal oscuro, tapa acrílica abierta y piloto ámbar. Única interacción: tocar el brazo.
 // Se carga en diferido solo al entrar a la sección (ver Deck.tsx); si no hay WebGL, queda el plato 2D.
 import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 export type Turntable = {
   /** Carátula de la canción en la etiqueta del disco; sin carátula, etiqueta ámbar con el título. */
@@ -30,7 +31,15 @@ const PLAY = -0.565 // giro del brazo sobre el disco
 const UP = -0.09 // elevación con la aguja levantada
 const RPM = 3.49 // 33⅓ rpm en rad/s
 
-export function createTurntable(canvas: HTMLCanvasElement, opts: { onArmTap: () => void; reducedMotion: boolean }): Turntable {
+export type CameraPose = { position: [number, number, number]; target: [number, number, number] }
+
+// Vista más frontal que el prototipo (pedida por Simón el 2026-10-25); se afina con ?camara
+const CAMERA: CameraPose = { position: [1.6, 4.2, 11.2], target: [0.4, 0.9, -0.3] }
+
+export function createTurntable(
+  canvas: HTMLCanvasElement,
+  opts: { onArmTap: () => void; reducedMotion: boolean; orbit?: (pose: CameraPose) => void },
+): Turntable {
   const R = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'low-power' })
   R.setPixelRatio(Math.min(devicePixelRatio, 2))
   R.shadowMap.enabled = true
@@ -40,8 +49,8 @@ export function createTurntable(canvas: HTMLCanvasElement, opts: { onArmTap: () 
 
   const S = new THREE.Scene()
   const cam = new THREE.PerspectiveCamera(40, ASPECT, 0.1, 100)
-  cam.position.set(2.6, 7.4, 10.4)
-  cam.lookAt(0.5, 1.05, -0.2)
+  cam.position.set(...CAMERA.position)
+  cam.lookAt(...CAMERA.target)
 
   // Reflejos: un estudio simple con paneles de luz, horneado a PMREM
   const pm = new THREE.PMREMGenerator(R)
@@ -334,6 +343,27 @@ export function createTurntable(canvas: HTMLCanvasElement, opts: { onArmTap: () 
   canvas.addEventListener('pointerup', onUp)
   canvas.addEventListener('pointermove', onMove)
 
+  // Modo ?camara (temporal): girar y acercar con el dedo para elegir el punto de vista
+  let controls: OrbitControls | null = null
+  if (opts.orbit) {
+    const report = opts.orbit
+    controls = new OrbitControls(cam, canvas)
+    controls.target.set(...CAMERA.target)
+    controls.enablePan = false
+    controls.maxPolarAngle = Math.PI / 2 - 0.05
+    controls.minDistance = 5
+    controls.maxDistance = 20
+    controls.rotateSpeed = 0.6
+    controls.update()
+    const r = (n: number) => Math.round(n * 100) / 100
+    const emit = () => report({ position: [r(cam.position.x), r(cam.position.y), r(cam.position.z)], target: [r(controls!.target.x), r(controls!.target.y), r(controls!.target.z)] })
+    controls.addEventListener('change', () => {
+      emit()
+      wake()
+    })
+    emit()
+  }
+
   paintLabel(null, '', '')
 
   return {
@@ -359,6 +389,7 @@ export function createTurntable(canvas: HTMLCanvasElement, opts: { onArmTap: () 
       disposed = true
       cancelAnimationFrame(raf)
       ro.disconnect()
+      controls?.dispose()
       canvas.removeEventListener('pointerdown', onDown)
       canvas.removeEventListener('pointerup', onUp)
       canvas.removeEventListener('pointermove', onMove)

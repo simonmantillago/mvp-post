@@ -3,9 +3,11 @@ import type { Song } from '../../lib/types'
 import { Icon } from '../../ui/Icon'
 import { embedUrl, spotifyUri } from './music'
 import { useSpotifyEmbed, youtubeCommand } from './player'
-import type { Turntable } from './turntable3d'
+import type { CameraPose, Turntable } from './turntable3d'
 
 const calm = () => matchMedia('(prefers-reduced-motion: reduce)').matches
+// ?camara: modo temporal para girar el tocadiscos y leer el punto de vista (se quita al fijarlo)
+const orbitMode = () => new URLSearchParams(location.search).has('camara')
 
 /**
  * El tocadiscos y la canción que suena. La aguja es el play/pausa:
@@ -15,6 +17,7 @@ export function Deck({ song, by }: { song: Song; by: string }) {
   const [needle, setNeedle] = useState(false)
   const [mode, setMode] = useState<'loading' | '3d' | '2d'>('loading')
   const [slow, setSlow] = useState(false)
+  const [pose, setPose] = useState<CameraPose | null>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const tt = useRef<Turntable | null>(null)
   const spotifyHost = useRef<HTMLDivElement>(null)
@@ -46,7 +49,7 @@ export function Deck({ song, by }: { song: Song; by: string }) {
       .then((m) => {
         if (!alive || !canvas.current) return
         if (!m.webglAvailable()) return setMode('2d')
-        tt.current = m.createTurntable(canvas.current, { onArmTap: () => toggleRef.current(), reducedMotion: calm() })
+        tt.current = m.createTurntable(canvas.current, { onArmTap: () => toggleRef.current(), reducedMotion: calm(), orbit: orbitMode() ? setPose : undefined })
         setMode('3d')
       })
       .catch(() => alive && setMode('2d'))
@@ -72,7 +75,7 @@ export function Deck({ song, by }: { song: Song; by: string }) {
   }, [needle, uri, spotify.playing])
 
   const preview = uri && spotify.duration > 0 && spotify.duration <= 31_000
-  const status = spinning ? 'Sonando' : needle ? 'Poniendo la aguja…' : 'Aguja levantada'
+  const status = spinning ? 'Sonando' : needle ? 'Poniendo la aguja' : 'En pausa'
   const platform = song.platform === 'spotify' ? 'Spotify' : song.platform === 'youtube' ? 'YouTube' : null
 
   return (
@@ -94,16 +97,20 @@ export function Deck({ song, by }: { song: Song; by: string }) {
             </svg>
           </div>
         )}
+        {pose && (
+          <p className="turntable-pose">
+            cam {pose.position.join(', ')} · mira {pose.target.join(', ')}
+          </p>
+        )}
       </div>
 
       <div className="needle">
-        <button type="button" className="needle-button" aria-pressed={needle} onClick={toggle}>
-          <Icon name={needle ? 'pause' : 'play'} size={18} />
-          {needle ? 'Levantar la aguja' : 'Bajar la aguja'}
+        <button type="button" className={`needle-button${needle ? '' : ' is-play'}`} aria-pressed={needle} aria-label={needle ? 'Pausar' : 'Reproducir'} onClick={toggle}>
+          <Icon name={needle ? 'pause' : 'play'} size={22} filled />
         </button>
-        <p className="needle-status" aria-live="polite">
+        <span className="visually-hidden" aria-live="polite">
           {status}
-        </p>
+        </span>
       </div>
 
       <div className="now">
