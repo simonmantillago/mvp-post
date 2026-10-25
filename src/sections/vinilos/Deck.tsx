@@ -3,11 +3,9 @@ import type { Song } from '../../lib/types'
 import { Icon } from '../../ui/Icon'
 import { embedUrl, spotifyUri } from './music'
 import { useSpotifyEmbed, youtubeCommand } from './player'
-import type { CameraPose, Turntable } from './turntable3d'
+import type { Turntable } from './turntable3d'
 
 const calm = () => matchMedia('(prefers-reduced-motion: reduce)').matches
-// ?camara: modo temporal para girar el tocadiscos y leer el punto de vista (se quita al fijarlo)
-const orbitMode = () => new URLSearchParams(location.search).has('camara')
 
 /**
  * El tocadiscos y la canción que suena. La aguja es el play/pausa:
@@ -17,7 +15,6 @@ export function Deck({ song, by }: { song: Song; by: string }) {
   const [needle, setNeedle] = useState(false)
   const [mode, setMode] = useState<'loading' | '3d' | '2d'>('loading')
   const [slow, setSlow] = useState(false)
-  const [pose, setPose] = useState<CameraPose | null>(null)
   const canvas = useRef<HTMLCanvasElement>(null)
   const tt = useRef<Turntable | null>(null)
   const spotifyHost = useRef<HTMLDivElement>(null)
@@ -49,7 +46,7 @@ export function Deck({ song, by }: { song: Song; by: string }) {
       .then((m) => {
         if (!alive || !canvas.current) return
         if (!m.webglAvailable()) return setMode('2d')
-        tt.current = m.createTurntable(canvas.current, { onArmTap: () => toggleRef.current(), reducedMotion: calm(), orbit: orbitMode() ? setPose : undefined })
+        tt.current = m.createTurntable(canvas.current, { onArmTap: () => toggleRef.current(), reducedMotion: calm() })
         setMode('3d')
       })
       .catch(() => alive && setMode('2d'))
@@ -96,11 +93,6 @@ export function Deck({ song, by }: { song: Song; by: string }) {
               <rect x="34" y="190" width="18" height="26" rx="3" fill="#1d1a17" stroke="#c9c3b8" strokeWidth="2" transform="rotate(-24 43 203)" />
             </svg>
           </div>
-        )}
-        {pose && (
-          <p className="turntable-pose">
-            cam {pose.position.join(', ')} · mira {pose.target.join(', ')}
-          </p>
         )}
       </div>
 

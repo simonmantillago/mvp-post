@@ -46,9 +46,9 @@ Brief: `docs/briefs/vinilos-spotify.md`; prototipo aprobado: `docs/briefs/tocadi
 - En `?demo` la canción s1 apunta a un track público real para probar el embed; la búsqueda falsa responde a todo (con «error» simula la caída y con «zzz», la búsqueda vacía).
 
 ### Ronda 3 (2026-10-25)
-- Cámara más frontal (`CAMERA` en `turntable3d.ts`: `(1.6, 4.2, 11.2)` mirando a `(0.4, 0.9, -0.3)`). **Modo temporal `?camara`** (`/vinilos?camara`, también en producción): se gira y acerca con el dedo y muestra `cam … · mira …` bajo el tocadiscos. Simón manda la captura con el punto de vista; se fijan esos números, se ajusta la proporción del canvas si sobra espacio y se quita el modo.
+- Cámara fija de frente y algo elevada, igualada a una captura de Simón (`CAMERA` en `turntable3d.ts`: `(-0.6, 6.62, 8.72)` mirando a `(0.44, 1.15, 0.08)`). El modelo no se tocó. El modo temporal `?camara` ya se quitó.
 - Play/pausa: un botón redondo de cuero centrado, solo con el ícono ámbar (sin «Bajar/Levantar la aguja» ni estado visible).
-- Dedicatoria en **EB Garamond itálica** entre comillas latinas ámbar; se quitó Homemade Apple (fuente y token `--face-hand`).
+- Dedicatoria en **EB Garamond itálica**, sin comillas; se quitó Homemade Apple (fuente y token `--face-hand`).
 
 ## Pendientes conocidos
 - **Fotos de perfil** de ambos en `public/readers/maria-victoria.jpg` y `simon.jpg` (hoy se ven iniciales).

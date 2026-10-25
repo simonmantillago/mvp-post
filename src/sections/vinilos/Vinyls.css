@@ -125,13 +125,6 @@
 .needle-button.is-play svg { translate: 2px 0; }
 .needle-button[aria-pressed="true"] { box-shadow: inset 0 0 0 1px var(--accent), 0 6px 14px -8px rgba(0, 0, 0, 0.8); }
 .needle-button:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
-.turntable-pose {
-  position: relative;
-  text-align: center;
-  font: var(--size-folio) / 1.3 var(--face-body);
-  color: var(--text-soft);
-  font-variant-numeric: tabular-nums;
-}
 
 .now { display: grid; gap: var(--s1); padding-top: var(--s4); border-top: 1px solid var(--rule); }
 .now-title {
@@ -146,9 +139,6 @@
   font: italic 400 1.2rem / 1.5 var(--face-dedication);
   color: var(--text);
 }
-/* Comillas latinas colgadas: la dedicatoria se lee como una cita */
-.now-dedication::before { content: "«"; margin-left: -0.55em; color: var(--accent-text); }
-.now-dedication::after { content: "»"; color: var(--accent-text); }
 .now-by {
   font: italic var(--size-small) / 1.3 var(--face-body);
   color: var(--accent-text);

@@ -3,7 +3,6 @@
 // nogal oscuro, tapa acrílica abierta y piloto ámbar. Única interacción: tocar el brazo.
 // Se carga en diferido solo al entrar a la sección (ver Deck.tsx); si no hay WebGL, queda el plato 2D.
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 export type Turntable = {
   /** Carátula de la canción en la etiqueta del disco; sin carátula, etiqueta ámbar con el título. */
@@ -31,14 +30,12 @@ const PLAY = -0.565 // giro del brazo sobre el disco
 const UP = -0.09 // elevación con la aguja levantada
 const RPM = 3.49 // 33⅓ rpm en rad/s
 
-export type CameraPose = { position: [number, number, number]; target: [number, number, number] }
-
-// Vista más frontal que el prototipo (pedida por Simón el 2026-10-25); se afina con ?camara
-const CAMERA: CameraPose = { position: [1.6, 4.2, 11.2], target: [0.4, 0.9, -0.3] }
+// Vista de frente y algo elevada, elegida por Simón con una captura (2026-10-25)
+const CAMERA: { position: [number, number, number]; target: [number, number, number] } = { position: [-0.6, 6.62, 8.72], target: [0.44, 1.15, 0.08] }
 
 export function createTurntable(
   canvas: HTMLCanvasElement,
-  opts: { onArmTap: () => void; reducedMotion: boolean; orbit?: (pose: CameraPose) => void },
+  opts: { onArmTap: () => void; reducedMotion: boolean },
 ): Turntable {
   const R = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'low-power' })
   R.setPixelRatio(Math.min(devicePixelRatio, 2))
@@ -343,27 +340,6 @@ export function createTurntable(
   canvas.addEventListener('pointerup', onUp)
   canvas.addEventListener('pointermove', onMove)
 
-  // Modo ?camara (temporal): girar y acercar con el dedo para elegir el punto de vista
-  let controls: OrbitControls | null = null
-  if (opts.orbit) {
-    const report = opts.orbit
-    controls = new OrbitControls(cam, canvas)
-    controls.target.set(...CAMERA.target)
-    controls.enablePan = false
-    controls.maxPolarAngle = Math.PI / 2 - 0.05
-    controls.minDistance = 5
-    controls.maxDistance = 20
-    controls.rotateSpeed = 0.6
-    controls.update()
-    const r = (n: number) => Math.round(n * 100) / 100
-    const emit = () => report({ position: [r(cam.position.x), r(cam.position.y), r(cam.position.z)], target: [r(controls!.target.x), r(controls!.target.y), r(controls!.target.z)] })
-    controls.addEventListener('change', () => {
-      emit()
-      wake()
-    })
-    emit()
-  }
-
   paintLabel(null, '', '')
 
   return {
@@ -389,7 +365,6 @@ export function createTurntable(
       disposed = true
       cancelAnimationFrame(raf)
       ro.disconnect()
-      controls?.dispose()
       canvas.removeEventListener('pointerdown', onDown)
       canvas.removeEventListener('pointerup', onUp)
       canvas.removeEventListener('pointermove', onMove)
