@@ -22,7 +22,7 @@ PWA privada de pareja, regalo para **MVP**. Es un **periódico neoyorquino de 20
 - No usar logos ni marcas reales (Sex and the City, Victoria's Secret, Chanel, Blockbuster, MSN…): todo propio, "inspirado en". "Big" solo como guiño en el nombre de la sección.
   - **Excepción pedida por Simón (2026-10-24):** las fotos de los artículos de la portada (`public/portada/`) son sus imágenes tal cual: #SWAG, monograma VS, foto de Big, póster de Entergalactic y sobre de Hogwarts. Es un regalo privado. Lo que vive en `public/` se puede abrir con el link directo sin sesión.
   - La columna se llama **Carrie's Column**.
-  - **Ícono de Spotify** en Los vinilos de Big para abrir la canción (permiso de Simón, 2026-10-25).
+  - **Íconos de Spotify y YouTube** en Los vinilos de Big para abrir la canción (permiso de Simón, 2026-10-25).
 - UI en **español**.
 
 ## Stack
@@ -127,7 +127,7 @@ docs/                     # specs, wireframe, inspiración
 - [x] Alfombra roja (cámara, flash, polaroids, ♥)
 - [x] Los vinilos de Big (oEmbed, tocadiscos, pila de fundas)
 - [x] Cartelera (turnos, ratings) — TMDB opcional pendiente
-- [x] Los vinilos de Big ronda 2: búsqueda en Spotify (Edge Function `spotify-search`), «Dedicar canción», tocadiscos 3D en three.js, aguja = play/pausa con la iFrame API (2026-10-24). Secretos de Spotify cargados y búsqueda verificada (2026-10-25). Ronda 3: cámara de frente fijada con la captura de Simón, botón redondo play/pausa, dedicatoria en EB Garamond. Ronda 4: embed de Spotify oculto, «+» para dedicar, ícono de Spotify (2026-10-25). Falta probar en el iPhone.
+- [x] Los vinilos de Big ronda 2: búsqueda en Spotify (Edge Function `spotify-search`), «Dedicar canción», tocadiscos 3D en three.js, aguja = play/pausa con la iFrame API (2026-10-24). Secretos de Spotify cargados y búsqueda verificada (2026-10-25). Ronda 3: cámara de frente fijada con la captura de Simón, botón redondo play/pausa, dedicatoria en EB Garamond. Rondas 4–5: embeds ocultos, «+ Añadir», íconos de Spotify y YouTube (2026-10-25). Falta probar en el iPhone.
 
 ### Fase 5 — Cierre
 - [ ] Pruebas en ambos iPhone instalados (cámara, audio, push, badge)

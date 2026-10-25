@@ -3,7 +3,7 @@ import type { Song } from '../../lib/types'
 import { Icon } from '../../ui/Icon'
 import { embedUrl, spotifyUri } from './music'
 import { useSpotifyEmbed, youtubeCommand } from './player'
-import { SpotifyMark } from './SpotifyMark'
+import { SpotifyMark, YouTubeMark } from './BrandMarks'
 import type { Turntable } from './turntable3d'
 
 const calm = () => matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -15,7 +15,6 @@ const calm = () => matchMedia('(prefers-reduced-motion: reduce)').matches
 export function Deck({ song, by }: { song: Song; by: string }) {
   const [needle, setNeedle] = useState(false)
   const [mode, setMode] = useState<'loading' | '3d' | '2d'>('loading')
-  const [slow, setSlow] = useState(false)
   const canvas = useRef<HTMLCanvasElement>(null)
   const tt = useRef<Turntable | null>(null)
   const spotifyHost = useRef<HTMLDivElement>(null)
@@ -64,15 +63,6 @@ export function Deck({ song, by }: { song: Song; by: string }) {
   useEffect(() => tt.current?.setNeedle(needle), [mode, needle])
   useEffect(() => tt.current?.setSpinning(spinning), [mode, spinning])
 
-  // Si la aguja bajó y Spotify no arrancó (Safari a veces exige tocar su propio play)
-  useEffect(() => {
-    setSlow(false)
-    if (!needle || !uri || spotify.playing) return
-    const t = setTimeout(() => setSlow(true), 4000)
-    return () => clearTimeout(t)
-  }, [needle, uri, spotify.playing])
-
-  const preview = uri && spotify.duration > 0 && spotify.duration <= 31_000
   const status = spinning ? 'Sonando' : needle ? 'Poniendo la aguja' : 'En pausa'
   const platform = song.platform === 'spotify' ? 'Spotify' : song.platform === 'youtube' ? 'YouTube' : null
 
@@ -112,38 +102,34 @@ export function Deck({ song, by }: { song: Song; by: string }) {
             <p className="now-title">{song.title || 'Sin título'}</p>
             {song.artist && <p className="now-artist">{song.artist}</p>}
           </div>
-          {song.platform === 'spotify' && (
-            <a className="now-spotify" href={song.url} target="_blank" rel="noreferrer" aria-label="Abrir en Spotify">
-              <SpotifyMark />
+          {platform && (
+            <a className={`now-brand now-brand--${song.platform}`} href={song.url} target="_blank" rel="noreferrer" aria-label={`Abrir en ${platform}`}>
+              {song.platform === 'spotify' ? <SpotifyMark /> : <YouTubeMark />}
             </a>
           )}
         </div>
         {song.dedication && <p className="now-dedication">{song.dedication}</p>}
         <p className="now-by">dedicada por {by}</p>
 
-        {/* El embed de Spotify suena pero no se ve: el tocadiscos es el reproductor */}
+        {/* Los embeds suenan pero no se ven: el tocadiscos es el reproductor */}
         {uri && <div ref={spotifyHost} className="now-player-hidden" aria-hidden="true" />}
         {yt && (
-          <div className="now-player now-player--youtube">
+          <div className="now-player-hidden" aria-hidden="true">
             <iframe
               ref={ytFrame}
               key={song.id}
               src={`${yt}?enablejsapi=1&playsinline=1`}
               title={`Reproducir ${song.title}`}
               allow="autoplay; clipboard-write; encrypted-media; picture-in-picture"
-              loading="lazy"
+              tabIndex={-1}
             />
           </div>
         )}
-        {(slow || preview || spotify.failed) && (
-          <p className="now-note">
-            {spotify.failed ? 'Spotify no cargó.' : slow ? 'Si no arranca, ábrela en Spotify.' : 'Aquí suena la muestra de 30 s.'} La canción entera, en {platform ?? 'su página'}.
-          </p>
-        )}
+        {platform && <p className="now-note">Para escucharla completa, ábrela en {platform}.</p>}
 
-        {song.platform !== 'spotify' && (
+        {!platform && (
           <a className="now-link" href={song.url} target="_blank" rel="noreferrer">
-            {platform ? `Abrir en ${platform}` : 'Abrir la canción'}
+            Abrir la canción
             <Icon name="arrow-right" size={16} />
           </a>
         )}

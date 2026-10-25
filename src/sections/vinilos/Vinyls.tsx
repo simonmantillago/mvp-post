@@ -58,8 +58,8 @@ export default function Vinyls() {
           />
         ) : (
           <div className="vinyls-add">
-            <button type="button" className="vinyls-add-button" aria-label="Dedicar canción" onClick={() => setAdding(true)}>
-              <Icon name="plus" size={26} />
+            <button type="button" className="vinyls-add-button" onClick={() => setAdding(true)}>
+              <Icon name="plus" size={18} /> Añadir
             </button>
           </div>
         )}

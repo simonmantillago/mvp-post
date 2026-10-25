@@ -113,7 +113,8 @@
   --focus: #e8a64b;
   --face-display: "Gloock", serif;
   --face-dedication: "EB Garamond", Georgia, serif;
-  --spotify: #1ed760; /* verde de marca, solo para el ícono «Abrir en Spotify» */
+  --spotify: #1ed760; /* colores de marca, solo para los íconos que abren la canción */
+  --youtube: #ff0000;
 }
 
 /* Cartelera: videoclub de noche */

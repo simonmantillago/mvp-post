@@ -55,6 +55,10 @@ Brief: `docs/briefs/vinilos-spotify.md`; prototipo aprobado: `docs/briefs/tocadi
 - «Dedicar canción» es un «+» redondo ámbar; «Abrir en Spotify» es el ícono de Spotify en verde junto al título (trazado de simple-icons, CC0; permiso de Simón para usar la marca).
 - Aviso: si en el iPhone `play()` no arranca, ya no hay un play de Spotify visible que tocar; la nota dice «Si no arranca, ábrela en Spotify». Revisarlo en la prueba del iPhone.
 
+### Ronda 5 (2026-10-25)
+- «+ Añadir»: píldora pequeña a la izquierda, del tamaño de los filtros «Todas / Mías / De …».
+- YouTube también suena con el reproductor oculto y tiene su ícono rojo junto al título (`BrandMarks.tsx`). Se quitó el aviso de la muestra de 30 s. Ahora la nota dice «Para escucharla completa, ábrela en Spotify/YouTube».
+
 ## Pendientes conocidos
 - **Fotos de perfil** de ambos en `public/readers/maria-victoria.jpg` y `simon.jpg` (hoy se ven iniciales).
 - **Quitar fondo** a las fotos del collage Y2K (plan: `@imgly/background-removal`; plan B MediaPipe). Hoy se pegan con fondo.
