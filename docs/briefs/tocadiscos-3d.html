@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tocadiscos 3D · prototipo</title>
+<!-- Prototipo aprobado por Simón (2026-10-24) para Los vinilos de Big: vista desde arriba y al frente, nogal oscuro,
+     tapa acrílica abierta, piloto ámbar. Única interacción: tocar el brazo (o el botón) para bajar/levantar la aguja.
+     Referencia para src/sections/vinilos/turntable3d.ts; ver docs/briefs/vinilos-spotify.md. -->
+<style>
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #1f1610; color: #c7b49a; font: 14px Georgia, serif; }
+  .dev { width: 360px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  #c { width: 360px; height: 380px; display: block; }
+  .row { display: flex; gap: 10px; align-items: center; }
+  .row button { background: #e8a64b; color: #1f1610; border: 0; padding: 10px 14px; font: 600 14px Georgia, serif; cursor: pointer; }
+</style>
+</head>
+<body>
+<div class="dev">
+  <canvas id="c" aria-label="Tocadiscos 3D. Toca el brazo para bajar o levantar la aguja."></canvas>
+  <div class="row"><button id="b">Bajar la aguja</button><span id="s">En pausa</span></div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  const cv = document.getElementById('c'); const W = 360, H = 380
+  const R = new THREE.WebGLRenderer({ canvas: cv, antialias: true, alpha: true })
+  R.setPixelRatio(Math.min(devicePixelRatio, 2)); R.setSize(W, H, false)
+  R.shadowMap.enabled = true; R.shadowMap.type = THREE.PCFSoftShadowMap
+  R.toneMapping = THREE.ACESFilmicToneMapping; R.toneMappingExposure = 1.1; R.outputEncoding = THREE.sRGBEncoding
+  const S = new THREE.Scene()
+  // Vista desde arriba y al frente; alejada lo justo para que la tapa abierta entre completa en 360 px
+  const cam = new THREE.PerspectiveCamera(40, W / H, 0.1, 100); cam.position.set(2.6, 7.4, 10.4); cam.lookAt(0.5, 1.05, -0.2)
+
+  // Reflejos: un estudio simple con paneles de luz, horneado a PMREM
+  const pm = new THREE.PMREMGenerator(R); const env = new THREE.Scene(); env.background = new THREE.Color(0x120c08)
+  const pan = (w, h, c, x, y, z, ry, rx) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ color: c, side: 2 })); m.position.set(x, y, z); m.rotation.y = ry || 0; m.rotation.x = rx || 0; env.add(m) }
+  pan(10, 4, 0xffffff, 0, 8, 0, 0, Math.PI / 2); pan(6, 3, 0xffc890, -7, 3, 0, Math.PI / 2); pan(5, 3, 0xbfd0ff, 6, 3, 4, -Math.PI / 3)
+  S.environment = pm.fromScene(env, 0.03).texture
+
+  function tex(w, h, draw) { const c = document.createElement('canvas'); c.width = w; c.height = h; draw(c.getContext('2d'), w, h); const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; t.anisotropy = 8; return t }
+  // Nogal oscuro con vetas
+  const walnut = tex(1024, 512, (g, w, h) => { g.fillStyle = '#2a170c'; g.fillRect(0, 0, w, h); for (let i = 0; i < 300; i++) { const y = Math.random() * h, a = 3 + Math.random() * 9, f = 0.004 + Math.random() * 0.01, p = Math.random() * 6; g.strokeStyle = Math.random() < 0.55 ? `rgba(8,4,2,${0.25 + Math.random() * 0.35})` : `rgba(110,64,32,${0.12 + Math.random() * 0.22})`; g.lineWidth = 0.6 + Math.random() * 2.4; g.beginPath(); for (let x = 0; x <= w; x += 8) g.lineTo(x, y + Math.sin(x * f + p) * a); g.stroke() } })
+  // Vinilo: surcos, separación entre pistas y etiqueta (en la app: la carátula de cover_url)
+  const vinyl = tex(1024, 1024, (g, w) => { const c = w / 2; g.fillStyle = '#070707'; g.fillRect(0, 0, w, w); for (let r = c * 0.36; r < c * 0.995; r += 1.15) { const gap = [0.52, 0.66, 0.8].some((k) => Math.abs(r / c - k) < 0.006); g.strokeStyle = gap ? '#1b1b1b' : `rgb(${9 + Math.random() * 9 | 0},${9 + Math.random() * 9 | 0},${10 + Math.random() * 9 | 0})`; g.lineWidth = gap ? 2.4 : 0.9; g.beginPath(); g.arc(c, c, r, 0, 7); g.stroke() }
+    const lr = c * 0.34, gr = g.createLinearGradient(c - lr, c - lr, c + lr, c + lr); gr.addColorStop(0, '#e8a64b'); gr.addColorStop(1, '#6b1424'); g.fillStyle = gr; g.beginPath(); g.arc(c, c, lr, 0, 7); g.fill()
+    g.fillStyle = 'rgba(255,240,215,.92)'; g.font = '600 44px Georgia'; g.textAlign = 'center'; g.fillText('GOLDEN HOUR', c, c - 58); g.font = 'italic 30px Georgia'; g.fillText('JVKE · dedicada por Simón', c, c + 78); g.fillStyle = '#0a0a0a'; g.beginPath(); g.arc(c, c, 9, 0, 7); g.fill() })
+
+  const M = {
+    walnut: new THREE.MeshStandardMaterial({ map: walnut, roughness: 0.5 }),
+    alu: new THREE.MeshStandardMaterial({ color: 0xd4d6da, metalness: 1, roughness: 0.25 }),
+    dark: new THREE.MeshStandardMaterial({ color: 0x161616, metalness: 0.4, roughness: 0.5 }),
+    rub: new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.95 }),
+    vin: new THREE.MeshPhysicalMaterial({ map: vinyl, roughness: 0.42, metalness: 0.1, clearcoat: 1, clearcoatRoughness: 0.18 }),
+    edge: new THREE.MeshPhysicalMaterial({ color: 0x0a0a0a, roughness: 0.3, clearcoat: 1 }),
+    brass: new THREE.MeshStandardMaterial({ color: 0xc9a24a, metalness: 1, roughness: 0.3 }),
+    acr: new THREE.MeshPhysicalMaterial({ color: 0xffffff, transparent: true, opacity: 0.1, roughness: 0.04, metalness: 0, clearcoat: 1, clearcoatRoughness: 0.02, envMapIntensity: 2.2, side: THREE.DoubleSide, depthWrite: false }),
+  }
+  const root = new THREE.Group(); root.rotation.y = -0.18; S.add(root)
+  const mesh = (geo, mat, x, y, z, cast = true) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); m.castShadow = cast; m.receiveShadow = true; root.add(m); return m }
+
+  // Plinto de nogal con filete oscuro y patas; arriba, botón de arranque, selector y piloto ámbar
+  mesh(new THREE.BoxGeometry(5.3, 0.55, 4.1), M.walnut, 0.45, -0.275, 0)
+  mesh(new THREE.BoxGeometry(5.34, 0.04, 4.14), M.dark, 0.45, -0.56, 0)
+  ;[[-2, -1.75], [2.9, -1.75], [-2, 1.75], [2.9, 1.75]].forEach(([x, z]) => mesh(new THREE.CylinderGeometry(0.22, 0.26, 0.18, 24), M.rub, x, -0.67, z))
+  mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.06, 32), M.alu, -1.75, 0.03, 1.65)
+  mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.05, 32), M.dark, -1.25, 0.025, 1.7)
+  const led = mesh(new THREE.SphereGeometry(0.05, 16, 12), new THREE.MeshStandardMaterial({ color: 0xe8a64b, emissive: 0xe8a64b, emissiveIntensity: 0.2 }), -0.9, 0.03, 1.72)
+
+  // Plato y vinilo
+  mesh(new THREE.CylinderGeometry(1.62, 1.62, 0.14, 96), M.alu, 0, 0.07, 0)
+  const disc = new THREE.Group(); root.add(disc); disc.position.set(0, 0.155, 0)
+  const rec = new THREE.Mesh(new THREE.CylinderGeometry(1.5, 1.5, 0.03, 128), [M.edge, M.vin, M.edge]); rec.castShadow = true; rec.receiveShadow = true; disc.add(rec)
+  const sp = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.035, 0.16, 16), M.alu); sp.position.y = 0.06; disc.add(sp)
+
+  // Brazo: dos grupos anidados, giro (yaw) y elevación (lift), para que la aguja suba y baje sobre su propio eje
+  const P = new THREE.Vector3(2.05, 0, -1.35)
+  mesh(new THREE.CylinderGeometry(0.34, 0.38, 0.08, 48), M.alu, P.x, 0.04, P.z); mesh(new THREE.CylinderGeometry(0.07, 0.07, 0.42, 24), M.dark, P.x, 0.25, P.z)
+  mesh(new THREE.CylinderGeometry(0.04, 0.05, 0.34, 16), M.dark, 2.05, 0.17, 0.95)
+  const yaw = new THREE.Group(); yaw.position.set(P.x, 0.44, P.z); root.add(yaw); const lift = new THREE.Group(); yaw.add(lift)
+  const L = 2.25, parts = []
+  const add = (geo, mat, x, y, z, rx) => { const m = new THREE.Mesh(geo, mat); m.position.set(x, y, z); if (rx) m.rotation.x = rx; m.castShadow = true; lift.add(m); parts.push(m); return m }
+  add(new THREE.SphereGeometry(0.09, 24, 16), M.alu, 0, 0, 0)
+  add(new THREE.CylinderGeometry(0.03, 0.03, L, 20), M.alu, 0, 0, L / 2, Math.PI / 2)
+  add(new THREE.CylinderGeometry(0.14, 0.14, 0.24, 32), M.dark, 0, 0, -0.36, Math.PI / 2)
+  add(new THREE.BoxGeometry(0.16, 0.07, 0.32), M.dark, 0, -0.06, L + 0.08)
+  add(new THREE.BoxGeometry(0.1, 0.12, 0.12), M.brass, 0, -0.15, L + 0.12)
+  add(new THREE.CylinderGeometry(0.008, 0.008, 0.1, 8), M.alu, 0, -0.24, L + 0.12)
+  add(new THREE.BoxGeometry(0.02, 0.02, 0.22), M.alu, 0.08, -0.04, L + 0.25)
+
+  // Tapa acrílica abierta: bisagras atrás, paneles transparentes con cantos que brillan
+  const lid = new THREE.Group(); lid.position.set(0.45, 0.02, -2.05); lid.rotation.x = -1.32; root.add(lid)
+  const edgeMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.55 })
+  function panel(w, h, d, x, y, z) { const g = new THREE.BoxGeometry(w, h, d); const m = new THREE.Mesh(g, M.acr); m.position.set(x, y, z); m.renderOrder = 2; lid.add(m); const e = new THREE.LineSegments(new THREE.EdgesGeometry(g), edgeMat); e.position.copy(m.position); e.renderOrder = 3; lid.add(e) }
+  panel(5.3, 0.03, 4.1, 0, 0.85, 2.05); panel(0.03, 0.85, 4.1, -2.635, 0.425, 2.05); panel(0.03, 0.85, 4.1, 2.635, 0.425, 2.05); panel(5.3, 0.85, 0.03, 0, 0.425, 4.085)
+  ;[-1.6, 1.6].forEach((x) => { const h = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.12, 0.12), M.dark); h.position.set(x + 0.45, 0.02, -2.06); root.add(h) })
+
+  // Sombra en el piso y luces (cenital + lámpara cálida)
+  const fl = new THREE.Mesh(new THREE.PlaneGeometry(30, 30), new THREE.ShadowMaterial({ opacity: 0.45 })); fl.rotation.x = -Math.PI / 2; fl.position.y = -0.76; fl.receiveShadow = true; S.add(fl)
+  S.add(new THREE.HemisphereLight(0xffe6c8, 0x1f1610, 0.4))
+  const key = new THREE.DirectionalLight(0xfff1dc, 1.6); key.position.set(-4, 8, 6); key.castShadow = true; key.shadow.mapSize.set(2048, 2048); Object.assign(key.shadow.camera, { left: -6, right: 6, top: 6, bottom: -6 }); key.shadow.bias = -0.0004; key.shadow.radius = 4; S.add(key)
+  const lamp = new THREE.PointLight(0xffb060, 0.9, 18); lamp.position.set(5, 3, -1); S.add(lamp)
+
+  // Aguja: bajar = girar hasta el disco y luego apoyar; levantar = subir y luego volver al apoyo
+  const PLAY = -0.565, UP = -0.09; let playing = false, spin = 0; lift.rotation.x = UP
+  const btn = document.getElementById('b'), st = document.getElementById('s')
+  function toggle() { playing = !playing; btn.textContent = playing ? 'Levantar la aguja' : 'Bajar la aguja'; st.textContent = playing ? 'Sonando' : 'En pausa' }
+  btn.onclick = toggle
+  const ray = new THREE.Raycaster(), v = new THREE.Vector2()
+  const hit = (e) => { const b = cv.getBoundingClientRect(); v.set(((e.clientX - b.left) / b.width) * 2 - 1, -((e.clientY - b.top) / b.height) * 2 + 1); ray.setFromCamera(v, cam); return ray.intersectObjects(parts, false).length > 0 }
+  cv.addEventListener('pointermove', (e) => { cv.style.cursor = hit(e) ? 'pointer' : 'default' })
+  cv.addEventListener('click', (e) => { if (hit(e)) toggle() })
+  const calm = matchMedia('(prefers-reduced-motion: reduce)').matches; const clock = new THREE.Clock()
+  ;(function loop() {
+    const dt = Math.min(clock.getDelta(), 0.05); const k = 1 - Math.exp(-dt * 5)
+    if (playing) { yaw.rotation.y += (PLAY - yaw.rotation.y) * k; const there = Math.abs(yaw.rotation.y - PLAY) < 0.02; lift.rotation.x += ((there ? 0 : UP) - lift.rotation.x) * k }
+    else { lift.rotation.x += (UP - lift.rotation.x) * k; if (lift.rotation.x < UP + 0.015) yaw.rotation.y += (0 - yaw.rotation.y) * k }
+    const on = playing && Math.abs(lift.rotation.x) < 0.01
+    spin += ((on ? 3.49 : 0) - spin) * (1 - Math.exp(-dt * (on ? 2.2 : 1.2)))
+    if (!calm) disc.rotation.y -= spin * dt
+    led.material.emissiveIntensity = on ? 2.2 : 0.2
+    R.render(S, cam); requestAnimationFrame(loop)
+  })()
+})()
+</script>
+</body>
+</html>
