@@ -114,7 +114,7 @@ export default function Newsroom() {
         </div>
 
         <label className="newsroom-field">
-          <span>La columna</span>
+          <span>Carrie's Column</span>
           <textarea
             className="newsroom-body"
             rows={14}

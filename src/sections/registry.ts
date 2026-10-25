@@ -1,21 +1,79 @@
 import type { SectionId } from '../lib/types'
 
+/** Cómo se compone el artículo de la sección en la portada; cada plana mezcla varias para que no se lea como una lista. */
+export type StoryLayout = 'lead-left' | 'float-right' | 'banner' | 'pair'
+
 export type SectionEntry = {
   id: Exclude<SectionId, 'portada'>
   path: string
   name: string
   page: number
-  /** Línea del pliego en la portada */
-  teaser: string
+  /** Bajada del artículo en la portada */
+  dek: string
+  /** Foto del artículo (public/portada/) y su pie */
+  cover: string
+  caption: string
+  /** Encuadre de la foto: 'contain' para logos sobre blanco; posición para recortar donde importa */
+  coverFit?: 'cover' | 'contain'
+  coverPosition?: string
+  layout: StoryLayout
 }
 
 // Portada, notificaciones (`activity.section`) y la columna ("Sigue en pág. N") leen de aquí.
 export const sections: SectionEntry[] = [
-  { id: 'y2k', path: '/y2k', name: 'Estilo · Y2K', page: 2, teaser: 'Nuestro scrapbook, recortado y pegado' },
-  { id: 'alfombra', path: '/alfombra-roja', name: 'Alfombra roja', page: 3, teaser: 'Recuerdos con flash' },
-  { id: 'vinilos', path: '/vinilos', name: 'Los vinilos de Big', page: 4, teaser: 'Lo que suena en el penthouse' },
-  { id: 'cartelera', path: '/cartelera', name: 'Cartelera', page: 5, teaser: 'Qué vemos esta noche' },
-  { id: 'cartas', path: '/cartas', name: 'Cartas al editor', page: 6, teaser: 'Correspondencia privada' },
+  {
+    id: 'y2k',
+    path: '/y2k',
+    name: 'Estilo · Y2K',
+    page: 2,
+    dek: 'Collage de fotos de la pareja con más estilo del momento: recortes, stickers y brillo, pegados a mano.',
+    cover: '/portada/swag.webp',
+    caption: '#SWAG, en primera fila.',
+    layout: 'lead-left',
+  },
+  {
+    id: 'alfombra',
+    path: '/alfombra-roja',
+    name: 'Los Ángeles de Victoria',
+    page: 3,
+    dek: 'Sección dedicada a tomarle fotos al ángel más hermoso que he conocido.',
+    cover: '/portada/angeles.webp',
+    caption: 'Desfile privado, una sola modelo.',
+    coverFit: 'contain',
+    layout: 'float-right',
+  },
+  {
+    id: 'vinilos',
+    path: '/vinilos',
+    name: 'Los vinilos de Big',
+    page: 4,
+    dek: 'Tras mudarse a Napa, Big abre su nuevo negocio: vinilos dedicados al amor de su vida. Cada funda lleva un lacre y una dedicatoria escrita a mano.',
+    cover: '/portada/big.webp',
+    caption: 'Big, en la inauguración de su tienda en Napa.',
+    coverPosition: '50% 30%',
+    layout: 'banner',
+  },
+  {
+    id: 'cartelera',
+    path: '/cartelera',
+    name: 'Cartelera',
+    page: 5,
+    dek: 'Qué vemos esta noche: turnos, estrellas y una lista que nunca se acaba.',
+    cover: '/portada/cartelera.webp',
+    caption: 'Estreno de la semana.',
+    layout: 'pair',
+  },
+  {
+    id: 'cartas',
+    path: '/cartas',
+    name: 'Cartas mágicas',
+    page: 6,
+    dek: 'Ahora los mensajes al editor llegan por lechuza, con sello de lacre.',
+    cover: '/portada/cartas.webp',
+    caption: 'Correspondencia certificada.',
+    coverPosition: '58% 50%',
+    layout: 'pair',
+  },
 ]
 
 export function sectionById(id: SectionId | null | undefined) {

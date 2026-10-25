@@ -12,7 +12,7 @@ import './Letters.css'
 
 const EXTRA_COOLDOWN = 10_000
 
-/** Cartas al editor: correspondencia en papel; el ¡Extra! es un titular de edición extraordinaria. */
+/** Cartas mágicas (antes Cartas al editor): correspondencia en papel; el ¡Extra! es un titular de edición extraordinaria. */
 export default function Letters() {
   const { session, isMe, isHer, nameOf, partner } = useCouple()
   const { load } = useLive<Message[]>('messages', () =>

@@ -15,7 +15,7 @@ import './RedCarpet.css'
 
 type Like = { photo_id: string; user_id: string }
 
-/** Alfombra roja: fotos tomadas en el momento, con flash, que caen como polaroids. */
+/** Los Ángeles de Victoria (antes Alfombra roja): fotos tomadas en el momento, con flash, que caen como polaroids. */
 export default function RedCarpet() {
   const { session, me, isMe, nameOf } = useCouple()
   const { load, refresh } = useLive<Photo[]>('photos', () => supabase.from('photos').select('id, author_id, storage_path, caption, effect, created_at').order('created_at', { ascending: false }))

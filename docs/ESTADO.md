@@ -29,6 +29,13 @@ Punto de partida para la próxima sesión. Primer MVP **publicado**; de aquí en
 - **Disparador con camarita** (ícono `camera`, `aria-label` «Tomar la foto») en lugar de la palabra «Flash». **Bajada** bajo el título: «Sección dedicada a tomarle fotos al ángel más hermoso que he conocido.» (`.carpet-dek`, Bodoni itálica).
 - **Falta probar en el iPhone:** que se vean título, fondo y controles; el sonido; publicar y borrar con datos reales.
 
+## Portada como periódico (publicado 2026-10-24)
+- La banda de la columna dice **Carrie's Column**; la foto, el titular y la entrada de la columna siguen igual.
+- «En esta edición» ya no es el cuadernillo negro. Ahora es una plana en papel con un artículo por sección: foto a color, título en la letra de su mundo, bajada, «Pág. N» y botón «Ver sección».
+- La composición varía según `layout` en `src/sections/registry.ts` (`lead-left`, `float-right`, `banner`, `pair`). El registro también guarda la bajada (`dek`), la foto (`cover`), el pie (`caption`) y el encuadre.
+- Fotos de Simón en `public/portada/`: swag, angeles (cuadritos limpiados a blanco), big, cartelera, cartas.
+- Nombres nuevos en toda la app: **Los Ángeles de Victoria** (ruta `/alfombra-roja` e id `alfombra` sin cambios) y **Cartas mágicas** (ruta `/cartas`). Los títulos de push en `notify` también cambiaron, incluida «Carta mágica de …».
+
 ## Pendientes conocidos
 - **Fotos de perfil** de ambos en `public/readers/maria-victoria.jpg` y `simon.jpg` (hoy se ven iniciales).
 - **Quitar fondo** a las fotos del collage Y2K (plan: `@imgly/background-removal`; plan B MediaPipe). Hoy se pegan con fondo.

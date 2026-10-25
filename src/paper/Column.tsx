@@ -41,7 +41,7 @@ export function Column() {
       <DogEar />
       <p className="column-folio">
         <span className="column-folio-mast">The MVP Post</span>
-        <span>La columna · N.º {number}</span>
+        <span>Carrie's Column · N.º {number}</span>
       </p>
 
       {load.state === 'loading' && <PressNote title="En prensa…" />}

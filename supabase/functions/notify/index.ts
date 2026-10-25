@@ -38,13 +38,13 @@ function compose(a: Activity, who: string): { title: string; body: string } {
     case 'collage_added':
       return { title: 'Estilo · Y2K', body: `${who} pegó algo nuevo en el collage` }
     case 'photo_taken':
-      return { title: 'Alfombra roja', body: p ? `${who}: “${p}”` : `${who} tomó una foto nueva` }
+      return { title: 'Los Ángeles de Victoria', body: p ? `${who}: “${p}”` : `${who} tomó una foto nueva` }
     case 'photo_liked':
-      return { title: 'Alfombra roja', body: `A ${who} le encantó tu foto ♥` }
+      return { title: 'Los Ángeles de Victoria', body: `A ${who} le encantó tu foto ♥` }
     case 'song_dedicated':
       return { title: 'Los vinilos de Big', body: p ? `${who} te dedicó “${p}”` : `${who} te dedicó un vinilo` }
     case 'letter':
-      return { title: `Carta de ${who}`, body: p || '…' }
+      return { title: `Carta mágica de ${who}`, body: p || '…' }
     case 'extra':
       return { title: '¡EXTRA! ¡EXTRA!', body: `${who} te está buscando` }
     case 'movie_added':

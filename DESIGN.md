@@ -221,7 +221,7 @@ Los materiales son imprenta y objetos: medio tono, filetes dobles, sellos de gom
 Papel y tinta con una segunda plancha rosa en la portada; cada sección trae su propia paleta cerrada que reemplaza los roles, no los suma.
 
 ### Primary
-- **Rosa Segunda Plancha** (spot): la única tinta de color del papel. Banda de sección («ESTILOS · DOMINGO»), sello «Nuevo», capitular, cinta del ejemplar en la llegada, botón «Publicar», filete bajo «Secciones», comillas del destacado, cursor del titular. Blanco encima (`on-spot`).
+- **Rosa Segunda Plancha** (spot): la única tinta de color del papel. Banda de la columna («CARRIE'S COLUMN»), sello «Nuevo», capitular, cinta del ejemplar en la llegada, botón «Publicar», filete bajo «Secciones», comillas del destacado, cursor del titular. Blanco encima (`on-spot`).
 - **Rosa Texto** (spot-text): la misma tinta oscurecida para texto pequeño sobre papel (≥ 4,5:1): errores, notas, tinta del sello de goma.
 
 ### Neutral
@@ -277,7 +277,7 @@ Todas las caras se sirven auto-alojadas (@fontsource, subconjunto latino: cubre 
 
 Una sola página de periódico: columna centrada de máximo 40rem, margen lateral `gutter` (1rem), relleno superior e inferior que suma `safe-area-inset-*`. La portada declara una retícula de 6 columnas; el arranque de texto va a 2 columnas con filete de columna al 25 % de tinta. El ritmo vertical usa la escala de múltiplos de 4 (s1–s7). Toda superficie tocable mide al menos 2.75rem.
 
-Las fotos a sangre rompen el gutter (`margin: 0 calc(var(--gutter) * -1)`); el cuadernillo negro de pliegos y el ¡Extra! también. Cada fila de pliego es una retícula `3.5rem / 1fr / auto` (miniatura, nombre y teaser, sello y flecha).
+Las fotos a sangre rompen el gutter (`margin: 0 calc(var(--gutter) * -1)`); el ¡Extra! también. Bajo la columna, «En esta edición» es una plana de artículos, uno por sección, cada uno compuesto distinto (ver Navigation).
 
 A partir de 48rem el periódico se convierte en una página sobre la mesa: fondo de mesa gris y la página levantada con sombra larga. La esquina doblada queda fija arriba a la derecha y los folios reservan 3.5rem para no quedar debajo.
 
@@ -330,7 +330,13 @@ No hay tarjetas genéricas; cada contenedor es un objeto del mundo: credencial l
 - **Etiquetas:** Antonio 500 0.75rem en mayúsculas en tinta corrida. Los errores son itálica en `--accent-text` / spot-text.
 
 ### Navigation
-- **Pliegos:** el índice de secciones es un cuadernillo negro a sangre. Cada fila anuncia la sección con su cara display y su `--accent` (el pliego lleva `data-section`), una miniatura del material del mundo y el sello «Nuevo».
+- **Artículos de sección:** el índice de secciones es una plana de periódico en papel. Cada sección es un artículo con:
+  - foto a color en marco blanco con filete de tinta (el único objeto que se levanta) y pie en itálica;
+  - título en la cara display de su mundo (el artículo lleva `data-section`), en tinta;
+  - bajada en Libre Caslon, «Pág. N» y el sello «Nuevo»;
+  - botón de tinta «Ver sección →».
+
+  La composición varía por artículo (`layout` en `src/sections/registry.ts`): `lead-left` (título a todo el ancho y foto flotando a la izquierda), `float-right` (foto a la derecha), `banner` (foto apaisada a todo el ancho y bajada a dos columnas con capitular) y `pair` (dos artículos lado a lado con filete de columna, uno con la foto arriba y otro abajo). Las fotos mantienen un tamaño parecido.
 - **Esquina doblada:** botón fijo arriba a la derecha (3.5rem en reposo) que se pela con el arrastre hasta 12.5rem y deja ver la portada en papel prensa debajo. Es la única vuelta atrás.
 - **Folio:** línea de etiqueta con la cabecera en miniatura sobre un filete en `--rule`, y debajo el título de sección.
 - **Pestañas (Cartelera):** tres columnas, filete inferior de 3 px que pasa a `--neon` en la activa.

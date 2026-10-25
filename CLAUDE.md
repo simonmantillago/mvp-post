@@ -14,12 +14,14 @@ PWA privada de pareja, regalo para **MVP**. Es un **periódico neoyorquino de 20
 ## Decisiones tomadas (no reabrir sin que el usuario lo pida)
 - **Nombre:** **The MVP Post** (cabecera gótica). Pie: **"SMG Development®"**.
 - **Navegación:** portada → tocar titular → pasar la página → sección a pantalla completa con estética propia. Esquina doblada arriba a la derecha = volver a portada. Una ruta por sección (deep links desde notificaciones).
-- **Secciones v1:** Llegada + login ("¿Quién lee hoy?", credenciales de prensa) · Portada + La columna (ediciones) · **Estilo · Y2K** (collage editable de fotos de la galería sin fondo + stickers + recortes; mover, girar, escalar, **fijar con candado**; burbuja de acciones tipo iOS) · **Sociedad · Alfombra roja** (cámara en la app → polaroids con texto) · **Los vinilos de Big** (tocadiscos + lista de fundas apiladas con sello de quién la dedicó) · **Cartelera** (videoclub, turnos, ratings) · **Cartas al editor** (chat + ¡Extra!) · Suscripción (ajustes).
+- **Secciones v1:** Llegada + login ("¿Quién lee hoy?", credenciales de prensa) · Portada + La columna (ediciones) · **Estilo · Y2K** (collage editable de fotos de la galería sin fondo + stickers + recortes; mover, girar, escalar, **fijar con candado**; burbuja de acciones tipo iOS) · **Los Ángeles de Victoria** (antes Alfombra roja; cámara en la app → polaroids con texto) · **Los vinilos de Big** (tocadiscos + lista de fundas apiladas con sello de quién la dedicó) · **Cartelera** (videoclub, turnos, ratings) · **Cartas mágicas** (antes Cartas al editor; chat + ¡Extra!) · Suscripción (ajustes).
 - **Estética:** portada de papel (gris claro frío, tinta negra, rosa como segunda tinta); cada sección rompe: Y2K = collage de recortes, brillo, leopardo, stickers; Alfombra roja = dark leopard, dorado, pedrería, alas de ángel, flash; Vinilos = penthouse classy (nogal, cuero, ámbar, sin brillo); Cartelera = videoclub de noche; Cartas = papel y máquina de escribir.
 - **Notificaciones push de todo lo nuevo** (edición, collage, foto, ♥, canción, carta, ¡Extra!, películas) + badge numérico en el ícono. Flujo: triggers → `activity` → pg_net → Edge Function `notify` → Web Push. Ver data-model.md.
 - **iOS:** Web Push solo con la PWA instalada (iOS 16.4+), permiso pedido desde un toque. No hay Vibration API → el ¡Extra! es visual + sonido. Audio solo tras gesto. El menú nativo de copiar/pegar no admite acciones propias → la burbuja del collage es un componente propio con ese look.
 - Texturas e ilustraciones (leopardo, stickers, alas, papel, VHS, vinilos) son **assets raster**, no dibujos en CSS.
 - No usar logos ni marcas reales (Sex and the City, Victoria's Secret, Chanel, Blockbuster, MSN…): todo propio, "inspirado en". "Big" solo como guiño en el nombre de la sección.
+  - **Excepción pedida por Simón (2026-10-24):** las fotos de los artículos de la portada (`public/portada/`) son sus imágenes tal cual: #SWAG, monograma VS, foto de Big, póster de Entergalactic y sobre de Hogwarts. Es un regalo privado. Lo que vive en `public/` se puede abrir con el link directo sin sesión.
+  - La columna se llama **Carrie's Column**.
 - UI en **español**.
 
 ## Stack
@@ -108,6 +110,7 @@ docs/                     # specs, wireframe, inspiración
 - [x] **Alas de ángel** en Alfombra roja (`public/sections/alfombra/alas.webp`), ajustadas a 390/1440 px (2026-10-24)
 - [x] Ráfaga de paparazzi + sonido de obturador en el Flash (2026-10-24). Falta oírla en el iPhone.
 - [x] Alfombra roja ronda 2: alas más abiertas, fondo con lirios, pie en Bodoni, efectos de revelado por foto (0003 aplicada), audio de paparazzi real (2026-10-24)
+- [x] Portada como periódico: un artículo por sección con foto a color y composición variada; Carrie's Column; Los Ángeles de Victoria y Cartas mágicas (2026-10-24)
 - [x] Alfombra roja ronda 3: alas con transparencia real (arregla el negro en iPhone), destellos de diamante en alas y marco, vista previa antes de publicar, borrar polaroids (2026-10-24). Falta probar en el iPhone.
 - [ ] Fotos de ambos en `public/readers/` y íconos PWA definitivos; sonidos
 
