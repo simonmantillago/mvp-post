@@ -50,6 +50,11 @@ Brief: `docs/briefs/vinilos-spotify.md`; prototipo aprobado: `docs/briefs/tocadi
 - Play/pausa: un botón redondo de cuero centrado, solo con el ícono ámbar (sin «Bajar/Levantar la aguja» ni estado visible).
 - Dedicatoria en **EB Garamond itálica**, sin comillas; se quitó Homemade Apple (fuente y token `--face-hand`).
 
+### Ronda 4 (2026-10-25)
+- Sin el rectángulo de Spotify: el embed queda oculto fuera de pantalla y sigue sonando (probado: suena, pausa y reanuda con el botón).
+- «Dedicar canción» es un «+» redondo ámbar; «Abrir en Spotify» es el ícono de Spotify en verde junto al título (trazado de simple-icons, CC0; permiso de Simón para usar la marca).
+- Aviso: si en el iPhone `play()` no arranca, ya no hay un play de Spotify visible que tocar; la nota dice «Si no arranca, ábrela en Spotify». Revisarlo en la prueba del iPhone.
+
 ## Pendientes conocidos
 - **Fotos de perfil** de ambos en `public/readers/maria-victoria.jpg` y `simon.jpg` (hoy se ven iniciales).
 - **Quitar fondo** a las fotos del collage Y2K (plan: `@imgly/background-removal`; plan B MediaPipe). Hoy se pegan con fondo.

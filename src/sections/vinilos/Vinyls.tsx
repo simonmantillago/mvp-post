@@ -57,9 +57,11 @@ export default function Vinyls() {
             }}
           />
         ) : (
-          <button type="button" className="section-button vinyls-add" onClick={() => setAdding(true)}>
-            <Icon name="plus" size={18} /> Dedicar canción
-          </button>
+          <div className="vinyls-add">
+            <button type="button" className="vinyls-add-button" aria-label="Dedicar canción" onClick={() => setAdding(true)}>
+              <Icon name="plus" size={26} />
+            </button>
+          </div>
         )}
 
         {songs.length > 0 && (

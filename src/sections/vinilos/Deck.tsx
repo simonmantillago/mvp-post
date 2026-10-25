@@ -3,6 +3,7 @@ import type { Song } from '../../lib/types'
 import { Icon } from '../../ui/Icon'
 import { embedUrl, spotifyUri } from './music'
 import { useSpotifyEmbed, youtubeCommand } from './player'
+import { SpotifyMark } from './SpotifyMark'
 import type { Turntable } from './turntable3d'
 
 const calm = () => matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -106,17 +107,22 @@ export function Deck({ song, by }: { song: Song; by: string }) {
       </div>
 
       <div className="now">
-        <p className="now-title">{song.title || 'Sin título'}</p>
-        {song.artist && <p className="now-artist">{song.artist}</p>}
+        <div className="now-head">
+          <div>
+            <p className="now-title">{song.title || 'Sin título'}</p>
+            {song.artist && <p className="now-artist">{song.artist}</p>}
+          </div>
+          {song.platform === 'spotify' && (
+            <a className="now-spotify" href={song.url} target="_blank" rel="noreferrer" aria-label="Abrir en Spotify">
+              <SpotifyMark />
+            </a>
+          )}
+        </div>
         {song.dedication && <p className="now-dedication">{song.dedication}</p>}
         <p className="now-by">dedicada por {by}</p>
 
-        {uri && (
-          <div className={`now-player now-player--spotify${spotify.ready ? ' is-ready' : ''}`}>
-            {!spotify.ready && <p className="now-player-wait">{spotify.failed ? 'Spotify no cargó. Ábrela abajo.' : 'Conectando con Spotify…'}</p>}
-            <div ref={spotifyHost} className="now-player-host" />
-          </div>
-        )}
+        {/* El embed de Spotify suena pero no se ve: el tocadiscos es el reproductor */}
+        {uri && <div ref={spotifyHost} className="now-player-hidden" aria-hidden="true" />}
         {yt && (
           <div className="now-player now-player--youtube">
             <iframe
@@ -129,16 +135,18 @@ export function Deck({ song, by }: { song: Song; by: string }) {
             />
           </div>
         )}
-        {(slow || preview) && (
+        {(slow || preview || spotify.failed) && (
           <p className="now-note">
-            {slow ? 'Si no arranca, toca play en el reproductor.' : 'Aquí suena la muestra de 30 s.'} La canción entera, en {platform ?? 'su página'}.
+            {spotify.failed ? 'Spotify no cargó.' : slow ? 'Si no arranca, ábrela en Spotify.' : 'Aquí suena la muestra de 30 s.'} La canción entera, en {platform ?? 'su página'}.
           </p>
         )}
 
-        <a className="now-link" href={song.url} target="_blank" rel="noreferrer">
-          {platform ? `Abrir en ${platform}` : 'Abrir la canción'}
-          <Icon name="arrow-right" size={16} />
-        </a>
+        {song.platform !== 'spotify' && (
+          <a className="now-link" href={song.url} target="_blank" rel="noreferrer">
+            {platform ? `Abrir en ${platform}` : 'Abrir la canción'}
+            <Icon name="arrow-right" size={16} />
+          </a>
+        )}
       </div>
     </section>
   )
