@@ -126,7 +126,7 @@ docs/                     # specs, wireframe, inspiración
 - [x] Alfombra roja (cámara, flash, polaroids, ♥)
 - [x] Los vinilos de Big (oEmbed, tocadiscos, pila de fundas)
 - [x] Cartelera (turnos, ratings) — TMDB opcional pendiente
-- [x] Los vinilos de Big ronda 2: búsqueda en Spotify (Edge Function `spotify-search`), «Dedicar canción», tocadiscos 3D en three.js, aguja = play/pausa con la iFrame API (2026-10-24). **Faltan los secretos de Spotify** y probar en el iPhone.
+- [x] Los vinilos de Big ronda 2: búsqueda en Spotify (Edge Function `spotify-search`), «Dedicar canción», tocadiscos 3D en three.js, aguja = play/pausa con la iFrame API (2026-10-24). Secretos de Spotify cargados y búsqueda verificada (2026-10-25). Falta probar en el iPhone.
 
 ### Fase 5 — Cierre
 - [ ] Pruebas en ambos iPhone instalados (cámara, audio, push, badge)
