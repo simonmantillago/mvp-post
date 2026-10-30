@@ -32,7 +32,7 @@ const UP = -0.09 // elevación con la aguja levantada
 const RPM = 3.49 // 33⅓ rpm en rad/s
 
 // Vista de frente y algo elevada, elegida por Simón con una captura (2026-10-25)
-const CAMERA: { position: [number, number, number]; target: [number, number, number] } = { position: [-0.6, 6.62, 8.72], target: [0.44, 1.25, 0.08] }
+const CAMERA: { position: [number, number, number]; target: [number, number, number] } = { position: [-0.6, 6.62, 8.72], target: [0.44, 1.5, 0.08] }
 // Lente más cerrada = tocadiscos más cerca, sin cambiar el ángulo de la vista
 const FOV = 36
 

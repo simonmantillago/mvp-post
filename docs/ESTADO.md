@@ -67,7 +67,7 @@ Brief: `docs/briefs/vinilos-spotify.md`; prototipo aprobado: `docs/briefs/tocadi
 
 ### Letras nuevas (2026-10-29)
 - Toda la sección pasa a **Playfair Display** (títulos, 500 y 500 italic) y **Lora** (cuerpo, dedicatoria y notas; 400 y 400 italic), elegidas por Simón entre tres muestras. Se quitaron Gloock y EB Garamond (paquetes e imports). La etiqueta del disco 3D sin carátula también usa estas letras.
-- Más aire entre el título «Los vinilos de Big» y el tocadiscos (`.section--vinilos .deck`, `margin-top: s5`): en el iPhone la tapa tocaba el título.
+- Más aire entre el título «Los vinilos de Big» y el tocadiscos (`.section--vinilos .deck`, `margin-top: s5`): en el iPhone la tapa tocaba el título. El problema de fondo era que la tapa se cortaba en el borde de arriba del canvas: el objetivo de la cámara sube a `y` 1.5 para bajar el tocadiscos en el encuadre, y así la tapa entra completa y se ven las patas.
 
 ## Pendientes conocidos
 - **Fotos de perfil** de ambos en `public/readers/maria-victoria.jpg` y `simon.jpg` (hoy se ven iniciales).
