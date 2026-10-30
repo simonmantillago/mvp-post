@@ -443,17 +443,29 @@
 .stars--read { gap: 0.15rem; }
 
 /* El ruletazo: ruleta de concurso con bombillos de marquesina */
+/* Alto fijo y contenido centrado: en iOS, Safari medía el diálogo con la caja de la rueda girada y lo
+   estiraba y encogía durante el giro. Con un alto propio, la rotación ya no puede cambiarlo. */
 .ruleta-dialog {
   width: min(94vw, 26rem);
-  max-height: 100dvh;
+  height: min(37rem, calc(100dvh - 2rem));
+  max-height: none;
   padding: var(--s5) var(--s4);
   border: 0;
   background: transparent;
   color: var(--text);
   text-align: center;
-  overflow: visible;
+  overflow: hidden;
 }
-.ruleta-dialog[open] { display: grid; justify-items: center; gap: var(--s4); }
+.ruleta-dialog[open] {
+  display: grid;
+  grid-template-rows: repeat(4, auto);
+  align-content: center;
+  justify-items: center;
+  gap: var(--s4);
+}
+/* El diálogo recibe el foco mientras «Listo» está desactivado; no es algo que se toque, así que sin contorno */
+.ruleta-dialog:focus,
+.ruleta-dialog:focus-visible { outline: none; }
 .ruleta-dialog::backdrop { background: var(--scrim); }
 .ruleta-title {
   font: 400 clamp(2.2rem, 11vw, 3rem) / 1 var(--face-display);
