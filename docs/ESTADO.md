@@ -65,6 +65,10 @@ Brief: `docs/briefs/vinilos-spotify.md`; prototipo aprobado: `docs/briefs/tocadi
 
 - Tocadiscos más cerca (2026-10-29): misma posición de cámara, lente de 40° a 36° (`FOV`) y objetivo un poco más alto (`y` 1.25) para que la tapa siga entrando.
 
+### Letras nuevas (2026-10-29)
+- Toda la sección pasa a **Playfair Display** (títulos, 500 y 500 italic) y **Lora** (cuerpo, dedicatoria y notas; 400 y 400 italic), elegidas por Simón entre tres muestras. Se quitaron Gloock y EB Garamond (paquetes e imports). La etiqueta del disco 3D sin carátula también usa estas letras.
+- Más aire entre el título «Los vinilos de Big» y el tocadiscos (`.section--vinilos .deck`, `margin-top: s5`): en el iPhone la tapa tocaba el título.
+
 ## Pendientes conocidos
 - **Fotos de perfil** de ambos en `public/readers/maria-victoria.jpg` y `simon.jpg` (hoy se ven iniciales).
 - **Quitar fondo** a las fotos del collage Y2K (plan: `@imgly/background-removal`; plan B MediaPipe). Hoy se pegan con fondo.

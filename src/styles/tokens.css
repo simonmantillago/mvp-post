@@ -111,8 +111,9 @@
   --seal-him: #b8963e;
   --rule: #5a4030;
   --focus: #e8a64b;
-  --face-display: "Gloock", serif;
-  --face-dedication: "EB Garamond", Georgia, serif;
+  --face-display: "Playfair Display", Georgia, serif;
+  --face-body: "Lora", Georgia, serif;
+  --face-dedication: "Lora", Georgia, serif;
   --vinyl: #0c0c0c;
   --vinyl-groove: #262626;
   --rule-soft: #3a2a1e;

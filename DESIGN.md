@@ -92,7 +92,7 @@ typography:
     lineHeight: 1.2
     letterSpacing: "0.08em"
   dedication:
-    fontFamily: "EB Garamond, Georgia, serif"
+    fontFamily: "Lora, Georgia, serif"
     fontSize: "1.2rem"
     fontWeight: 400
     fontStyle: italic
@@ -109,8 +109,8 @@ typography:
     fontFamily: "Bodoni Moda, serif"
     fontWeight: 400
   display-vinilos:
-    fontFamily: "Gloock, serif"
-    fontWeight: 400
+    fontFamily: "Playfair Display, Georgia, serif"
+    fontWeight: 500
   display-cartelera:
     fontFamily: "Monoton, sans-serif"
     fontWeight: 400
@@ -252,8 +252,8 @@ Cada mundo asigna sus valores a los roles genéricos:
 **Masthead:** UnifrakturCook 700 (serif)
 **Headline / Label:** Antonio 500/700 (sans-serif)
 **Body:** Libre Caslon Text 400, 400 italic, 700 (Georgia)
-**Dedicatoria:** EB Garamond 400 italic (`--face-dedication`, solo en Los vinilos de Big), sin comillas; más clásica y fina que la itálica de Caslon del resto de la sección. Los pies de polaroid van en Bodoni Moda itálica, la voz de Alfombra roja.
-**Display por sección:** Bagel Fat One (Y2K), Bodoni Moda 400 + italic (Alfombra), Gloock (Vinilos), Monoton (Cartelera), Special Elite (Cartas y las cartas de él)
+**Los vinilos de Big:** la sección entera cambia de voz (2026-10-29): títulos en Playfair Display 500 y 500 italic (`--face-display`; el título de la sección va en itálica), y el cuerpo, la dedicatoria y las notas en Lora 400 y 400 italic (`--face-body` y `--face-dedication` redefinidos en `[data-section="vinilos"]`). La dedicatoria va en Lora italic, sin comillas.
+**Display por sección:** Bagel Fat One (Y2K), Bodoni Moda 400 + italic (Alfombra), Playfair Display (Vinilos), Monoton (Cartelera), Special Elite (Cartas y las cartas de él)
 
 **Character:** Gótica de cabecera + gótica condensada de titular + serif de periódico: la voz de un diario de gran tirada. Las caras display de sección son la voz de cada mundo y aparecen también en la portada, en el nombre de cada pliego, como los logos de sección de un diario.
 
@@ -351,17 +351,17 @@ Las fotos de Alfombra roja son polaroids (Blanco Polaroid, pie en Bodoni itálic
 Las alas de ángel son un raster con transparencia real; nunca se usa `mix-blend-mode` en elementos grandes (en iOS deja el negro opaco). Sobre la pedrería de las alas y la banda del marco hay destellos de diamante: dos rayos finísimos en cruz más dos diagonales tenues (raster) que se abren y se cierran en su sitio, sin desplazarse, en un ciclo de 3,6 s con retrasos distintos para que nunca brillen a la vez.
 
 ### Tocadiscos 3D y aguja
-El tocadiscos de Los vinilos de Big es un modelo procedural en three.js (`src/sections/vinilos/turntable3d.ts`, chunk diferido de ~136 kB gzip que solo se baja en esa sección): vista fija de frente y algo elevada (`CAMERA`, elegida por Simón con una captura), con la tapa abierta completa en el encuadre, plinto de nogal oscuro (`#2a170c` con vetas en canvas) con filete y patas, plato de aluminio, vinilo con surcos y clearcoat, tapa acrílica abierta (caja completa de cinco paneles) con cantos que brillan, plinto y bisagras con aristas redondeadas (`RoundedBoxGeometry`) y bisel en el borde del plato, piloto ámbar y luz de lámpara cálida. La etiqueta del disco es la carátula de la canción (`cover_url`) recortada en círculo; sin carátula, ámbar a vino con el título en Gloock. El canvas mide `min(100%, 27rem)` con proporción 360/380 y entra con un fundido de 600 ms; se renderiza solo mientras algo se mueve. Sin WebGL queda el plato 2D de CSS (`.platter`).
+El tocadiscos de Los vinilos de Big es un modelo procedural en three.js (`src/sections/vinilos/turntable3d.ts`, chunk diferido de ~136 kB gzip que solo se baja en esa sección): vista fija de frente y algo elevada (`CAMERA`, elegida por Simón con una captura), con la tapa abierta completa en el encuadre, plinto de nogal oscuro (`#2a170c` con vetas en canvas) con filete y patas, plato de aluminio, vinilo con surcos y clearcoat, tapa acrílica abierta (caja completa de cinco paneles) con cantos que brillan, plinto y bisagras con aristas redondeadas (`RoundedBoxGeometry`) y bisel en el borde del plato, piloto ámbar y luz de lámpara cálida. La etiqueta del disco es la carátula de la canción (`cover_url`) recortada en círculo; sin carátula, ámbar a vino con el título en Playfair Display. El canvas mide `min(100%, 27rem)` con proporción 360/380 y entra con un fundido de 600 ms; se renderiza solo mientras algo se mueve. Sin WebGL queda el plato 2D de CSS (`.platter`).
 
 La aguja es el play/pausa: tocar el brazo (zona de toque ampliada) o el botón redondo centrado bajo el tocadiscos (3.5rem, cuero con filete tabaco, ▶/❚❚ relleno en ámbar, canto ámbar mientras suena, sin texto; `aria-label` «Reproducir»/«Pausar» y el estado solo para lectores de pantalla) mueve el brazo, y el disco gira con inercia solo cuando el reproductor dice que suena. Con movimiento reducido el brazo salta a su sitio y el disco no gira.
 
 ### Colección (catálogo de discos)
-Encabezado «Colección» en Gloock con «N discos» en EB Garamond itálica `--text-soft` y filete `--rule`. Filtros «Todas · Mías · De …» como texto en EB Garamond itálica; el activo en ámbar subrayado (1 px, 0.35em de separación), con 44 px de toque. Cada fila es una funda de 4rem con la carátula (sin carátula: cuero con ▶ ámbar) y, detrás, un disco negro con surcos, etiqueta ámbar y un canto apenas iluminado (`--vinyl`, `--vinyl-groove`) que asoma 8 px. Al lado van el título en Gloock 1.125rem, el artista en EB Garamond itálica y la fecha y quién la dedicó en versalitas de 0.6875rem. Entre filas, filetes finos `--rule-soft`. En la que suena (`aria-current`), el disco sale de la funda (1.1rem, girando 140°, 520 ms `--ease-out`) y a la derecha aparece «sonando» en ámbar; con movimiento reducido, sale sin animación.
+Encabezado «Colección» en Playfair Display con «N discos» en Lora itálica `--text-soft` y filete `--rule`. Filtros «Todas · Mías · De …» como texto en Lora itálica; el activo en ámbar subrayado (1 px, 0.35em de separación), con 44 px de toque. Cada fila es una funda de 4rem con la carátula (sin carátula: cuero con ▶ ámbar) y, detrás, un disco negro con surcos, etiqueta ámbar y un canto apenas iluminado (`--vinyl`, `--vinyl-groove`) que asoma 8 px. Al lado van el título en Playfair Display 1.125rem, el artista en Lora itálica y la fecha y quién la dedicó en versalitas de 0.6875rem. Entre filas, filetes finos `--rule-soft`. En la que suena (`aria-current`), el disco sale de la funda (1.1rem, girando 140°, 520 ms `--ease-out`) y a la derecha aparece «sonando» en ámbar; con movimiento reducido, sale sin animación.
 
 ### Buscador de canciones
 Los reproductores de Spotify y YouTube no se ven: sus iframes siguen en el DOM con su tamaño, fuera de la pantalla y transparentes (`.now-player-hidden`), y el tocadiscos hace de reproductor. Junto al título de la canción, el ícono de la plataforma en su color de marca (`--spotify`, `--youtube`; `BrandMarks.tsx`; 2.75rem de toque) abre la canción allí. Son las únicas marcas reales de la sección y las autorizó Simón. Debajo, en itálica `--text-soft`: «Para escucharla completa, ábrela en Spotify/YouTube.»
 
-El formulario se abre con la píldora «+ Añadir», alineada a la izquierda y del tamaño de los filtros de la pila (2.25rem): canto y texto ámbar sobre fondo transparente. El formulario «Dedicar canción» es un panel `--surface` con título en Gloock. El campo «Buscar en Spotify» espera 300 ms entre teclas; los resultados son fundas de cuero como las de la pila (carátula 3rem, título en Gloock, artista · álbum en itálica) con canto ámbar al pasar o tocar. La elegida queda como funda con filete ámbar y el enlace «Cambiar». Los estados (buscando, vacío, error, sin conexión) son notas en itálica `--text-soft`. Debajo, el enlace subrayado «¿No está? Pega el enlace de Spotify o YouTube» abre los campos manuales.
+El formulario se abre con la píldora «+ Añadir», alineada a la izquierda y del tamaño de los filtros de la pila (2.25rem): canto y texto ámbar sobre fondo transparente. El formulario «Dedicar canción» es un panel `--surface` con título en Playfair Display. El campo «Buscar en Spotify» espera 300 ms entre teclas; los resultados son fundas de cuero como las de la pila (carátula 3rem, título en Playfair Display, artista · álbum en itálica) con canto ámbar al pasar o tocar. La elegida queda como funda con filete ámbar y el enlace «Cambiar». Los estados (buscando, vacío, error, sin conexión) son notas en itálica `--text-soft`. Debajo, el enlace subrayado «¿No está? Pega el enlace de Spotify o YouTube» abre los campos manuales.
 
 ### Lacre
 Sello de cera SVG (`WaxSeal`) con la inicial hundida en Bodoni italic. Rosa para ella y dorado viejo para él: firma quién escribió en cartas. En la Colección de vinilos, quién dedicó va en versalitas («29 oct · de Simón»).

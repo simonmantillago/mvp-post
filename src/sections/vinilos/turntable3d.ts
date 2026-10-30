@@ -261,9 +261,9 @@ export function createTurntable(
         g.fillRect(0, 0, w, w)
         g.fillStyle = 'rgba(255,240,215,.92)'
         g.textAlign = 'center'
-        g.font = '400 40px Gloock, Georgia, serif'
+        g.font = '500 40px "Playfair Display", Georgia, serif'
         g.fillText(fit(g, title.toUpperCase(), w * 0.78), c, c - 70)
-        g.font = 'italic 26px "Libre Caslon Text", Georgia, serif'
+        g.font = 'italic 26px Lora, Georgia, serif'
         g.fillText(fit(g, subtitle, w * 0.8), c, c + 92)
       }
       g.restore()
