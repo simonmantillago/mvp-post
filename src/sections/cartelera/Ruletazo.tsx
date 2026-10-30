@@ -83,6 +83,7 @@ export function Ruletazo({ herId, himId, onSpun, onClose }: { herId: string; him
         <svg className="ruleta-pointer" viewBox="0 0 24 20" aria-hidden="true">
           <path d="M2 2h20L12 18z" />
         </svg>
+        <div className="ruleta-disc">
         <svg ref={wheel} className="ruleta-wheel" viewBox="-112 -112 224 224" style={{ rotate: `${rotation}deg` }} aria-hidden="true">
           <circle r="111" className="ruleta-rim" />
           {Array.from({ length: SLICES }, (_, i) => {
@@ -104,6 +105,7 @@ export function Ruletazo({ herId, himId, onSpun, onClose }: { herId: string; him
           })}
           <circle r="15" className="ruleta-hub" />
         </svg>
+        </div>
       </div>
 
       <p className="ruleta-result" aria-live="polite">
