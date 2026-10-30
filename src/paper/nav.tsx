@@ -1,6 +1,8 @@
 import { useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router'
 import { formatDay } from './dates'
+import { Icon } from '../ui/Icon'
 import './nav.css'
 
 /** Navegar pasando la página. `back` la pasa hacia atrás (de vuelta a la portada). */
@@ -42,7 +44,9 @@ export function DogEar({ to = '/' }: { to?: string }) {
     else setPeel(0)
   }
 
-  return (
+  // En <body> y no dentro de la página: así queda en la esquina de la pantalla aunque la sección
+  // tenga un contenedor posicionado, y se va con el scroll en lugar de seguirlo.
+  return createPortal(
     <button
       type="button"
       className="dogear"
@@ -66,9 +70,14 @@ export function DogEar({ to = '/' }: { to?: string }) {
         }
       }}
     >
-      <span className="dogear-behind" />
+      <span className="dogear-behind">
+        <span className="dogear-arrow">
+          <Icon name="arrow-left" size={14} />
+        </span>
+      </span>
       <span className="dogear-flap" />
-    </button>
+    </button>,
+    document.body,
   )
 }
 

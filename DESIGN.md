@@ -280,7 +280,7 @@ Una sola página de periódico: columna centrada de máximo 40rem, margen latera
 
 Las fotos a sangre rompen el gutter (`margin: 0 calc(var(--gutter) * -1)`); el ¡Extra! también. Bajo la columna, «En esta edición» es una plana de artículos, uno por sección, cada uno compuesto distinto (ver Navigation).
 
-A partir de 48rem el periódico se convierte en una página sobre la mesa: fondo de mesa gris y la página levantada con sombra larga. La esquina doblada queda fija arriba a la derecha y los folios reservan 3.5rem para no quedar debajo.
+A partir de 48rem el periódico se convierte en una página sobre la mesa: fondo de mesa gris y la página levantada con sombra larga. La esquina doblada queda arriba a la derecha de la pantalla (se va con el scroll, no lo sigue) y los folios reservan 3.5rem para no quedar debajo.
 
 ### Named Rules
 **The One Page Rule.** No hay pestañas ni barra inferior: se navega por pliegos, titular y esquina doblada. Cada sección es una página entera, no un panel.
@@ -338,7 +338,7 @@ No hay tarjetas genéricas; cada contenedor es un objeto del mundo: credencial l
   - botón de tinta «Ver sección →».
 
   La composición varía por artículo (`layout` en `src/sections/registry.ts`): `lead-left` (título a todo el ancho y foto flotando a la izquierda), `float-right` (foto a la derecha), `banner` (foto apaisada a todo el ancho y bajada a dos columnas con capitular) y `pair` (dos artículos lado a lado con filete de columna, uno con la foto arriba y otro abajo). Las fotos mantienen un tamaño parecido.
-- **Esquina doblada:** botón fijo arriba a la derecha (3.5rem en reposo) que se pela con el arrastre hasta 12.5rem y deja ver la portada en papel prensa debajo. Es la única vuelta atrás.
+- **Esquina doblada:** botón arriba a la derecha de la página (3rem en reposo), montado en `<body>` con `position: absolute`: se queda en la esquina de arriba y se va con el scroll en lugar de seguirlo. El revés doblado es del mismo material que la página (`--ground` mezclado con `--text`, con un brillo fino sobre el pliegue y la esquina redondeada). Debajo asoma la portada en papel prensa con una flecha ← en tinta. Se pela con el arrastre hasta 12rem. Es la única vuelta atrás.
 - **Folio:** línea de etiqueta con la cabecera en miniatura sobre un filete en `--rule`, y debajo el título de sección.
 - **Pestañas (Cartelera):** tres columnas, filete inferior de 3 px que pasa a `--neon` en la activa.
 
