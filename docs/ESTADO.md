@@ -72,9 +72,8 @@ Brief: `docs/briefs/vinilos-spotify.md`; prototipo aprobado: `docs/briefs/tocadi
 ### Fondo de pared de nogal (2026-10-29)
 - El fondo plano pasa a una pared de nogal con veta vertical (`walnutWallTexture()`, raster en canvas sin costuras), con velo oscuro, penumbra en los bordes y luz ámbar arriba. Va en `<html>` mientras se está en la sección y se quita al salir. Simón descartó las tres escenas (ventana, paneles con lámpara y damasco) y pidió solo la textura de madera.
 
-## Esquina doblada rediseñada (2026-10-29, global)
-- Ya no baja con el scroll: va en `<body>` (portal) con `position: absolute` arriba a la derecha, así se queda en la esquina de la página en todas las secciones, la columna y la redacción.
-- Rediseño: más pequeña (3rem); el revés doblado toma el color de la página de cada mundo en vez del gris claro que parecía un cuadrado blanco, y lleva un brillo sobre el pliegue. Debajo asoma la portada con una flecha ← en tinta.
+## Volver: solo la flecha (2026-10-29, global)
+- La esquina doblada se reemplazó por una flecha ← arriba a la derecha (`BackButton` en `src/paper/nav.tsx`), alineada con el folio y bajo la isla dinámica. Está en `<body>` con `position: absolute`: se queda arriba de la página y no baja con el scroll. Se quitaron el doblez y el gesto de arrastrar para despegar.
 
 ## Pendientes conocidos
 - **Fotos de perfil** de ambos en `public/readers/maria-victoria.jpg` y `simon.jpg` (hoy se ven iniciales).

@@ -10,7 +10,7 @@ import { Icon } from '../ui/Icon'
 import { PressNote } from '../ui/PressNote'
 import { formatShort } from './dates'
 import { useDrafts } from './editions'
-import { DogEar } from './nav'
+import { BackButton } from './nav'
 import './Newsroom.css'
 
 type Draft = Pick<Edition, 'headline' | 'body' | 'cover_path' | 'cover_caption' | 'continues_to'>
@@ -39,7 +39,7 @@ export default function Newsroom() {
   if (!reader?.columnist) {
     return (
       <main className="newsroom newsprint">
-        <DogEar />
+        <BackButton />
         <PressNote title="Solo para la redacción" body="Las columnas las escribe el columnista. Tú solo tienes que leerlas." />
       </main>
     )
@@ -84,7 +84,7 @@ export default function Newsroom() {
 
   return (
     <main className="newsroom newsprint">
-      <DogEar />
+      <BackButton />
       <header className="newsroom-head">
         <p className="newsroom-mast">The MVP Post</p>
         <h1 className="newsroom-title">Redacción</h1>

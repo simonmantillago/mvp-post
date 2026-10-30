@@ -1,7 +1,7 @@
 import { useEffect, type ReactNode } from 'react'
 import { useMarkSeen } from '../hooks/useData'
 import type { SectionId } from '../lib/types'
-import { DogEar, Folio } from '../paper/nav'
+import { BackButton, Folio } from '../paper/nav'
 import { sectionById } from './registry'
 import './Section.css'
 
@@ -19,7 +19,7 @@ export function Section({ id, className = '', header, children }: { id: Exclude<
 
   return (
     <main className={`section section--${id} ${className}`} data-section={id}>
-      <DogEar />
+      <BackButton />
       <Folio page={entry.page} title={entry.name}>
         {header}
       </Folio>

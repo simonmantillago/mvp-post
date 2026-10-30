@@ -1,4 +1,4 @@
-import { useRef, useState, type CSSProperties, type ReactNode } from 'react'
+import { type ReactNode } from 'react'
 import { createPortal } from 'react-dom'
 import { useNavigate } from 'react-router'
 import { formatDay } from './dates'
@@ -19,63 +19,14 @@ export function useTurn() {
 }
 
 /**
- * Esquina doblada: vuelve a la portada. Se toca, o se arrastra hacia abajo a la
- * izquierda para despegar la página con el dedo (un solo gesto continuo).
+ * Flecha para volver a la portada, arriba a la derecha bajo la isla dinámica.
+ * Va en <body> con `position: absolute`: se queda arriba de la página y se va con el scroll.
  */
-export function DogEar({ to = '/' }: { to?: string }) {
+export function BackButton({ to = '/' }: { to?: string }) {
   const turn = useTurn()
-  const [peel, setPeel] = useState(0)
-  const drag = useRef<{ x: number; y: number; moved: boolean } | null>(null)
-
-  function onPointerDown(e: React.PointerEvent<HTMLButtonElement>) {
-    e.currentTarget.setPointerCapture(e.pointerId)
-    drag.current = { x: e.clientX, y: e.clientY, moved: false }
-  }
-  function onPointerMove(e: React.PointerEvent) {
-    if (!drag.current) return
-    const d = (drag.current.x - e.clientX + (e.clientY - drag.current.y)) / 260
-    if (Math.abs(d) > 0.03) drag.current.moved = true
-    setPeel(Math.max(0, Math.min(1, d)))
-  }
-  function onPointerUp() {
-    const moved = drag.current?.moved
-    drag.current = null
-    if (!moved || peel > 0.4) turn(to, true)
-    else setPeel(0)
-  }
-
-  // En <body> y no dentro de la página: así queda en la esquina de la pantalla aunque la sección
-  // tenga un contenedor posicionado, y se va con el scroll en lugar de seguirlo.
   return createPortal(
-    <button
-      type="button"
-      className="dogear"
-      style={{ '--peel': peel } as CSSProperties}
-      aria-label="Volver a la portada"
-      onClick={(e) => {
-        // Activación sin puntero (lector de pantalla, teclado en escritorio)
-        if (e.detail === 0) turn(to, true)
-      }}
-      onPointerDown={onPointerDown}
-      onPointerMove={onPointerMove}
-      onPointerUp={onPointerUp}
-      onPointerCancel={() => {
-        drag.current = null
-        setPeel(0)
-      }}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault()
-          turn(to, true)
-        }
-      }}
-    >
-      <span className="dogear-behind">
-        <span className="dogear-arrow">
-          <Icon name="arrow-left" size={14} />
-        </span>
-      </span>
-      <span className="dogear-flap" />
+    <button type="button" className="back-button" aria-label="Volver a la portada" onClick={() => turn(to, true)}>
+      <Icon name="arrow-left" size={22} />
     </button>,
     document.body,
   )

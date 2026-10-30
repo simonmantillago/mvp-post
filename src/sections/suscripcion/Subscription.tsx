@@ -3,7 +3,7 @@ import { useCouple } from '../../hooks/useCouple'
 import { useMarkSeen } from '../../hooks/useData'
 import { disablePush, enablePush, getPushState, isInstalled, type PushState } from '../../lib/push'
 import { supabase } from '../../lib/supabase'
-import { DogEar } from '../../paper/nav'
+import { BackButton } from '../../paper/nav'
 import { sections } from '../registry'
 import './Subscription.css'
 
@@ -46,7 +46,7 @@ export default function Subscription() {
 
   return (
     <main className="subscription newsprint">
-      <DogEar />
+      <BackButton />
       <div className="coupon">
         <p className="coupon-cut" aria-hidden="true">
           Recorte por la línea punteada

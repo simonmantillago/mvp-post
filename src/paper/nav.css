@@ -1,54 +1,22 @@
-/* Esquina doblada: la esquina de la página se dobla y deja ver la portada debajo.
-   Va en el borde de arriba de la página (no fija): al bajar, se queda arriba con el folio. */
-.dogear {
-  --size: calc(3rem + var(--peel) * 9rem);
+/* Volver: solo la flecha, arriba a la derecha, alineada con el folio y bajo la isla dinámica */
+.back-button {
   position: absolute;
   top: var(--safe-top);
-  right: 0;
+  right: calc(var(--gutter) - var(--s2));
   z-index: 40;
-  width: var(--size);
-  height: var(--size);
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
   padding: 0;
   border: 0;
+  border-radius: 50%;
   background: none;
-  touch-action: none;
+  color: var(--text);
   -webkit-tap-highlight-color: transparent;
-  transition: width 260ms var(--ease-out), height 260ms var(--ease-out);
 }
-.dogear:active { transition: none; }
-.dogear-behind,
-.dogear-flap {
-  position: absolute;
-  inset: 0;
-}
-/* Lo que hay detrás: la portada, en papel prensa, con la flecha de volver impresa en tinta */
-.dogear-behind {
-  clip-path: polygon(0 0, 100% 0, 100% 100%);
-  background: var(--paper);
-  background-image: radial-gradient(rgba(20, 20, 20, 0.12) 0.6px, transparent 0.75px);
-  background-size: 3px 3px;
-  box-shadow: inset 0 0 0.6rem rgba(0, 0, 0, 0.18);
-}
-.dogear-arrow {
-  position: absolute;
-  top: 0.35rem;
-  right: 0.35rem;
-  color: var(--ink);
-  opacity: calc(1 - var(--peel) * 2);
-}
-/* El revés de la página, doblado: del mismo material que la página, con luz sobre el pliegue */
-.dogear-flap {
-  clip-path: polygon(0 0, 100% 100%, 0 100%);
-  background:
-    linear-gradient(225deg, transparent 49%, rgba(255, 255, 255, 0.28) 50%, transparent 54%),
-    linear-gradient(225deg, color-mix(in srgb, var(--ground) 78%, var(--text) 22%) 45%, color-mix(in srgb, var(--ground) 94%, var(--text) 6%) 100%);
-  border-bottom-left-radius: 0.35rem;
-  filter: drop-shadow(-3px 4px 5px rgba(0, 0, 0, 0.4));
-}
-.dogear:focus-visible { outline-offset: -4px; }
-@media (prefers-reduced-motion: reduce) {
-  .dogear { transition: none; }
-}
+.back-button:active { opacity: 0.6; }
+.back-button:focus-visible { outline: 2px solid var(--focus); outline-offset: -2px; }
 
 /* Folio de sección */
 .folio {

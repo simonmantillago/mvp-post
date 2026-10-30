@@ -206,7 +206,7 @@ components:
 
 The MVP Post es un periódico neoyorquino de 2003 hecho para una sola lectora. La portada, la columna, el login, la redacción y la suscripción son **papel prensa**: gris claro frío (no crema), trama de medio tono, tinta negra y una segunda plancha rosa que solo aparece donde hay trabajo (lo nuevo, la banda de sección, la capitular), con un leve fuera de registro. La tipografía es la de un diario: cabecera gótica, titulares en gótica condensada en mayúsculas, cuerpo en serif de periódico a dos columnas y pies de foto en itálica.
 
-Cada sección rompe con el papel y es su propio mundo. Detrás del pliego viven cinco pieles (Y2K, Alfombra roja, Vinilos, Cartelera, Cartas) que redefinen **los mismos roles** (`--ground`, `--surface`, `--text`, `--text-soft`, `--accent`, `--accent-text`, `--on-accent`, `--rule`, `--focus`, `--face-display`) bajo `[data-section="…"]`. El cambio de mundo es la sorpresa; la estructura de lectura (folio, título de sección, esquina doblada para volver) es fija.
+Cada sección rompe con el papel y es su propio mundo. Detrás del pliego viven cinco pieles (Y2K, Alfombra roja, Vinilos, Cartelera, Cartas) que redefinen **los mismos roles** (`--ground`, `--surface`, `--text`, `--text-soft`, `--accent`, `--accent-text`, `--on-accent`, `--rule`, `--focus`, `--face-display`) bajo `[data-section="…"]`. El cambio de mundo es la sorpresa; la estructura de lectura (folio, título de sección, flecha para volver) es fija.
 
 Los materiales son imprenta y objetos: medio tono, filetes dobles, sellos de goma, lacre, ticket perforado, polaroids, fundas de vinilo, lomos de VHS. Las texturas que no son tipografía son raster: leopardo rosa, marco de pedrería, anillo de gemas, nogal, cuero y grano de película se generan en canvas (`src/ui/leopard.ts`) y entran como variables CSS (`--leopard`, `--frame`, `--ring`, `--walnut`, `--wall`, `--leather-tex`, `--grain`); las alas de ángel y el fondo de Alfombra roja (leopardo oscuro con lirios vino) son imágenes del usuario en `public/sections/alfombra/`. Nunca se dibujan en CSS. Se rechaza explícitamente la app de pareja con tarjetas y pestañas y la primera plana genérica de periódico crema.
 
@@ -280,10 +280,10 @@ Una sola página de periódico: columna centrada de máximo 40rem, margen latera
 
 Las fotos a sangre rompen el gutter (`margin: 0 calc(var(--gutter) * -1)`); el ¡Extra! también. Bajo la columna, «En esta edición» es una plana de artículos, uno por sección, cada uno compuesto distinto (ver Navigation).
 
-A partir de 48rem el periódico se convierte en una página sobre la mesa: fondo de mesa gris y la página levantada con sombra larga. La esquina doblada queda arriba a la derecha de la pantalla (se va con el scroll, no lo sigue) y los folios reservan 3.5rem para no quedar debajo.
+A partir de 48rem el periódico se convierte en una página sobre la mesa: fondo de mesa gris y la página levantada con sombra larga. La flecha de volver queda arriba a la derecha de la pantalla (se va con el scroll, no lo sigue) y los folios reservan 3.5rem para no quedar debajo.
 
 ### Named Rules
-**The One Page Rule.** No hay pestañas ni barra inferior: se navega por pliegos, titular y esquina doblada. Cada sección es una página entera, no un panel.
+**The One Page Rule.** No hay pestañas ni barra inferior: se navega por pliegos, titular y la flecha de volver. Cada sección es una página entera, no un panel.
 
 ## Elevation & Depth
 
@@ -338,7 +338,7 @@ No hay tarjetas genéricas; cada contenedor es un objeto del mundo: credencial l
   - botón de tinta «Ver sección →».
 
   La composición varía por artículo (`layout` en `src/sections/registry.ts`): `lead-left` (título a todo el ancho y foto flotando a la izquierda), `float-right` (foto a la derecha), `banner` (foto apaisada a todo el ancho y bajada a dos columnas con capitular) y `pair` (dos artículos lado a lado con filete de columna, uno con la foto arriba y otro abajo). Las fotos mantienen un tamaño parecido.
-- **Esquina doblada:** botón arriba a la derecha de la página (3rem en reposo), montado en `<body>` con `position: absolute`: se queda en la esquina de arriba y se va con el scroll en lugar de seguirlo. El revés doblado es del mismo material que la página (`--ground` mezclado con `--text`, con un brillo fino sobre el pliegue y la esquina redondeada). Debajo asoma la portada en papel prensa con una flecha ← en tinta. Se pela con el arrastre hasta 12rem. Es la única vuelta atrás.
+- **Volver:** solo una flecha ← (ícono `arrow-left`, 22 px, color `--text`) en un botón de 2.75rem arriba a la derecha, alineada con el folio y bajo la isla dinámica (`BackButton` en `src/paper/nav.tsx`). Está montada en `<body>` con `position: absolute`: se queda arriba de la página y se va con el scroll. Lleva a la portada pasando la página hacia atrás. Es la única vuelta atrás.
 - **Folio:** línea de etiqueta con la cabecera en miniatura sobre un filete en `--rule`, y debajo el título de sección.
 - **Pestañas (Cartelera):** tres columnas, filete inferior de 3 px que pasa a `--neon` en la activa.
 
@@ -393,7 +393,7 @@ Sello de cera SVG (`WaxSeal`) con la inicial hundida en Bodoni italic. Rosa para
 ### Don't:
 - **Don't** uses papel crema o hueso: el papel es gris frío (paper).
 - **Don't** pongas rosa en el papel fuera de lo nuevo, la sección, la capitular o publicar.
-- **Don't** construyas la UI con tarjetas redondeadas, pestañas inferiores o barras de app: se navega por pliegos y esquina doblada.
+- **Don't** construyas la UI con tarjetas redondeadas, pestañas inferiores o barras de app: se navega por pliegos y la flecha de volver.
 - **Don't** uses el desplazamiento duro (fuera de registro) en tinta negra ni como sombra de tarjeta; es exclusivo de la segunda plancha y de los sellos.
 - **Don't** escribas hex en componentes; si un mundo necesita un color nuevo, añádelo como rol en su bloque de tokens.
 - **Don't** uses logos ni marcas reales; todo es propio e «inspirado en».

@@ -7,7 +7,7 @@ import { Icon } from '../ui/Icon'
 import { PressNote } from '../ui/PressNote'
 import { formatFull } from './dates'
 import { blocks, useEdition } from './editions'
-import { DogEar } from './nav'
+import { BackButton } from './nav'
 import './Column.css'
 
 /** El titular se teclea letra a letra, como en la laptop de la columnista. */
@@ -38,7 +38,7 @@ export function Column() {
 
   return (
     <main className="column newsprint">
-      <DogEar />
+      <BackButton />
       <p className="column-folio">
         <span className="column-folio-mast">The MVP Post</span>
         <span>Carrie's Column · N.º {number}</span>
