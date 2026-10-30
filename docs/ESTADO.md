@@ -69,6 +69,9 @@ Brief: `docs/briefs/vinilos-spotify.md`; prototipo aprobado: `docs/briefs/tocadi
 - Toda la sección pasa a **Playfair Display** (títulos, 500 y 500 italic) y **Lora** (cuerpo, dedicatoria y notas; 400 y 400 italic), elegidas por Simón entre tres muestras. Se quitaron Gloock y EB Garamond (paquetes e imports). La etiqueta del disco 3D sin carátula también usa estas letras.
 - Más aire entre el título «Los vinilos de Big» y el tocadiscos (`.section--vinilos .deck`, `margin-top: s5`): en el iPhone la tapa tocaba el título. El problema de fondo era que la tapa se cortaba en el borde de arriba del canvas: el objetivo de la cámara sube a `y` 1.5 para bajar el tocadiscos en el encuadre, y así la tapa entra completa y se ven las patas.
 
+### Fondo de pared de nogal (2026-10-29)
+- El fondo plano pasa a una pared de nogal con veta vertical (`walnutWallTexture()`, raster en canvas sin costuras), con velo oscuro, penumbra en los bordes y luz ámbar arriba. Va en `<html>` mientras se está en la sección y se quita al salir. Simón descartó las tres escenas (ventana, paneles con lámpara y damasco) y pidió solo la textura de madera.
+
 ## Pendientes conocidos
 - **Fotos de perfil** de ambos en `public/readers/maria-victoria.jpg` y `simon.jpg` (hoy se ven iniciales).
 - **Quitar fondo** a las fotos del collage Y2K (plan: `@imgly/background-removal`; plan B MediaPipe). Hoy se pegan con fondo.

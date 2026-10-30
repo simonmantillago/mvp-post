@@ -5,7 +5,7 @@ import { supabase } from '../../lib/supabase'
 import type { Song } from '../../lib/types'
 import { formatShort } from '../../paper/dates'
 import { Icon } from '../../ui/Icon'
-import { leatherTexture, walnutTexture } from '../../ui/leopard'
+import { leatherTexture, walnutTexture, walnutWallTexture } from '../../ui/leopard'
 import { PressNote } from '../../ui/PressNote'
 import { Section } from '../Section'
 import { Deck } from './Deck'
@@ -26,6 +26,12 @@ export default function Vinyls() {
   const [wood, setWood] = useState<{ walnut: string; leather: string }>()
   useEffect(() => {
     setWood({ walnut: walnutTexture(), leather: leatherTexture() })
+    // La pared de nogal va en <html>, para que cubra toda la pantalla y no solo la columna
+    const root = document.documentElement
+    root.style.setProperty('--wall', `url(${walnutWallTexture()})`)
+    return () => {
+      root.style.removeProperty('--wall')
+    }
   }, [])
 
   const songs = load.state === 'ready' ? load.data : []
