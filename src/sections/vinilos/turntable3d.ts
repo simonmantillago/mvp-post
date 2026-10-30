@@ -3,6 +3,7 @@
 // nogal oscuro, tapa acrílica abierta y piloto ámbar. Única interacción: tocar el brazo.
 // Se carga en diferido solo al entrar a la sección (ver Deck.tsx); si no hay WebGL, queda el plato 2D.
 import * as THREE from 'three'
+import { RoundedBoxGeometry } from 'three/examples/jsm/geometries/RoundedBoxGeometry.js'
 
 export type Turntable = {
   /** Carátula de la canción en la etiqueta del disco; sin carátula, etiqueta ámbar con el título. */
@@ -128,8 +129,9 @@ export function createTurntable(
   }
 
   // Plinto de nogal con filete oscuro y patas; arriba, botón de arranque, selector y piloto ámbar
-  mesh(new THREE.BoxGeometry(5.3, 0.55, 4.1), M.walnut, 0.45, -0.275, 0)
-  mesh(new THREE.BoxGeometry(5.34, 0.04, 4.14), M.dark, 0.45, -0.56, 0)
+  // Cantos lijados: el plinto y el filete con aristas redondeadas, como un mueble de verdad
+  mesh(new RoundedBoxGeometry(5.3, 0.55, 4.1, 4, 0.06), M.walnut, 0.45, -0.275, 0)
+  mesh(new RoundedBoxGeometry(5.34, 0.04, 4.14, 2, 0.02), M.dark, 0.45, -0.56, 0)
   for (const [x, z] of [[-2, -1.75], [2.9, -1.75], [-2, 1.75], [2.9, 1.75]]) mesh(new THREE.CylinderGeometry(0.22, 0.26, 0.18, 24), M.rub, x, -0.67, z)
   mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.06, 32), M.alu, -1.75, 0.03, 1.65)
   mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.05, 32), M.dark, -1.25, 0.025, 1.7)
@@ -138,6 +140,9 @@ export function createTurntable(
 
   // Plato, vinilo y etiqueta con la carátula
   mesh(new THREE.CylinderGeometry(1.62, 1.62, 0.14, 96), M.alu, 0, 0.07, 0)
+  // Bisel en el borde del plato: atrapa el reflejo en lugar de una arista cortada
+  const bevel = mesh(new THREE.TorusGeometry(1.6, 0.025, 12, 128), M.alu, 0, 0.14, 0)
+  bevel.rotation.x = Math.PI / 2
   const disc = new THREE.Group()
   disc.position.set(0, 0.155, 0)
   root.add(disc)
@@ -196,7 +201,8 @@ export function createTurntable(
   panel(0.03, 0.85, 4.1, -2.635, 0.425, 2.05)
   panel(0.03, 0.85, 4.1, 2.635, 0.425, 2.05)
   panel(5.3, 0.85, 0.03, 0, 0.425, 4.085)
-  for (const x of [-1.6, 1.6]) mesh(new THREE.BoxGeometry(0.4, 0.12, 0.12), M.dark, x + 0.45, 0.02, -2.06)
+  panel(5.3, 0.85, 0.03, 0, 0.425, 0.015) // pared trasera, junto a la bisagra
+  for (const x of [-1.6, 1.6]) mesh(new RoundedBoxGeometry(0.4, 0.12, 0.12, 2, 0.02), M.dark, x + 0.45, 0.02, -2.06)
 
   // Sombra en el piso y luces (cenital + lámpara cálida). Valores del prototipo r128 × π:
   // desde r155 las luces son físicas y sin ese factor la escena queda apagada.

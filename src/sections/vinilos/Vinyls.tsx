@@ -5,7 +5,6 @@ import { supabase } from '../../lib/supabase'
 import type { Song } from '../../lib/types'
 import { formatShort } from '../../paper/dates'
 import { Icon } from '../../ui/Icon'
-import { WaxSeal } from '../../ui/Marks'
 import { leatherTexture, walnutTexture } from '../../ui/leopard'
 import { PressNote } from '../../ui/PressNote'
 import { Section } from '../Section'
@@ -17,7 +16,7 @@ type Filter = 'all' | 'mine' | 'theirs'
 
 /** Los vinilos de Big: el tocadiscos arriba y la pila de fundas dedicadas abajo. */
 export default function Vinyls() {
-  const { session, isMe, isHer, nameOf, partner } = useCouple()
+  const { session, isMe, nameOf, partner } = useCouple()
   const { load } = useLive<Song[]>('songs', () =>
     supabase.from('songs').select('id, author_id, url, platform, title, artist, dedication, cover_url, created_at').order('created_at', { ascending: false }),
   )
@@ -68,9 +67,13 @@ export default function Vinyls() {
           <section className="pile" aria-labelledby="pila">
             <div className="pile-head">
               <h2 id="pila" className="pile-title">
-                La pila de discos
+                Colección
               </h2>
-              <div className="pile-filters" role="group" aria-label="Filtrar">
+              <p className="pile-count">
+                {songs.length} {songs.length === 1 ? 'disco' : 'discos'}
+              </p>
+            </div>
+            <div className="pile-filters" role="group" aria-label="Filtrar">
                 {(
                   [
                     ['all', 'Todas'],
@@ -82,22 +85,25 @@ export default function Vinyls() {
                     {label}
                   </button>
                 ))}
-              </div>
             </div>
 
             <ol className="sleeves">
               {shown.map((s) => (
                 <li key={s.id}>
-                  <button type="button" className="sleeve" aria-current={s.id === current?.id} onClick={() => setCurrentId(s.id)}>
-                    <span className="sleeve-art">{s.cover_url ? <img src={s.cover_url} alt="" loading="lazy" decoding="async" /> : <Icon name="play" />}</span>
-                    <span className="sleeve-text">
-                      <span className="sleeve-title">{s.title || 'Sin título'}</span>
-                      <span className="sleeve-meta">
-                        {s.artist ? `${s.artist} · ` : ''}
-                        {formatShort(s.created_at)}
+                  <button type="button" className="record-row" aria-current={s.id === current?.id} onClick={() => setCurrentId(s.id)}>
+                    {/* funda con el disco detrás: el de la que suena sale de la funda */}
+                    <span className="record-row-art" aria-hidden="true">
+                      <span className="record-row-disc" />
+                      <span className="record-row-sleeve">{s.cover_url ? <img src={s.cover_url} alt="" loading="lazy" decoding="async" /> : <Icon name="play" />}</span>
+                    </span>
+                    <span className="record-row-text">
+                      <span className="record-row-title">{s.title || 'Sin título'}</span>
+                      {s.artist && <span className="record-row-artist">{s.artist}</span>}
+                      <span className="record-row-meta">
+                        {formatShort(s.created_at)} · de {nameOf(s.author_id).split(' ')[0]}
                       </span>
                     </span>
-                    <WaxSeal initial={nameOf(s.author_id).charAt(0)} her={isHer(s.author_id)} size={38} label={`Dedicada por ${nameOf(s.author_id)}`} />
+                    {s.id === current?.id && <span className="record-row-now">sonando</span>}
                   </button>
                 </li>
               ))}

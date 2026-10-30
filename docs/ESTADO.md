@@ -59,6 +59,10 @@ Brief: `docs/briefs/vinilos-spotify.md`; prototipo aprobado: `docs/briefs/tocadi
 - «+ Añadir»: píldora pequeña a la izquierda, del tamaño de los filtros «Todas / Mías / De …».
 - YouTube también suena con el reproductor oculto y tiene su ícono rojo junto al título (`BrandMarks.tsx`). Se quitó el aviso de la muestra de 30 s. Ahora la nota dice «Para escucharla completa, ábrela en Spotify/YouTube».
 
+### Ronda 6 (2026-10-29)
+- Tapa acrílica completa: se agregó la pared trasera junto a la bisagra. El plinto, el filete y las bisagras tienen aristas redondeadas (`RoundedBoxGeometry`) y el plato, un bisel que atrapa el reflejo. Medidas y cámara sin cambios.
+- «La pila de discos» pasa a **«Colección»**, en formato catálogo (opción A del mockup): funda con el disco asomando, título en Gloock, artista en EB Garamond, fecha y autor en versalitas, filtros en itálica subrayados. Al elegir una canción, su disco sale de la funda girando.
+
 ## Pendientes conocidos
 - **Fotos de perfil** de ambos en `public/readers/maria-victoria.jpg` y `simon.jpg` (hoy se ven iniciales).
 - **Quitar fondo** a las fotos del collage Y2K (plan: `@imgly/background-removal`; plan B MediaPipe). Hoy se pegan con fondo.

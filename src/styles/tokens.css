@@ -113,6 +113,9 @@
   --focus: #e8a64b;
   --face-display: "Gloock", serif;
   --face-dedication: "EB Garamond", Georgia, serif;
+  --vinyl: #0c0c0c;
+  --vinyl-groove: #262626;
+  --rule-soft: #3a2a1e;
   --spotify: #1ed760; /* colores de marca, solo para los íconos que abren la canción */
   --youtube: #ff0000;
 }
