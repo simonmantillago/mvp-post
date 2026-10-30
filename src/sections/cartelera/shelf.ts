@@ -2,7 +2,7 @@ import type { WatchItem } from '../../lib/types'
 
 export type Tab = WatchItem['status']
 export const tabs: [Tab, string][] = [
-  ['want', 'Debiendo'],
+  ['want', 'Pendientes'],
   ['watching', 'Viendo'],
   ['watched', 'Vistas'],
 ]

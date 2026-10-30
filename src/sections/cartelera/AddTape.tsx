@@ -6,7 +6,7 @@ import { searchMovies, type FoundMovie } from './tmdb'
 
 type Search = { state: 'idle' } | { state: 'loading' } | { state: 'error' } | { state: 'ready'; results: FoundMovie[] }
 
-/** Buscar en TMDB y poner la cinta en «Debiendo». Si no aparece o la búsqueda falla, se agrega a mano. */
+/** Buscar en TMDB y poner la cinta en «Pendientes». Si no aparece o la búsqueda falla, se agrega a mano. */
 export function AddTape({ userId, onShelf, onAdded, onCancel }: { userId: string; onShelf: Set<number>; onAdded: () => void; onCancel: () => void }) {
   const [q, setQ] = useState('')
   const [search, setSearch] = useState<Search>({ state: 'idle' })

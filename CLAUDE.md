@@ -128,7 +128,7 @@ docs/                     # specs, wireframe, inspiración
 - [x] Alfombra roja (cámara, flash, polaroids, ♥)
 - [x] Los vinilos de Big (oEmbed, tocadiscos, pila de fundas)
 - [x] Cartelera (turnos, ratings)
-- [ ] Cartelera ronda 2 (2026-10-29): búsqueda en TMDB (Edge Function `movie-search`), portada dentro del cassette, estantes por filas, burbuja con portada + mover entre Debiendo/Viendo/Vistas + crítica (estrellas y comentario) de cada uno, Ruletazo (`watch_spins`). Probado en demo a 390/1440. `0004` aplicada, `movie-search` desplegada y `TMDB_API_KEY` cargada (2026-10-29). **Falta:** probar la búsqueda real en el iPhone.
+- [ ] Cartelera ronda 2 (2026-10-29): búsqueda en TMDB (Edge Function `movie-search`), portada dentro del cassette, estantes por filas, burbuja con portada + mover entre Pendientes/Viendo/Vistas + crítica (estrellas y comentario) de cada uno, Ruletazo (`watch_spins`). Probado en demo a 390/1440. `0004` aplicada, `movie-search` desplegada y `TMDB_API_KEY` cargada (2026-10-29). **Falta:** probar la búsqueda real en el iPhone.
 - [x] Los vinilos de Big ronda 2: búsqueda en Spotify (Edge Function `spotify-search`), «Dedicar canción», tocadiscos 3D en three.js, aguja = play/pausa con la iFrame API (2026-10-24). Secretos de Spotify cargados y búsqueda verificada (2026-10-25). Ronda 3: cámara de frente fijada con la captura de Simón, botón redondo play/pausa, dedicatoria en EB Garamond. Rondas 4–5: embeds ocultos, «+ Añadir», íconos de Spotify y YouTube (2026-10-25). Ronda 6: tapa completa, bordes suaves, «Colección» en catálogo, tocadiscos más cerca, letras Playfair Display + Lora, fondo de pared de nogal (2026-10-29). Falta probar en el iPhone.
 
 ### Fase 5 — Cierre

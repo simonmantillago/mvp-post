@@ -5,9 +5,22 @@
     var(--ground);
 }
 .section--cartelera .folio-title {
+  /* Tubo de neón: núcleo claro pegado al trazo, halo amarillo y un resplandor rosa que se abre al fondo */
+  --neon-glow:
+    0 0 2px rgba(255, 246, 214, 0.9),
+    0 0 6px rgba(255, 210, 63, 0.95),
+    0 0 14px rgba(255, 210, 63, 0.7),
+    0 0 28px rgba(255, 210, 63, 0.45),
+    0 0 48px rgba(255, 79, 139, 0.35);
   color: var(--accent);
   font-size: clamp(2.2rem, 11vw, 3.2rem);
-  text-shadow: 0 0 18px rgba(255, 210, 63, 0.45);
+  text-shadow: var(--neon-glow);
+  animation: neon-flicker 2.4s steps(1) 0.35s both;
+}
+/* El letrero se enciende como un tubo de neón que calienta; termina encendido */
+@keyframes neon-flicker {
+  0%, 11%, 21% { opacity: 0.2; text-shadow: none; }
+  8%, 17%, 26%, 100% { opacity: 1; text-shadow: var(--neon-glow); }
 }
 
 /* Ticket perforado con el turno + el ruletazo */
@@ -505,6 +518,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .ruleta-wheel { transition: none; }
+  .section--cartelera .folio-title,
   .ruleta-bulb,
   .tape-dialog[open],
   .ruleta-result-name { animation: none; }

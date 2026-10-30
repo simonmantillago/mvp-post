@@ -105,7 +105,7 @@ export default function Cartelera() {
                 tab === 'want'
                   ? 'Busca la primera película o serie que se deben.'
                   : tab === 'watching'
-                    ? 'Elijan algo de «Debiendo» cuando sea su turno.'
+                    ? 'Elijan algo de «Pendientes» cuando sea su turno.'
                     : 'Lo que terminen de ver aparecerá aquí con sus estrellas.'
               }
             />

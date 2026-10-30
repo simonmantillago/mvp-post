@@ -55,7 +55,7 @@ Todas cubren: **vacío** (texto tierno que invita a crear), **cargando**, **erro
 - **Dedicar canción:** buscar en Spotify (Edge Function `spotify-search`, Client Credentials, máx. 10 resultados) → elegir → dedicatoria → guardar. Respaldo: pegar link → oEmbed (`open.spotify.com/oembed`, `youtube.com/oembed`) para título y `cover_url`.
 
 ## 5. Cartelera (videoclub)
-- Estantes de VHS (filas con tabla de madera); cada cinta muestra la portada en su ventana. Pestañas **Debiendo · Viendo · Vistas**.
+- Estantes de VHS (filas con tabla de madera); cada cinta muestra la portada en su ventana. Pestañas **Pendientes · Viendo · Vistas**.
 - **Buscar:** Edge Function `movie-search` (TMDB `search/multi`, es-MX) → título, año, sinopsis, portada. Respaldo: agregar a mano como película o serie.
 - **Burbuja** al tocar una cinta: portada, ficha, mover entre estantes, «Elegir esta para esta noche» (solo a quien le toca), temporada/capítulo, crítica propia (estrellas + comentario) y la del otro, quitar del estante (doble toque).
 - **Turno:** gana lo más reciente entre el último **Ruletazo** (`watch_spins`: elige quien salió) y la última cinta empezada (elige quien **no** la eligió). Sin nada, empieza ella.
