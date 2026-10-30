@@ -63,6 +63,8 @@ Brief: `docs/briefs/vinilos-spotify.md`; prototipo aprobado: `docs/briefs/tocadi
 - Tapa acrílica completa: se agregó la pared trasera junto a la bisagra. El plinto, el filete y las bisagras tienen aristas redondeadas (`RoundedBoxGeometry`) y el plato, un bisel que atrapa el reflejo. Medidas y cámara sin cambios.
 - «La pila de discos» pasa a **«Colección»**, en formato catálogo (opción A del mockup): funda con el disco asomando, título en Gloock, artista en EB Garamond, fecha y autor en versalitas, filtros en itálica subrayados. Al elegir una canción, su disco sale de la funda girando.
 
+- Tocadiscos más cerca (2026-10-29): misma posición de cámara, lente de 40° a 36° (`FOV`) y objetivo un poco más alto (`y` 1.25) para que la tapa siga entrando.
+
 ## Pendientes conocidos
 - **Fotos de perfil** de ambos en `public/readers/maria-victoria.jpg` y `simon.jpg` (hoy se ven iniciales).
 - **Quitar fondo** a las fotos del collage Y2K (plan: `@imgly/background-removal`; plan B MediaPipe). Hoy se pegan con fondo.
