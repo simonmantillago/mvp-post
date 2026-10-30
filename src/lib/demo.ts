@@ -34,13 +34,14 @@ export function createDemoClient(): any {
       { id: 's3', author_id: HIM, url: 'https://open.spotify.com/track/1', platform: 'spotify', title: 'La del penthouse', artist: 'Trío de jazz', dedication: '', cover_url: null, created_at: ago(2000) },
     ],
     watch_items: [
-      { id: 'w1', title: 'Película de ejemplo', kind: 'movie', status: 'want', season: null, episode: null, poster_url: null, note: '', added_by: HER, picked_by: null, started_at: null, finished_at: null, created_at: ago(500) },
-      { id: 'w2', title: 'Serie larga', kind: 'series', status: 'want', season: null, episode: null, poster_url: null, note: '', added_by: HIM, picked_by: null, started_at: null, finished_at: null, created_at: ago(400) },
-      { id: 'w3', title: 'Comedia romántica', kind: 'movie', status: 'want', season: null, episode: null, poster_url: null, note: '', added_by: HER, picked_by: null, started_at: null, finished_at: null, created_at: ago(300) },
-      { id: 'w4', title: 'La de los sábados', kind: 'series', status: 'watching', season: 2, episode: 5, poster_url: null, note: '', added_by: HIM, picked_by: HIM, started_at: ago(200), finished_at: null, created_at: ago(1000) },
-      { id: 'w5', title: 'Clásico de los 2000', kind: 'movie', status: 'watched', season: null, episode: null, poster_url: null, note: '', added_by: HER, picked_by: HER, started_at: ago(3000), finished_at: ago(2900), created_at: ago(4000) },
+      { id: 'w1', title: 'Película de ejemplo', kind: 'movie', status: 'want', season: null, episode: null, poster_url: '/portada/cartelera.webp', tmdb_id: 1, year: 2003, overview: 'Una columnista de Manhattan se pregunta si el amor cabe en una suscripción. Sinopsis de ejemplo para revisar la burbuja.', note: '', added_by: HER, picked_by: null, started_at: null, finished_at: null, created_at: ago(500) },
+      { id: 'w2', title: 'Serie larga', kind: 'series', status: 'want', season: null, episode: null, poster_url: null, tmdb_id: null, year: null, overview: '', note: '', added_by: HIM, picked_by: null, started_at: null, finished_at: null, created_at: ago(400) },
+      { id: 'w3', title: 'Comedia romántica', kind: 'movie', status: 'want', season: null, episode: null, poster_url: '/portada/swag.webp', tmdb_id: 3, year: 2004, overview: 'Dos que se conocen en un videoclub discuten por la última copia.', note: '', added_by: HER, picked_by: null, started_at: null, finished_at: null, created_at: ago(300) },
+      { id: 'w4', title: 'La de los sábados', kind: 'series', status: 'watching', season: 2, episode: 5, poster_url: '/portada/big.webp', tmdb_id: 4, year: 1998, overview: 'Cuatro amigas, una ciudad y muchos sábados.', note: '', added_by: HIM, picked_by: HIM, started_at: ago(200), finished_at: null, created_at: ago(1000) },
+      { id: 'w5', title: 'Clásico de los 2000', kind: 'movie', status: 'watched', season: null, episode: null, poster_url: '/portada/angeles.webp', tmdb_id: 5, year: 2001, overview: 'Un clásico de ejemplo.', note: '', added_by: HER, picked_by: HER, started_at: ago(3000), finished_at: ago(2900), created_at: ago(4000) },
     ],
-    watch_ratings: [{ item_id: 'w5', user_id: HIM, rating: 4, comment: '' }],
+    watch_ratings: [{ item_id: 'w5', user_id: HIM, rating: 4, comment: 'La vimos con palomitas de caramelo. El final, perfecto.' }],
+    watch_spins: [],
     photos: [
       { id: 'p1', author_id: HER, storage_path: 'glam-dark-leopard.webp', caption: 'nuestra primera cena', effect: 'vintage', created_at: ago(100) },
       { id: 'p2', author_id: HIM, storage_path: 'y2k-swag-collage.webp', caption: 'ese vestido…', effect: 'flash', created_at: ago(1500) },
@@ -70,6 +71,7 @@ export function createDemoClient(): any {
     let limit = Infinity
     let single: 'one' | 'maybe' | null = null
     let returning = false
+    let conflict: string[] = []
 
     const run = () => {
       const rows = (db[table] ??= [])
@@ -84,7 +86,11 @@ export function createDemoClient(): any {
           ...(table === 'collage_items' ? { style: {}, locked: false, locked_by: null, bg_removed: false } : {}),
           ...p,
         }))
-        rows.push(...list)
+        for (const row of list) {
+          const same = op === 'upsert' && conflict.length ? rows.find((r) => conflict.every((k) => r[k] === row[k])) : null
+          if (same) Object.assign(same, row)
+          else rows.push(row)
+        }
         result = list
       } else {
         result = rows.filter((r) => filters.every((f) => f(r)))
@@ -102,7 +108,7 @@ export function createDemoClient(): any {
     const b: any = {
       select: () => ((op === 'select' ? null : (returning = true)), b),
       insert: (p: any) => ((op = 'insert'), (payload = p), b),
-      upsert: (p: any) => ((op = 'upsert'), (payload = p), b),
+      upsert: (p: any, o?: { onConflict?: string }) => ((op = 'upsert'), (payload = p), (conflict = o?.onConflict?.split(',') ?? []), b),
       update: (p: any) => ((op = 'update'), (payload = p), b),
       delete: () => ((op = 'delete'), b),
       eq: (c: string, v: any) => (filters.push((r) => r[c] === v), b),
@@ -135,11 +141,23 @@ export function createDemoClient(): any {
     id: `demo${i}`, uri: `spotify:track:demo${i}`, url: `https://open.spotify.com/track/demo${i}`,
     title, artist, album, cover, thumb: cover, duration_ms: 200_000,
   }))
+  // Resultados falsos de `movie-search` (mismas palabras: «error» y «zzz»).
+  const movies = [
+    ['Noches de videoclub', 'movie', 2003, '/portada/cartelera.webp'],
+    ['Noches de videoclub 2', 'movie', 2005, '/portada/big.webp'],
+    ['La columnista', 'series', 1998, '/portada/swag.webp'],
+    ['Cartas desde Manhattan', 'movie', 2002, null],
+    ['Ángeles de medianoche', 'series', 2004, '/portada/angeles.webp'],
+  ].map(([title, kind, year, poster], i) => ({
+    tmdb_id: 900 + i, kind, title, original_title: title, year, poster, thumb: poster,
+    overview: 'Sinopsis de ejemplo: así se verá la ficha que llega de TMDB, con su resumen en español.',
+  }))
   const functions = {
-    invoke: async (_name: string, { body }: { body: { q: string } }) => {
+    invoke: async (name: string, { body }: { body: { q: string } }) => {
       await new Promise((r) => setTimeout(r, 450))
       const q = body.q.toLowerCase()
       if (q.includes('error')) return { data: null, error: { message: 'demo' } }
+      if (name === 'movie-search') return { data: { results: q.includes('zzz') ? [] : movies }, error: null }
       if (q.includes('zzz')) return { data: { tracks: [] }, error: null }
       return { data: { tracks }, error: null }
     },

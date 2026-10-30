@@ -133,6 +133,11 @@
   --neon: #ff4f8b;
   --rule: #2c3768;
   --focus: #ffd23f;
+  --shelf: #3b2a1e;
+  --shelf-shade: #24180f;
+  --tape: #111114;
+  --tape-ink: #f4efe6;
+  --scrim: rgba(6, 9, 22, 0.86);
   --face-display: "Monoton", sans-serif;
 }
 

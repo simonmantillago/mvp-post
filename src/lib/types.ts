@@ -72,6 +72,9 @@ export type WatchItem = {
   season: number | null
   episode: number | null
   poster_url: string | null
+  tmdb_id: number | null
+  year: number | null
+  overview: string
   note: string
   added_by: string
   picked_by: string | null
@@ -85,6 +88,13 @@ export type WatchRating = {
   user_id: string
   rating: number
   comment: string
+}
+
+export type WatchSpin = {
+  id: string
+  chooser: string
+  spun_by: string
+  created_at: string
 }
 
 export type Message = {

@@ -12,7 +12,8 @@ Fuente de verdad: [`0001_init.sql`](../supabase/migrations/0001_init.sql) + [`00
 | `collage_items` | Estilo · Y2K | Pieza del collage: `kind = photo · cutout · sticker · text`. Posición relativa (`x`, `width` en fracción del ancho; `y` en anchos), `rotation` en grados, `z`. `locked` bloquea mover/borrar (trigger + RLS). |
 | `photos` / `photo_likes` | Alfombra roja | Fotos tomadas con la cámara de la app, como polaroids con `caption`. Bucket `photos/<uid>/`. |
 | `songs` | Los vinilos de Big | `author_id` = quien la dedicó. `platform`, `dedication`, `cover_url` (oEmbed). |
-| `watch_items` / `watch_ratings` | Cartelera | `status = want → watching → watched`. Rating 1–5 por persona. |
+| `watch_items` / `watch_ratings` | Cartelera | `status` want · watching · watched (se mueve libre). `tmdb_id`, `poster_url`, `year`, `overview` de TMDB (0004). Rating 1–5 + comentario por persona. |
+| `watch_spins` | Cartelera | Cada Ruletazo: `chooser`, `spun_by`. Decide el turno si es más reciente que la última cinta empezada (0004). |
 | `messages` | Cartas al editor | `kind = 'text' \| 'nudge'` (nudge = ¡Extra!). Solo el destinatario marca `read_at`. |
 | `activity` | todas | Una fila por cada cosa nueva. Solo la llenan triggers. Alimenta "Nuevo", el badge y las notificaciones. |
 | `section_reads` | todas | Hasta cuándo vio cada quien cada sección. Al entrar a una sección: `upsert (section, seen_at = now())`. |

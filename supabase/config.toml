@@ -422,3 +422,7 @@ verify_jwt = false
 [functions.spotify-search]
 # La llama la app con la sesión de la pareja; además valida is_member() adentro.
 verify_jwt = true
+
+[functions.movie-search]
+# Igual que spotify-search: sesión de la pareja + is_member().
+verify_jwt = true

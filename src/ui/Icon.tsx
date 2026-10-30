@@ -27,6 +27,8 @@ const paths = {
   minus: 'M5 12h14',
   film: 'M4 5h16v14H4zM8 5v14M16 5v14M4 9h4M4 15h4M16 9h4M16 15h4',
   door: 'M6 21V4h12v17M3 21h18M14 12h.01',
+  wheel: 'M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM12 4v16M4 12h16M6.3 6.3l11.4 11.4M17.7 6.3L6.3 17.7',
+  search: 'M10.5 17a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zM15.5 15.5L20 20',
 } as const
 
 export type IconName = keyof typeof paths

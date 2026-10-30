@@ -82,7 +82,7 @@ Brief: `docs/briefs/vinilos-spotify.md`; prototipo aprobado: `docs/briefs/tocadi
 - **Íconos PWA definitivos** (`public/icons/`) y sonidos (¡Extra!).
 - **Primera edición real** (la escribe Simón en Redacción).
 - **Deuda de tokens** (reportada por el documentador): varios colores escritos directo en CSS/TSX en vez de tokens (FrontPage, Arrival, Vinilos, Cartelera, polaroids, `Marks.tsx` usa hex en vez de `--seal-her/--seal-him`). No afecta el look.
-- TMDB opcional para pósters en Cartelera.
+- **Cartelera ronda 2 (2026-10-29, en código):** búsqueda TMDB (`movie-search`), portada en el cassette, burbuja con crítica, mover entre estantes, Ruletazo. `0004` aplicada, `movie-search` desplegada y `TMDB_API_KEY` cargada. Falta probar la búsqueda real en el iPhone.
 - Re-correr `/impeccable audit` después de los cambios grandes.
 
 ## Cómo seguir iterando un módulo
