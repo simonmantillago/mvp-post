@@ -9,6 +9,7 @@ import { Section } from '../Section'
 import { AddTape } from './AddTape'
 import { MovieDialog } from './MovieDialog'
 import { Ruletazo } from './Ruletazo'
+import { prepareRuleta } from './ruletaSound'
 import { hueOf, tabs, type Tab, type Turn } from './shelf'
 import './Cartelera.css'
 
@@ -26,7 +27,7 @@ function whoseTurn(items: WatchItem[], spins: WatchSpin[], other: (id: string) =
 
 /** Cartelera: estantería de VHS con portadas, turno para elegir, ruletazo y críticas de los dos. */
 export default function Cartelera() {
-  const { session, isMe, nameOf, partner, herId } = useCouple()
+  const { session, me, isMe, nameOf, partner, herId } = useCouple()
   const uid = session.user.id
   const { load, refresh } = useLive<WatchItem[]>('watch_items', () =>
     supabase.from('watch_items').select('*').order('created_at', { ascending: false }),
@@ -80,7 +81,11 @@ export default function Cartelera() {
             </span>
             <span className="ticket-name">{turn.id ? (myTurn ? 'Tú' : nameOf(turn.id)) : '—'}</span>
           </p>
-          <button type="button" className="ruletazo-button" onClick={() => setSpinning(true)} disabled={!partner}>
+          <button type="button" className="ruletazo-button" onClick={() => {
+              if (me?.sounds_enabled ?? true) prepareRuleta()
+              setSpinning(true)
+            }}
+            disabled={!partner}>
             <Icon name="wheel" size={20} /> Ruletazo
           </button>
         </div>
