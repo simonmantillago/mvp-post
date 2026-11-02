@@ -16,6 +16,8 @@ export type SectionEntry = {
   /** Encuadre de la foto: 'contain' para logos sobre blanco; posición para recortar donde importa */
   coverFit?: 'cover' | 'contain'
   coverPosition?: string
+  /** Acercamiento para centrar un detalle que el recorte no alcanza (el origen es el punto que queda fijo al escalar) */
+  coverZoom?: { scale: number; origin: string }
   layout: StoryLayout
 }
 
@@ -69,9 +71,9 @@ export const sections: SectionEntry[] = [
     name: 'Cartas mágicas',
     page: 6,
     dek: 'Ahora los mensajes al editor llegan por lechuza, con sello de lacre.',
-    cover: '/portada/cartas.webp',
+    cover: '/portada/escudo.png',
     caption: 'Correspondencia certificada.',
-    coverPosition: '58% 50%',
+    coverFit: 'contain',
     layout: 'pair',
   },
 ]

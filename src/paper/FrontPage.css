@@ -160,6 +160,7 @@
 .story-photo { margin: 0; }
 .story-photo-link {
   display: block;
+  overflow: hidden;
   padding: 3px;
   border: 1px solid var(--ink);
   background: #fff;
