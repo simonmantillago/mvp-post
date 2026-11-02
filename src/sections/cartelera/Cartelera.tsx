@@ -81,13 +81,22 @@ export default function Cartelera() {
             </span>
             <span className="ticket-name">{turn.id ? (myTurn ? 'Tú' : nameOf(turn.id)) : '—'}</span>
           </p>
-          <button type="button" className="ruletazo-button" onClick={() => {
-              if (me?.sounds_enabled ?? true) prepareRuleta()
-              setSpinning(true)
-            }}
-            disabled={!partner}>
-            <Icon name="wheel" size={20} /> Ruletazo
-          </button>
+          <div className="ticket-actions">
+            <button type="button" className="ruletazo-button add-button" aria-haspopup="dialog" onClick={() => setAdding(true)}>
+              <Icon name="search" size={20} /> Agregar
+            </button>
+            <button
+              type="button"
+              className="ruletazo-button"
+              onClick={() => {
+                if (me?.sounds_enabled ?? true) prepareRuleta()
+                setSpinning(true)
+              }}
+              disabled={!partner}
+            >
+              <Icon name="wheel" size={20} /> Ruletazo
+            </button>
+          </div>
         </div>
 
         <div className="cartelera-tabs" role="tablist" aria-label="Estante">
@@ -127,23 +136,19 @@ export default function Cartelera() {
           )}
         </div>
 
-        {adding ? (
-          <AddTape
-            userId={uid}
-            onShelf={new Set(items.map((i) => i.tmdb_id).filter((n): n is number => n != null))}
-            onAdded={() => {
-              setAdding(false)
-              setTab('want')
-              refresh()
-            }}
-            onCancel={() => setAdding(false)}
-          />
-        ) : (
-          <button type="button" className="section-button cartelera-add" onClick={() => setAdding(true)}>
-            <Icon name="search" size={18} /> Buscar película o serie
-          </button>
-        )}
       </div>
+
+      {adding && (
+        <AddTape
+          userId={uid}
+          onShelf={new Set(items.map((i) => i.tmdb_id).filter((n): n is number => n != null))}
+          onAdded={() => {
+            setTab('want')
+            refresh()
+          }}
+          onClose={() => setAdding(false)}
+        />
+      )}
 
       {selected && (
         <MovieDialog
