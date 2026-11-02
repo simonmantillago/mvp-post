@@ -15,12 +15,20 @@
   color: var(--accent);
   font-size: clamp(2.2rem, 11vw, 3.2rem);
   text-shadow: var(--neon-glow);
-  animation: neon-flicker 2.4s steps(1) 0.35s both;
+  animation:
+    neon-flicker 2.4s steps(1) 0.35s both,
+    neon-stutter 14s steps(1) 8s infinite;
 }
 /* El letrero se enciende como un tubo de neón que calienta; termina encendido */
 @keyframes neon-flicker {
   0%, 11%, 21% { opacity: 0.2; text-shadow: none; }
   8%, 17%, 26%, 100% { opacity: 1; text-shadow: var(--neon-glow); }
+}
+/* Ya encendido, cada 14 s el tubo falla un instante: dos cortes rápidos y vuelve (~0,4 s en total) */
+@keyframes neon-stutter {
+  0%, 1.2%, 2.9%, 100% { opacity: 1; text-shadow: var(--neon-glow); }
+  0.5% { opacity: 0.25; text-shadow: none; }
+  2% { opacity: 0.4; text-shadow: none; }
 }
 
 /* Ticket perforado con el turno + el ruletazo */
