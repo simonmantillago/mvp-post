@@ -59,7 +59,7 @@ function Owl() {
   )
 }
 
-/** Cartas mágicas: lechucería de pergamino. Cada carta lleva su estampilla; el Tin es un vociferador. */
+/** Cartas mágicas: lechucería de pergamino. Cada carta lleva su estampilla; el Tin es un sobre rojo con lacre de llama. */
 export default function Letters() {
   const { session, isMe, isHer, nameOf, partner } = useCouple()
   const { load } = useLive<Message[]>('messages', () =>
@@ -138,17 +138,18 @@ export default function Letters() {
         <ol className="letters-list" aria-live="polite" aria-relevant="additions">
           {letters.map((m) =>
             m.kind === 'nudge' ? (
-              <li key={m.id} className={`howler ${arriving === m.id ? 'is-arriving' : ''}`}>
-                <div className="howler-env">
-                  <span className="howler-flap" aria-hidden="true" />
-                  <span className="howler-seal">
-                    <WaxSeal initial="" her={false} wine size={38} />
-                  </span>
-                  <p className="howler-hed">¡Tin! ¡Tin!</p>
-                  <p className="howler-sub">
-                    {isMe(m.author_id) ? 'Pediste tin' : `${nameOf(m.author_id)} quiere tin`} · {formatTime(m.created_at)}
-                  </p>
-                </div>
+              <li key={m.id} className={`tin ${isMe(m.author_id) ? 'tin--mine' : 'tin--theirs'} ${arriving === m.id ? 'is-arriving' : ''}`}>
+                {/* sobre rojo cerrado: pliegues de la solapa y lacre con llama */}
+                <svg className="tin-folds" viewBox="0 0 186 120" preserveAspectRatio="none" fill="none" stroke="currentColor" strokeWidth="1.4" aria-hidden="true">
+                  <path d="M0 0 93 58 186 0M0 120l70-52M186 120l-70-52" />
+                </svg>
+                <p className="tin-hed">¡Tin!</p>
+                <span className="tin-seal">
+                  <WaxSeal initial="" her={false} wine flame size={44} />
+                </span>
+                <p className="tin-sub">
+                  {isMe(m.author_id) ? 'Pediste tin' : `${nameOf(m.author_id)} quiere tin`} · {formatTime(m.created_at)}
+                </p>
               </li>
             ) : (
               <li key={m.id} className={`letter ${isMe(m.author_id) ? 'letter--mine' : 'letter--theirs'} ${isHer(m.author_id) ? 'letter--her' : 'letter--him'}`}>
@@ -184,14 +185,13 @@ export default function Letters() {
             onChange={(e) => setText(e.target.value)}
             placeholder="Escribe tu carta…"
           />
+          <button type="button" className="letters-tin" onClick={() => send('nudge')} disabled={sending}>
+            Tin
+          </button>
           <button type="submit" className="letters-send" disabled={sending || !text.trim()} aria-label="Enviar carta">
             <Icon name="quill" />
           </button>
         </div>
-        <button type="button" className="letters-tin" onClick={() => send('nudge')} disabled={sending}>
-          <WaxSeal initial="" her={false} wine size={26} />
-          Tin
-        </button>
       </form>
     </Section>
   )

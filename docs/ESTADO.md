@@ -78,6 +78,7 @@ Brief: `docs/briefs/vinilos-spotify.md`; prototipo aprobado: `docs/briefs/tocadi
 ## Cartas mágicas: Tin y lechucería (2026-11-03)
 - El botón ¡Extra! se llama **Tin** (palabra clave de la pareja). En la base sigue siendo `messages.kind = 'nudge'` / `activity.kind = 'extra'`; solo cambió el texto. Push «¡TIN! ¡TIN!» — «X quiere tin»: `notify` desplegada y probada en el iPhone.
 - Estética nueva (mockup aprobado en `docs/wireframes/cartas.html`): pergamino raster (`parchmentTexture` en `src/ui/leopard.ts`), título en UnifrakturCook, filete doble dorado con «Correo por lechuza · entrega inmediata», hojas con barbas y doblez, **estampilla + matasellos** por autor (se descartaron los lacres con M y S), Tin como vociferador rojo que abre la solapa al llegar, buzón vacío con lechuza en tinta, botón de enviar con pluma. «Visto» → «Leída».
+- Ronda 2 (2026-11-03): título y subtítulo a todo el ancho (solo la línea del folio deja sitio a la flecha); el Tin pasó de franja a **sobre rojo** chico del lado de quien lo manda, con lacre de **llama en relieve**, que llega volando; botón Tin = lacre redondo junto a enviar; recuadro de escribir redondeado. Propuestas en `docs/wireframes/cartas-tin.html` (elegida la 2).
 - La lechuza del vacío es SVG de trazo; si se quiere ilustrada, pasarla a asset raster.
 
 ## Pendientes conocidos
