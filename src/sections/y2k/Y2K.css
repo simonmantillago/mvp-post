@@ -41,23 +41,7 @@
   letter-spacing: 0;
 }
 
-/* Barra pegada arriba: respeta la barra de estado del iPhone y deja libre la flecha de volver */
-.y2k-tools {
-  position: sticky;
-  top: var(--safe-top);
-  z-index: 20;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--s2);
-  padding: var(--s2) var(--gutter);
-  /* pinta la franja de la barra de estado cuando queda pegada */
-  box-shadow: 0 calc(var(--safe-top) * -1) 0 var(--surface), 0 6px 14px rgba(0, 0, 0, 0.45);
-  background: var(--surface);
-  border-block: 2px solid var(--accent);
-}
-
 /* Plástico brillante: mitad de arriba con reflejo, mitad de abajo más oscura */
-.y2k-tool,
 .y2k-pill {
   display: inline-flex;
   align-items: center;
@@ -65,63 +49,141 @@
   gap: 0.35rem;
   min-height: 2.75rem;
   padding: 0 0.9rem;
-  border: 1.5px solid var(--accent);
+  border: 1px solid var(--line-strong);
   border-radius: 999px;
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.32), rgba(255, 255, 255, 0.06) 48%, transparent 50%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.04) 48%, transparent 50%),
     linear-gradient(180deg, var(--gloss-hi), var(--gloss-lo));
-  box-shadow: inset 0 -2px 4px color-mix(in srgb, var(--accent) 35%, transparent), 0 2px 6px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
   color: var(--text);
-  /* los botones van en la letra del periódico (Antonio), como los de las demás secciones */
-  font: 700 0.875rem/1 var(--face-head);
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  /* controles flotantes en blanco y negro con la letra del sistema */
+  font: 600 0.9375rem/1 var(--face-ui);
   white-space: nowrap;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition: scale 120ms var(--ease-out), filter 120ms var(--ease-out);
 }
-.y2k-tool { padding-inline: 0.5rem; }
-.y2k-tool svg { flex: none; color: var(--accent-text); }
-.y2k-tool:active,
 .y2k-pill:active { scale: 0.96; filter: brightness(1.15); }
-.y2k-tool[aria-expanded="true"],
-.y2k-pill--hot {
+.y2k-pill svg { flex: none; }
+/* la acción principal va en blanco con letra negra */
+.y2k-pill--main {
   border-color: var(--text);
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(255, 255, 255, 0.12) 48%, transparent 50%),
-    linear-gradient(180deg, var(--candy-hi), var(--candy-lo));
-  box-shadow: inset 0 -2px 4px rgba(0, 0, 0, 0.25), 0 2px 8px color-mix(in srgb, var(--accent) 40%, transparent);
+  background: linear-gradient(180deg, var(--text), var(--chrome));
+  box-shadow: inset 0 -2px 3px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.5);
   color: var(--on-accent);
 }
-.y2k-tool[aria-expanded="true"] svg { color: var(--on-accent); }
-.y2k-tool:focus-visible,
-.y2k-tool:focus-within,
 .y2k-pill:focus-visible,
 .y2k-pill:focus-within { outline: 2px solid var(--focus); outline-offset: 2px; }
 @media (hover: hover) {
-  .y2k-tool:hover,
   .y2k-pill:hover { filter: brightness(1.12); }
 }
 
-/* Paneles que bajan de la barra */
+/* Dock fijo abajo a la izquierda: avisos, panel abierto, menú y el botón + (se alinea con la página en escritorio) */
+.y2k-dock {
+  position: fixed;
+  z-index: 30;
+  left: max(var(--gutter), calc((100vw - 40rem) / 2 + var(--gutter)));
+  right: max(var(--gutter), calc((100vw - 40rem) / 2 + var(--gutter)));
+  bottom: calc(var(--safe-bottom) + var(--s4));
+  display: grid;
+  justify-items: start;
+  gap: var(--s3);
+  pointer-events: none;
+}
+.y2k-dock > * { pointer-events: auto; }
+.y2k-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 29;
+  background: radial-gradient(120% 70% at 0% 100%, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.15) 60%, transparent);
+  animation: fade-in 180ms var(--ease-out);
+}
+
+.y2k-fab {
+  display: grid;
+  place-items: center;
+  width: 3.5rem;
+  height: 3.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--text), var(--chrome));
+  box-shadow: inset 0 -3px 4px rgba(0, 0, 0, 0.12), 0 6px 16px -4px rgba(0, 0, 0, 0.8);
+  color: var(--on-accent);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: scale 140ms var(--ease-out);
+}
+.y2k-fab svg { transition: rotate 220ms var(--ease-out); }
+.y2k-fab.is-open { background: linear-gradient(180deg, var(--gloss-hi), var(--gloss-lo)); box-shadow: inset 0 0 0 1px var(--line-strong), 0 6px 16px -4px rgba(0, 0, 0, 0.8); color: var(--text); }
+.y2k-fab.is-open svg { rotate: 45deg; }
+.y2k-fab:active { scale: 0.93; }
+.y2k-fab:focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
+
+/* Las opciones suben del botón: ícono redondo y la palabra sobre un velo oscuro para que se lea encima del collage */
+.y2k-add-menu {
+  display: grid;
+  gap: var(--s3);
+  padding-left: 0.375rem;
+}
+.y2k-add-item {
+  display: flex;
+  align-items: center;
+  gap: var(--s3);
+  min-height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--text);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  animation: item-up 220ms var(--ease-out) backwards;
+}
+.y2k-add-item:nth-child(2) { animation-delay: 40ms; }
+.y2k-add-item:nth-child(1) { animation-delay: 80ms; }
+.y2k-add-icon {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22), rgba(255, 255, 255, 0.04) 48%, transparent 50%),
+    linear-gradient(180deg, var(--gloss-hi), var(--gloss-lo));
+  box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.6);
+  color: var(--text);
+}
+.y2k-add-label {
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(13, 13, 13, 0.6);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  font: 600 0.9375rem/1 var(--face-ui);
+}
+.y2k-add-item:active .y2k-add-icon { background: var(--text); color: var(--on-accent); }
+.y2k-add-item:focus-visible,
+.y2k-add-item:focus-within { outline: 2px solid var(--focus); outline-offset: 3px; border-radius: 999px; }
+
+/* Paneles de recorte y texto: tarjeta encima del botón */
 .y2k-panel {
-  position: relative;
-  z-index: 15;
+  justify-self: stretch;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--s2);
-  padding: var(--s3) var(--gutter);
+  padding: var(--s3);
   background: var(--surface);
-  border-bottom: 2px solid var(--accent);
+  border: 1px solid var(--line-soft);
+  border-radius: 1.25rem;
+  box-shadow: 0 12px 28px -8px rgba(0, 0, 0, 0.75);
   animation: panel-in 220ms var(--ease-out);
 }
 .y2k-panel-note {
   flex: 1 0 100%;
-  font-size: 0.8125rem;
-  line-height: 1.45;
-  color: var(--text-soft);
+  font: 400 0.9375rem/1.35 var(--face-ui);
+  color: rgba(255, 255, 255, 0.78);
 }
 .y2k-text { display: grid; grid-template-columns: 1fr auto; }
 .y2k-field {
@@ -129,15 +191,15 @@
   width: 100%;
   min-height: 3rem;
   padding: 0.2rem 1rem 0;
-  border: 1.5px solid var(--accent);
+  border: 1px solid var(--line-strong);
   border-radius: 999px;
   background: var(--gloss-lo);
   color: var(--text);
-  caret-color: var(--accent);
+  caret-color: var(--text);
   font: 400 1.125rem/1 var(--face-display);
   text-transform: uppercase;
 }
-.y2k-field::placeholder { color: var(--text-soft); opacity: 0.6; }
+.y2k-field::placeholder { color: var(--text); opacity: 0.45; }
 .y2k-field:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .y2k-inks { display: flex; gap: var(--s3); align-items: center; }
 .y2k-inks button {
@@ -148,23 +210,19 @@
   background: var(--ink);
   box-shadow: inset 0 6px 6px -4px rgba(255, 255, 255, 0.6);
 }
-.y2k-inks button[aria-checked="true"] { box-shadow: inset 0 6px 6px -4px rgba(255, 255, 255, 0.6), 0 0 0 3px var(--surface), 0 0 0 5px var(--accent); }
+.y2k-inks button[aria-checked="true"] { box-shadow: inset 0 6px 6px -4px rgba(255, 255, 255, 0.6), 0 0 0 3px var(--surface), 0 0 0 5px var(--text); }
 .y2k-inks button:focus-visible { outline: 2px solid var(--focus); outline-offset: 6px; }
 [data-ink="pink"] { --ink: var(--accent); --ink-edge: var(--on-accent); }
 [data-ink="white"] { --ink: var(--text); --ink-edge: var(--on-accent); }
 [data-ink="black"] { --ink: var(--on-accent); --ink-edge: var(--text); }
 
 .y2k-status {
-  position: relative;
-  z-index: 15;
-  margin: var(--s2) var(--gutter) 0;
   padding: 0.55rem 1rem 0.4rem;
   width: fit-content;
   border-radius: 1.25rem;
   background: var(--surface);
-  border: 1.5px solid var(--accent);
-  font-size: 0.8125rem;
-  line-height: 1.4;
+  border: 1px solid var(--line-soft);
+  font: 400 0.9375rem/1.35 var(--face-ui);
   color: var(--text);
 }
 .y2k-status.is-busy::before {
@@ -174,7 +232,7 @@
   height: 0.55em;
   margin-right: 0.5em;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--text);
   animation: blink 900ms steps(2) infinite;
 }
 .y2k-status.is-error { color: var(--accent-text); }
@@ -182,6 +240,7 @@
 /* El lienzo: transparente sobre el medio tono */
 .y2k-canvas {
   position: relative;
+  margin-top: var(--s4);
   overflow: hidden;
   user-select: none;
   -webkit-user-select: none;
@@ -257,7 +316,7 @@
 }
 /* área de toque de 44 px sin agrandar el candado */
 .piece-lock::before { content: ""; position: absolute; inset: -0.6rem; }
-.piece-lock:active { background: var(--accent); color: var(--on-accent); }
+.piece-lock:active { background: var(--text); color: var(--on-accent); }
 .piece-lock:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
 .piece-handle {
   position: absolute;
@@ -269,7 +328,7 @@
   height: 2.75rem;
   border: 2px solid var(--on-accent);
   border-radius: 50%;
-  background: linear-gradient(180deg, var(--candy-hi), var(--accent));
+  background: linear-gradient(180deg, var(--text), var(--chrome));
   color: var(--on-accent);
   touch-action: none;
   cursor: nwse-resize;
@@ -322,14 +381,19 @@
 .ios-menu .is-destructive { color: #ff6961; }
 
 @keyframes menu-in { from { opacity: 0; scale: 0.92; } }
-@keyframes panel-in { from { opacity: 0; translate: 0 -0.5rem; } }
+@keyframes panel-in { from { opacity: 0; translate: 0 0.5rem; } }
+@keyframes item-up { from { opacity: 0; translate: 0 0.75rem; scale: 0.9; } }
+@keyframes fade-in { from { opacity: 0; } }
 @keyframes blink { 50% { opacity: 0.2; } }
 @keyframes lock-in { from { opacity: 0; scale: 0.8; } }
 
 @media (prefers-reduced-motion: reduce) {
   .y2k-panel,
+  .y2k-scrim,
   .piece-lock,
   .y2k-status.is-busy::before { animation: none; }
-  .y2k-tool,
-  .y2k-pill { transition: none; }
+  .y2k-pill,
+  .y2k-fab,
+  .y2k-fab svg { transition: none; }
+  .y2k-add-item { animation: none; }
 }

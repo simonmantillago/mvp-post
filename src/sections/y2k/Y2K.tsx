@@ -33,6 +33,7 @@ export default function Y2K() {
   const [selected, setSelected] = useState<string | null>(null)
   const [menuPage, setMenuPage] = useState(0)
   const [panel, setPanel] = useState<'none' | 'text' | 'cutout'>('none')
+  const [adding, setAdding] = useState(false)
   const [busy, setBusy] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [menuAt, setMenuAt] = useState<{ x: number; y: number; above: boolean } | null>(null)
@@ -313,54 +314,97 @@ export default function Y2K() {
       {label}
     </button>
   )
-  const toggle = (p: 'text' | 'cutout') => setPanel(panel === p ? 'none' : p)
+  // Botón + abajo a la izquierda: abre el menú; con un panel abierto, lo cierra
+  function onFab() {
+    if (panel !== 'none') return setPanel('none')
+    setAdding((v) => !v)
+  }
+  function choose(p: 'text' | 'cutout') {
+    setAdding(false)
+    setPanel(p)
+  }
 
   return (
     <Section id="y2k" className="y2k">
-      <div className="y2k-tools" role="toolbar" aria-label="Agregar al collage">
-        <label className="y2k-tool">
-          <Icon name="image" size={18} /> Foto
-          <input type="file" accept="image/*" className="visually-hidden" onChange={(e) => addImage(e.target.files?.[0], 'photo')} />
-        </label>
-        <button type="button" className="y2k-tool" aria-expanded={panel === 'cutout'} onClick={() => toggle('cutout')}>
-          <Icon name="scissors" size={18} /> Recorte
-        </button>
-        <button type="button" className="y2k-tool" aria-expanded={panel === 'text'} onClick={() => toggle('text')}>
-          <Icon name="type" size={18} /> Texto
+      {adding && <div className="y2k-scrim" aria-hidden="true" onPointerDown={() => setAdding(false)} />}
+      <div
+        className="y2k-dock"
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') {
+            setAdding(false)
+            setPanel('none')
+          }
+        }}
+      >
+        {busy && (
+          <p className="y2k-status is-busy" role="status">
+            {busy}
+          </p>
+        )}
+        {error && (
+          <p className="y2k-status is-error" role="alert">
+            {error}
+          </p>
+        )}
+
+        {panel === 'cutout' && (
+          <div className="y2k-panel y2k-cutout" role="group" aria-label="Hacer un recorte">
+            <p className="y2k-panel-note">Elige una foto y la recorto como un sticker.</p>
+            <label className="y2k-pill y2k-pill--main">
+              <Icon name="image" size={17} /> Galería
+              <input type="file" accept="image/*" className="visually-hidden" onChange={(e) => addImage(e.target.files?.[0], 'cutout')} />
+            </label>
+            <button type="button" className="y2k-pill" onClick={pasteCutout}>
+              <Icon name="copy" size={17} /> Pegar
+            </button>
+          </div>
+        )}
+        {panel === 'text' && (
+          <TextComposer
+            onAdd={(body, ink) => {
+              setPanel('none')
+              add({ kind: 'text', body, style: { color: ink }, width: 0.6 })
+            }}
+          />
+        )}
+
+        {adding && (
+          <div className="y2k-add-menu" id="y2k-add-menu" role="menu" aria-label="Agregar al collage">
+            <button type="button" role="menuitem" className="y2k-add-item" onClick={() => choose('text')}>
+              <span className="y2k-add-icon"><Icon name="type" size={18} /></span>
+              <span className="y2k-add-label">Texto</span>
+            </button>
+            <button type="button" role="menuitem" className="y2k-add-item" onClick={() => choose('cutout')}>
+              <span className="y2k-add-icon"><Icon name="scissors" size={18} /></span>
+              <span className="y2k-add-label">Recorte</span>
+            </button>
+            <label role="menuitem" className="y2k-add-item">
+              <span className="y2k-add-icon"><Icon name="image" size={18} /></span>
+              <span className="y2k-add-label">Foto</span>
+              <input
+                type="file"
+                accept="image/*"
+                className="visually-hidden"
+                onChange={(e) => {
+                  setAdding(false)
+                  addImage(e.target.files?.[0], 'photo')
+                }}
+              />
+            </label>
+          </div>
+        )}
+
+        <button
+          type="button"
+          className={`y2k-fab${adding || panel !== 'none' ? ' is-open' : ''}`}
+          aria-label={panel !== 'none' ? 'Cerrar' : adding ? 'Cerrar menú' : 'Agregar al collage'}
+          aria-expanded={adding}
+          aria-controls="y2k-add-menu"
+          onClick={onFab}
+        >
+          <Icon name="plus" size={26} />
         </button>
       </div>
-
-      {panel === 'cutout' && (
-        <div className="y2k-panel y2k-cutout" role="group" aria-label="Hacer un recorte">
-          <p className="y2k-panel-note">Elige una foto y la recorto a la silueta, como un sticker.</p>
-          <label className="y2k-pill y2k-pill--hot">
-            Elegir foto
-            <input type="file" accept="image/*" className="visually-hidden" onChange={(e) => addImage(e.target.files?.[0], 'cutout')} />
-          </label>
-          <button type="button" className="y2k-pill" onClick={pasteCutout}>
-            Pegar copiada
-          </button>
-        </div>
-      )}
-      {panel === 'text' && (
-        <TextComposer
-          onAdd={(body, ink) => {
-            setPanel('none')
-            add({ kind: 'text', body, style: { color: ink }, width: 0.6 })
-          }}
-        />
-      )}
-
-      {busy && (
-        <p className="y2k-status is-busy" role="status">
-          {busy}
-        </p>
-      )}
-      {error && (
-        <p className="y2k-status is-error" role="alert">
-          {error}
-        </p>
-      )}
 
       <div
         ref={canvasRef}
@@ -487,8 +531,8 @@ function TextComposer({ onAdd }: { onAdd: (body: string, ink: Ink) => void }) {
           <button key={c.value} type="button" role="radio" aria-checked={c.value === ink} aria-label={c.name} data-ink={c.value} onClick={() => setInk(c.value)} />
         ))}
       </div>
-      <button type="submit" className="y2k-pill y2k-pill--hot">
-        Pegar
+      <button type="submit" className="y2k-pill y2k-pill--main">
+        Agregar
       </button>
     </form>
   )

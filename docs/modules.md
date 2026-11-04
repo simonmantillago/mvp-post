@@ -33,7 +33,7 @@ Todas cubren: **vacío** (texto tierno que invita a crear), **cargando**, **erro
 
 ## 2. 2000's Collage (antes Estilo · Y2K; collage editable)
 - **Para fotos de la galería.** Lienzo libre que crece hacia abajo; ambos ven y editan el mismo collage (Realtime).
-- **Agregar:** `Foto` (galería, tal cual con borde blanco), `Recorte` (sticker con la silueta recortada, ver abajo), `Texto` (tinta rosa, blanca o negra).
+- **Agregar:** botón redondo `+` abajo a la izquierda (sin barra arriba, 2026-11-04); al tocarlo suben `Foto` (galería, tal cual con borde blanco), `Recorte` (sticker con la silueta recortada, ver abajo) y `Texto` (tinta rosa, blanca o negra), cada uno con su ícono y la palabra sobre un velo oscuro. Recorte y Texto abren su tarjeta encima del botón, que pasa a × para cerrar.
 - **Editar:** arrastrar mueve; dos dedos escalan y giran; agarraderas en la pieza seleccionada.
 - **Burbuja tipo iOS** al tocar una pieza (como la de Copiar/Pegar): `Al frente · Fijar · Duplicar · Eliminar · ▸` (página 2: `Atrás · Quitar fondo`). Flecha apuntando a la pieza; sale abajo o arriba según el espacio. Es un componente propio: el menú nativo de iOS no admite acciones personalizadas en la web, así que en el lienzo se desactiva el nativo (`-webkit-touch-callout: none; user-select: none`).
 - **Fijar:** la pieza no se mueve ni se borra (lo garantiza también la BD). Sin marca visible; al seleccionarla aparece un candadito sutil en la esquina y tocarlo la desfija (sin burbuja).

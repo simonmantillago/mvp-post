@@ -75,6 +75,10 @@
   --gloss-lo: #050505;
   --candy-hi: #ff5cc0;
   --candy-lo: #d1007f;
+  /* letra de los controles flotantes: la del sistema, como la burbuja de iOS */
+  --face-ui: -apple-system, "SF Pro Text", system-ui, sans-serif;
+  --line-soft: rgba(255, 255, 255, 0.28);
+  --line-strong: rgba(255, 255, 255, 0.6);
   /* Kabisat en el titular y lo que se pega; folio y botones quedan en las letras del periódico */
   --face-display: "Kabisat", "Bagel Fat One", sans-serif;
 }
