@@ -142,7 +142,7 @@ function Story({ s, unseen, photoLast = false }: { s: SectionEntry; unseen: numb
   const photo = (
     <figure className="story-photo">
       <Link to={s.path} viewTransition className="story-photo-link" tabIndex={-1} aria-hidden="true">
-        <img src={s.cover} alt="" loading="lazy" decoding="async" style={{ objectFit: s.coverFit ?? 'cover', objectPosition: s.coverPosition, transform: s.coverZoom && `scale(${s.coverZoom.scale})`, transformOrigin: s.coverZoom?.origin }} />
+        <img src={s.cover} alt="" loading="lazy" decoding="async" style={{ objectFit: s.coverFit ?? 'cover', objectPosition: s.coverPosition, aspectRatio: s.coverAspect }} />
       </Link>
       <figcaption className="story-caption">{s.caption}</figcaption>
     </figure>
