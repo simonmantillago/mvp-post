@@ -12,7 +12,7 @@ import './Letters.css'
 
 const EXTRA_COOLDOWN = 10_000
 
-/** Cartas mágicas (antes Cartas al editor): correspondencia en papel; el ¡Extra! es un titular de edición extraordinaria. */
+/** Cartas mágicas (antes Cartas al editor): correspondencia en papel; el botón «Tin» (antes ¡Extra!) es un titular a todo el ancho: nuestra palabra clave. */
 export default function Letters() {
   const { session, isMe, isHer, nameOf, partner } = useCouple()
   const { load } = useLive<Message[]>('messages', () =>
@@ -34,7 +34,7 @@ export default function Letters() {
     // Marcar como leídas las cartas del otro
     const unread = letters.filter((m) => !isMe(m.author_id) && !m.read_at).map((m) => m.id)
     if (unread.length) supabase.from('messages').update({ read_at: new Date().toISOString() }).in('id', unread).then()
-    // Un ¡Extra! nuevo del otro sacude la página
+    // Un «Tin» nuevo del otro sacude la página
     const nudge = [...letters].reverse().find((m) => m.kind === 'nudge' && !isMe(m.author_id))
     if (nudge && seenNudge.current !== null && nudge.id !== seenNudge.current) {
       setShake(true)
@@ -49,7 +49,7 @@ export default function Letters() {
     e?.preventDefault()
     if (kind === 'text' && !text.trim()) return
     if (kind === 'nudge' && Date.now() - lastExtra < EXTRA_COOLDOWN) {
-      setError('Ya salió una edición extraordinaria. Espera unos segundos para la siguiente.')
+      setError('Ya pediste tin. Espera unos segundos para el siguiente.')
       return
     }
     setSending(true)
@@ -74,9 +74,9 @@ export default function Letters() {
           {letters.map((m) =>
             m.kind === 'nudge' ? (
               <li key={m.id} className="extra">
-                <p className="extra-hed">¡Extra! ¡Extra!</p>
+                <p className="extra-hed">¡Tin! ¡Tin!</p>
                 <p className="extra-sub">
-                  {isMe(m.author_id) ? 'Mandaste una edición extraordinaria' : `${nameOf(m.author_id)} te está buscando`} · {formatTime(m.created_at)}
+                  {isMe(m.author_id) ? 'Pediste tin' : `${nameOf(m.author_id)} quiere tin`} · {formatTime(m.created_at)}
                 </p>
               </li>
             ) : (
@@ -120,7 +120,7 @@ export default function Letters() {
           </button>
         </div>
         <button type="button" className="letters-extra" onClick={() => send('nudge')} disabled={sending}>
-          ¡Extra!
+          Tin
         </button>
       </form>
     </Section>

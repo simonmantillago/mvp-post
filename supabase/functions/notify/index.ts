@@ -46,7 +46,7 @@ function compose(a: Activity, who: string): { title: string; body: string } {
     case 'letter':
       return { title: `Carta mágica de ${who}`, body: p || '…' }
     case 'extra':
-      return { title: '¡EXTRA! ¡EXTRA!', body: `${who} te está buscando` }
+      return { title: '¡TIN! ¡TIN!', body: `${who} quiere tin` }
     case 'movie_added':
       return { title: 'Cartelera', body: `${who} agregó “${p}” a la estantería` }
     case 'movie_picked':

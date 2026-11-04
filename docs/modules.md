@@ -63,7 +63,7 @@ Todas cubren: **vacío** (texto tierno que invita a crear), **cargando**, **erro
 
 ## 6. Cartas al editor (chat)
 - Cartas en papel; las de ella con lacre rosa, las de él en máquina de escribir. Realtime, paginación de 50 hacia atrás, "Visto".
-- **¡Extra!** (antes zumbido): `messages.kind = 'nudge'` → titular "¡EXTRA! ¡EXTRA!" que sacude la pantalla + sonido. En iPhone no hay vibración. Límite: uno cada 10 s.
+- **Tin** (antes ¡Extra!, nuestra palabra clave; 2026-11-03): `messages.kind = 'nudge'` → titular «¡TIN! ¡TIN!» — X quiere tin, que sacude la pantalla + sonido. En iPhone no hay vibración. Límite: uno cada 10 s.
 
 ## 7. Suscripción (ajustes)
 - Formulario de suscripción recortado del periódico: nombre, foto, sonidos, **notificaciones** (activar; silenciar por sección → `profiles.muted_sections`), cerrar sesión.
@@ -82,7 +82,7 @@ Cada cosa nueva genera una fila en `activity` (triggers) → Edge Function `noti
 | ♥ a tu foto | "A X le encantó tu foto" (máx. 1 cada 10 min) |
 | Canción dedicada | "Los vinilos de Big" — X te dedicó "título" (sin título: "te dedicó una canción") |
 | Carta | "Carta de X" — texto |
-| ¡Extra! | "¡EXTRA! ¡EXTRA!" — X te está buscando |
+| Tin | "¡TIN! ¡TIN!" — X quiere tin |
 | Película agregada / elegida / calificada | "Cartelera" — … |
 
 El ícono de la app muestra el número de cosas sin ver (Badging API). Tocar la notificación abre la sección.
