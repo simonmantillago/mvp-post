@@ -75,6 +75,11 @@ Brief: `docs/briefs/vinilos-spotify.md`; prototipo aprobado: `docs/briefs/tocadi
 ## Volver: solo la flecha (2026-10-29, global)
 - La esquina doblada se reemplazó por una flecha ← arriba a la derecha (`BackButton` en `src/paper/nav.tsx`), alineada con el folio y bajo la isla dinámica. Está en `<body>` con `position: absolute`: se queda arriba de la página y no baja con el scroll. Se quitaron el doblez y el gesto de arrastrar para despegar.
 
+## Cartas mágicas: Tin y lechucería (2026-11-03)
+- El botón ¡Extra! se llama **Tin** (palabra clave de la pareja). En la base sigue siendo `messages.kind = 'nudge'` / `activity.kind = 'extra'`; solo cambió el texto. Push «¡TIN! ¡TIN!» — «X quiere tin»: `notify` desplegada y probada en el iPhone.
+- Estética nueva (mockup aprobado en `docs/wireframes/cartas.html`): pergamino raster (`parchmentTexture` en `src/ui/leopard.ts`), título en UnifrakturCook, filete doble dorado con «Correo por lechuza · entrega inmediata», hojas con barbas y doblez, **estampilla + matasellos** por autor (se descartaron los lacres con M y S), Tin como vociferador rojo que abre la solapa al llegar, buzón vacío con lechuza en tinta, botón de enviar con pluma. «Visto» → «Leída».
+- La lechuza del vacío es SVG de trazo; si se quiere ilustrada, pasarla a asset raster.
+
 ## Pendientes conocidos
 - **Fotos de perfil** de ambos en `public/readers/maria-victoria.jpg` y `simon.jpg` (hoy se ven iniciales).
 - **Quitar fondo** a las fotos del collage Y2K (plan: `@imgly/background-removal`; plan B MediaPipe). Hoy se pegan con fondo.

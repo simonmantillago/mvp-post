@@ -238,7 +238,7 @@ Cada mundo asigna sus valores a los roles genéricos:
 - **Alfombra roja** (dark leopard con lirios vino, dorado, pedrería): fondo fotográfico fijo en pantalla sobre suelo Negro Laca (alfombra-ground), acento Dorado Viejo (alfombra-gold) también como filete, Dorado Claro (alfombra-gold-text) para texto, Vino (alfombra-wine) para el corazón de «me gusta», Blanco Polaroid (alfombra-polaroid).
 - **Los vinilos de Big** (penthouse de noche): Nogal Oscuro (vinilos-ground), Cuero (vinilos-leather), acento Ámbar de Lámpara (vinilos-amber), filete Tabaco (vinilos-rule). Lacres: rosa (spot) para ella, Latón (vinilos-seal-him) para él.
 - **Cartelera** (videoclub de noche): Azul Medianoche (cartelera-ground), acento Amarillo Marquesina (cartelera-marquee), Neón Rosa (cartelera-neon) solo para la pestaña activa y el halo superior.
-- **Cartas al editor** (papel de carta y máquina): Papel de Carta (cartas-ground) rayado cada 32 px, hoja Marfil (cartas-surface), acento rosa texto (spot-text), lacre Oro Viejo (cartas-seal-him) para él.
+- **Cartas mágicas** (lechucería, 2026-11-03): suelo de Pergamino (`--ground` #e6d7b8) con textura raster `parchmentTexture` y bordes tostados, hojas de carta con barbas y doblez (`--surface` #f1e6cc + `--sheet`), tinta sepia (`--text` #2a1c10), acento Lacre Vino (`--accent` #7e1a1c), filete doble Dorado Viejo (`--gold`). Quién escribe se marca con una **estampilla perforada + matasellos** (rosa con lechuza «MVP» para ella, dorada con pluma «SMG» para él), no con lacres de inicial. El Tin es un **vociferador**: sobre rojo (`--howler`) a todo el ancho con la solapa abierta y lacre vino sin inicial.
 
 ### Named Rules
 **The Segunda Plancha Rule.** En el papel, el rosa solo marca trabajo: lo nuevo, la sección, la capitular, la acción de publicar. Si el rosa aparece en algo que no cambió ni invita a entrar, sobra.
@@ -253,7 +253,7 @@ Cada mundo asigna sus valores a los roles genéricos:
 **Headline / Label:** Antonio 500/700 (sans-serif)
 **Body:** Libre Caslon Text 400, 400 italic, 700 (Georgia)
 **Los vinilos de Big:** la sección entera cambia de voz (2026-10-29): títulos en Playfair Display 500 y 500 italic (`--face-display`; el título de la sección va en itálica), y el cuerpo, la dedicatoria y las notas en Lora 400 y 400 italic (`--face-body` y `--face-dedication` redefinidos en `[data-section="vinilos"]`). La dedicatoria va en Lora italic, sin comillas.
-**Display por sección:** Bagel Fat One (Y2K), Bodoni Moda 400 + italic (Alfombra), Playfair Display (Vinilos), Monoton (Cartelera), Special Elite (Cartas y las cartas de él)
+**Display por sección:** Bagel Fat One (Y2K), Bodoni Moda 400 + italic (Alfombra), Playfair Display (Vinilos), Monoton (Cartelera), UnifrakturCook (título de Cartas mágicas, la gótica de la cabecera), Special Elite (las cartas de él)
 
 **Character:** Gótica de cabecera + gótica condensada de titular + serif de periódico: la voz de un diario de gran tirada. Las caras display de sección son la voz de cada mundo y aparecen también en la portada, en el nombre de cada pliego, como los logos de sección de un diario.
 

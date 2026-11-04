@@ -2,9 +2,10 @@
 import './Marks.css'
 
 /** Lacre aplastado con borde irregular y la inicial hundida. Rosa = ella, dorado viejo = él. */
-export function WaxSeal({ initial, her, size = 34, label }: { initial: string; her: boolean; size?: number; label?: string }) {
-  const [base, deep, hi] = her ? ['#c2255c', '#7d1238', '#f07aa4'] : ['#a8842f', '#5e4512', '#e6c877']
-  const id = her ? 'wax-her' : 'wax-him'
+export function WaxSeal({ initial, her, wine = false, size = 34, label }: { initial: string; her: boolean; wine?: boolean; size?: number; label?: string }) {
+  // Lacre: rosa para ella, dorado para él; vino para el Tin de Cartas mágicas
+  const [base, deep, hi] = wine ? ['#a3262a', '#4f0c0e', '#e0706a'] : her ? ['#c2255c', '#7d1238', '#f07aa4'] : ['#a8842f', '#5e4512', '#e6c877']
+  const id = wine ? 'wax-wine' : her ? 'wax-her' : 'wax-him'
   return (
     <svg className="wax-seal" width={size} height={size} viewBox="0 0 64 64" role={label ? 'img' : undefined} aria-label={label} aria-hidden={label ? undefined : true}>
       <defs>

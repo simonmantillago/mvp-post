@@ -1,0 +1,486 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cartas mágicas · mockup</title>
+<style>
+  @font-face { font-family: "UnifrakturCook"; font-weight: 700; src: url(/node_modules/@fontsource/unifrakturcook/files/unifrakturcook-latin-700-normal.woff2) format("woff2"); }
+  @font-face { font-family: Antonio; font-weight: 500; src: url(/node_modules/@fontsource/antonio/files/antonio-latin-500-normal.woff2) format("woff2"); }
+  @font-face { font-family: Antonio; font-weight: 700; src: url(/node_modules/@fontsource/antonio/files/antonio-latin-700-normal.woff2) format("woff2"); }
+  @font-face { font-family: "Libre Caslon Text"; src: url(/node_modules/@fontsource/libre-caslon-text/files/libre-caslon-text-latin-400-normal.woff2) format("woff2"); }
+  @font-face { font-family: "Libre Caslon Text"; font-style: italic; src: url(/node_modules/@fontsource/libre-caslon-text/files/libre-caslon-text-latin-400-italic.woff2) format("woff2"); }
+  @font-face { font-family: "Special Elite"; src: url(/node_modules/@fontsource/special-elite/files/special-elite-latin-400-normal.woff2) format("woff2"); }
+  @font-face { font-family: "Bodoni Moda"; font-style: italic; src: url(/node_modules/@fontsource/bodoni-moda/files/bodoni-moda-latin-400-italic.woff2) format("woff2"); }
+
+  /* Roles de la sección (mismos nombres que tokens.css) */
+  :root {
+    --ground: #e6d7b8;          /* pergamino */
+    --surface: #f1e6cc;         /* hoja de carta */
+    --text: #2a1c10;            /* tinta de pluma, sepia casi negra */
+    --text-soft: #5c4630;       /* tinta corrida */
+    --accent: #7e1a1c;          /* lacre vino */
+    --accent-text: #7e1a1c;
+    --on-accent: #f6ead0;
+    --gold: #9a7630;            /* filete dorado viejo */
+    --rule: #3a2814;
+    --focus: #7e1a1c;
+    --howler: #8c1d1d;          /* sobre del vociferador */
+    --howler-deep: #571010;
+    --head: Antonio, "Arial Narrow", sans-serif;
+    --body: "Libre Caslon Text", Georgia, serif;
+    --type: "Special Elite", "Courier New", monospace;
+    --mast: "UnifrakturCook", serif;
+    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --page: #17110b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  ::selection { background: var(--accent); color: var(--on-accent); }
+  body { background: var(--page); color: #e9dcc0; font: 16px/1.5 var(--body); padding: 48px 16px 96px; }
+  button { font: inherit; color: inherit; cursor: pointer; border: 0; background: none; }
+  button:focus-visible, textarea:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+
+  .doc { max-width: 1300px; margin: 0 auto 40px; }
+  .doc h1 { font: 700 clamp(2.2rem, 6vw, 3.4rem)/1 var(--mast); color: #f1e6cc; }
+  .doc p { max-width: 64ch; margin-top: 12px; color: #c9b893; }
+  .doc ul { max-width: 64ch; margin: 12px 0 0 1.1em; color: #c9b893; }
+  .doc li + li { margin-top: 4px; }
+
+  .boards { display: flex; flex-wrap: wrap; gap: 48px 32px; justify-content: center; max-width: 1300px; margin: 0 auto; }
+  figure { width: min(390px, 100%); }
+  figcaption { margin-top: 16px; }
+  figcaption b { display: block; font: 700 1.05rem/1.2 var(--head); letter-spacing: 0.08em; text-transform: uppercase; color: #e0c27a; }
+  figcaption span { display: block; margin-top: 6px; font: italic 0.92rem/1.45 var(--body); color: #c9b893; }
+  figcaption button { margin-top: 10px; padding: 8px 14px; background: #2a1f14; color: #e0c27a; font: 500 0.8rem/1 var(--head); letter-spacing: 0.1em; text-transform: uppercase; }
+
+  /* ── Teléfono ── */
+  .phone {
+    position: relative; height: 844px; overflow: hidden; border-radius: 44px;
+    background-color: var(--ground);
+    background-image:
+      radial-gradient(130% 90% at 50% 45%, transparent 55%, rgba(92, 54, 18, 0.38) 100%),
+      var(--parchment);
+    box-shadow: 0 0 0 10px #1b1510, 0 0 0 11px #3a2c1e, 0 40px 80px -30px #000;
+    color: var(--text);
+  }
+  .screen { position: absolute; inset: 0; bottom: 150px; overflow-y: auto; padding: 56px 16px 32px; scrollbar-width: none; }
+  .screen::-webkit-scrollbar { display: none; }
+  .phone.is-shaking { animation: shake 620ms var(--ease-out); }
+  @keyframes shake {
+    0%, 100% { translate: 0 0; } 15% { translate: -10px 2px; } 30% { translate: 9px -2px; }
+    45% { translate: -7px 1px; } 60% { translate: 5px -1px; } 75% { translate: -3px 0; }
+  }
+
+  /* Folio del periódico: fijo en todas las secciones */
+  .folio { display: flex; gap: 10px; align-items: baseline; padding-bottom: 8px; border-bottom: 1px solid var(--rule); font: 500 0.75rem/1 var(--head); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-soft); }
+  .folio .mp { font: 700 1rem/1 var(--mast); letter-spacing: 0; text-transform: none; color: var(--text); }
+  .folio .back { margin-left: auto; width: 24px; height: 24px; color: var(--text); align-self: center; }
+
+  /* Cabecera de la sección: gótica de la cabecera del periódico */
+  .hed { margin-top: 18px; text-align: center; }
+  .hed h2 { font: 700 clamp(2.5rem, 12vw, 3rem)/1 var(--mast); color: var(--text); }
+  .hed p { margin-top: 6px; padding: 5px 0; border-block: 3px double var(--gold); font: italic 0.875rem/1.3 var(--body); color: var(--text-soft); }
+
+  /* ── Cartas ── */
+  .list { display: grid; gap: 30px; padding-top: 26px; list-style: none; }
+  .letter {
+    position: relative; max-width: 86%; padding: 18px 18px 14px;
+    background-color: var(--surface);
+    background-image:
+      linear-gradient(180deg, transparent 49.6%, rgba(90, 60, 25, 0.13) 50%, rgba(255, 250, 235, 0.35) 50.6%, transparent 52%),
+      var(--sheet);
+    filter: drop-shadow(0 7px 9px rgba(60, 35, 10, 0.32));
+  }
+  .letter--theirs { justify-self: start; rotate: -0.8deg; }
+  .letter--mine { justify-self: end; rotate: 0.6deg; }
+  .letter .body { white-space: pre-wrap; font: 1rem/1.55 var(--body); color: var(--text); }
+  .letter--him .body { font-family: var(--type); font-size: 0.97rem; }
+  .letter .sign { margin-top: 8px; padding-right: 2.6rem; font: italic 0.75rem/1.3 var(--body); color: var(--text-soft); }
+  .seal { position: absolute; right: 12px; bottom: -14px; rotate: -12deg; }
+  .letter--mine .seal { rotate: 10deg; }
+
+  .seen { margin-top: -10px; text-align: right; font: italic 0.75rem/1 var(--body); color: var(--text-soft); }
+
+  /* ── Tin: el vociferador ── */
+  .howler { position: relative; margin: 6px -16px 0; padding: 0 16px; list-style: none; }
+  .howler-env {
+    position: relative; padding: 46px 16px 18px; text-align: center; color: var(--on-accent);
+    background:
+      radial-gradient(80% 120% at 50% 0%, rgba(255, 190, 150, 0.16), transparent 60%),
+      linear-gradient(var(--howler), var(--howler-deep));
+    box-shadow: 0 12px 22px -12px rgba(40, 8, 8, 0.7);
+  }
+  /* la solapa abierta, como una boca */
+  .howler-flap {
+    position: absolute; left: 0; right: 0; top: 0; height: 40px;
+    background: linear-gradient(var(--howler-deep), #3f0a0a);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top; transform: rotateX(0deg);
+  }
+  .howler-env .seal { position: absolute; left: 50%; top: 22px; right: auto; bottom: auto; translate: -50% 0; rotate: 0deg; }
+  .howler-hed { margin-top: 10px; font: 700 2.7rem/0.95 var(--head); text-transform: uppercase; letter-spacing: -0.01em; }
+  .howler-sub { margin-top: 6px; font: italic 0.875rem/1.3 var(--body); color: #ecd6b8; }
+  .is-arriving .howler-env { animation: howl 900ms var(--ease-out) both; }
+  .is-arriving .howler-flap { animation: flap 700ms 120ms var(--ease-out) both; }
+  .is-arriving .howler-hed { animation: shout 760ms 260ms var(--ease-out) both; }
+  @keyframes howl { 0% { transform: scale(0.82) rotate(-3deg); } 40% { transform: scale(1.06) rotate(1.5deg); } 100% { transform: none; } }
+  @keyframes flap { 0% { transform: rotateX(0); } 100% { transform: rotateX(180deg); opacity: 0.85; } }
+  @keyframes shout { 0% { transform: scale(0.3); opacity: 0; filter: blur(6px); } 60% { transform: scale(1.12); opacity: 1; filter: none; } 100% { transform: none; } }
+
+  /* ── Redactar ── */
+  .compose {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 150px; padding: 12px 16px 30px;
+    background-color: var(--ground); background-image: var(--parchment);
+    border-top: 3px double var(--gold);
+    display: grid; gap: 8px; align-content: start;
+  }
+  .row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: end; }
+  textarea {
+    width: 100%; min-height: 2.9rem; padding: 9px 12px; resize: none;
+    border: 1px solid var(--text-soft); background: var(--surface);
+    font: 1rem/1.4 var(--type); color: var(--text); caret-color: var(--accent);
+  }
+  textarea::placeholder { color: #7a6448; }
+  .send { width: 2.9rem; height: 2.9rem; display: grid; place-items: center; background: var(--accent); color: var(--on-accent); border-radius: 50%; box-shadow: 0 4px 8px -3px rgba(60, 10, 10, 0.6); }
+  .send:disabled { opacity: 0.45; }
+  .tin {
+    justify-self: start; display: inline-flex; align-items: center; gap: 10px;
+    min-height: 2.75rem; padding: 0 16px 0 10px; background: var(--howler); color: var(--on-accent);
+    font: 700 1.15rem/1 var(--head); letter-spacing: 0.06em; text-transform: uppercase;
+    box-shadow: 0 5px 10px -5px rgba(60, 10, 10, 0.7);
+  }
+  .tin:active { transform: translateY(1px); }
+  .tin .seal { position: static; rotate: -8deg; }
+
+  /* ── Vacío ── */
+  .empty { margin-top: 64px; text-align: center; padding: 0 16px; }
+  .empty svg { width: 132px; height: auto; color: var(--text); opacity: 0.85; }
+  .empty h3 { margin-top: 18px; font: 700 1.6rem/1.1 var(--head); text-transform: uppercase; letter-spacing: 0.02em; }
+  .empty p { margin: 8px auto 0; max-width: 30ch; font: italic 1rem/1.45 var(--body); color: var(--text-soft); }
+
+  /* ── Alternativas a los lacres con inicial ── */
+  .alts { max-width: 1300px; margin: 72px auto 0; }
+  .alts > h2 { font: 700 clamp(1.8rem, 5vw, 2.6rem)/1 var(--mast); color: #f1e6cc; text-align: center; }
+  .alts > p { max-width: 60ch; margin: 10px auto 0; text-align: center; color: #c9b893; }
+  .alts .boards { margin-top: 32px; }
+  .tile {
+    position: relative; padding: 28px 16px 34px; border-radius: 18px; color: var(--text);
+    background-color: var(--ground);
+    background-image: radial-gradient(130% 90% at 50% 45%, transparent 55%, rgba(92, 54, 18, 0.38) 100%), var(--parchment);
+    box-shadow: 0 30px 60px -30px #000;
+  }
+  .tile .list { padding-top: 0; gap: 26px; }
+
+  /* A · Firma de pluma */
+  .alt-a .sign { padding-right: 0; }
+  .alt-a .signature { display: block; margin-top: 10px; font: italic 1.2rem/1 var(--body); }
+  .alt-a .letter--him .signature { font: italic 1.25rem/1 "Bodoni Moda", serif; }
+  .alt-a .letter--her .signature { color: #7d1238; }
+  .alt-a .letter--him .signature { color: #5e4512; }
+  .alt-a .flourish { display: block; width: 120px; height: 14px; margin-top: 2px; }
+  .alt-a .letter--her .flourish { color: #7d1238; }
+  .alt-a .letter--him .flourish { color: #5e4512; }
+  .alt-a .date { display: block; margin-top: 6px; font: italic 0.75rem/1.2 var(--body); color: var(--text-soft); }
+
+  /* B · Estampilla de lechucería */
+  .alt-b .letter { padding-right: 72px; }
+  .alt-b .sign { padding-right: 0; }
+  .stamp {
+    position: absolute; top: 12px; right: 12px; width: 46px; height: 56px; padding: 4px;
+    background: #f6eedb;
+    -webkit-mask: radial-gradient(circle 2.4px at 50% 50%, transparent 98%, #000) -3px -3px / 6px 6px, linear-gradient(#000 0 0) center / calc(100% - 6px) calc(100% - 6px) no-repeat;
+            mask: radial-gradient(circle 2.4px at 50% 50%, transparent 98%, #000) -3px -3px / 6px 6px, linear-gradient(#000 0 0) center / calc(100% - 6px) calc(100% - 6px) no-repeat;
+    rotate: 4deg; filter: drop-shadow(0 1px 1px rgba(60, 35, 10, 0.3));
+  }
+  .stamp-in { display: grid; place-items: center; height: 100%; padding: 3px; color: #f6eedb; }
+  .stamp--her .stamp-in { background: #b01f53; }
+  .stamp--him .stamp-in { background: #8a6d2c; }
+  .stamp-in svg { width: 26px; height: 26px; }
+  .stamp-in small { font: 700 0.6875rem/1 var(--head); letter-spacing: 0.04em; }
+  .postmark { position: absolute; top: 30px; right: 26px; width: 52px; height: 52px; color: rgba(42, 28, 16, 0.55); pointer-events: none; rotate: -14deg; }
+
+  /* C · Tinta de cada uno */
+  .alt-c .sign { padding-right: 0; display: flex; align-items: center; gap: 6px; }
+  .alt-c .letter--her .body, .alt-c .letter--her .sign { color: #6e1430; }
+  .alt-c .letter--him .body, .alt-c .letter--him .sign { color: #1f3a2e; }
+  .alt-c .sign svg { width: 16px; height: 16px; flex: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .phone.is-shaking, .is-arriving .howler-env, .is-arriving .howler-flap, .is-arriving .howler-hed { animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="doc">
+  <h1>Cartas mágicas</h1>
+  <p>Mockup de la lechucería de The MVP Post. El papel rayado y la máquina de escribir pasan a ser pergamino, tinta de pluma y lacre vino. La estructura del periódico se queda igual: folio en Antonio, título en la gótica de la cabecera, Libre Caslon para las cartas de ella y Special Elite para las de él.</p>
+  <ul>
+    <li>El pergamino y las hojas son texturas raster hechas en canvas, igual que el leopardo y el nogal.</li>
+    <li>El Tin es un vociferador: un sobre rojo que abre la solapa y grita «¡Tin! ¡Tin!».</li>
+    <li>No usa escudos ni nombres reales. La lechuza del estado vacío es un dibujo propio.</li>
+  </ul>
+</header>
+
+<main class="boards">
+  <!-- 1 · Correspondencia -->
+  <figure>
+    <div class="phone" id="p1">
+      <div class="screen">
+        <div class="folio"><span class="mp">The MVP Post</span><span>Martes, 3 nov</span><span>Pág. 6</span>
+          <svg class="back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-label="Volver a portada"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+        </div>
+        <div class="hed">
+          <h2>Cartas mágicas</h2>
+          <p>Correo por lechuza · entrega inmediata</p>
+        </div>
+        <ol class="list">
+          <li class="letter letter--theirs letter--her">
+            <p class="body">Querido columnista: tu última edición me hizo sonreír en el metro.</p>
+            <p class="sign">— María Victoria · 3 nov, 20:49</p>
+            <span class="seal" data-seal="her">M</span>
+          </li>
+          <li class="letter letter--mine letter--him">
+            <p class="body">La redacción agradece a su lectora más fiel.</p>
+            <p class="sign">— Simón · 3 nov, 21:09</p>
+            <span class="seal" data-seal="him">S</span>
+          </li>
+          <li class="letter letter--theirs letter--her">
+            <p class="body">¿Vemos algo esta noche? Yo pongo las cobijas.</p>
+            <p class="sign">— María Victoria · 3 nov, 21:59</p>
+            <span class="seal" data-seal="her">M</span>
+          </li>
+        </ol>
+        <p class="seen" style="margin-top:14px">Leída</p>
+      </div>
+      <form class="compose" onsubmit="return false">
+        <div class="row">
+          <textarea rows="2" placeholder="Escribe tu carta…" aria-label="Escribe tu carta"></textarea>
+          <button class="send" type="submit" aria-label="Enviar carta"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 3C12 4 7 9 5 17l-1 4"/><path d="M20 3c-1 6-5 10-11 11"/><path d="M8.5 11.5 13 9"/></svg></button>
+        </div>
+        <button class="tin" type="button" data-tin><span class="seal" data-seal="tin" data-size="26">T</span>Tin</button>
+      </form>
+    </div>
+    <figcaption><b>Correspondencia</b><span>Cada carta es una hoja de pergamino con el doblez marcado y su lacre: rosa para ella y dorado para él. «Visto» pasa a decir «Leída». El botón de enviar es un lacre vino con una pluma.</span></figcaption>
+  </figure>
+
+  <!-- 2 · Llega un Tin -->
+  <figure>
+    <div class="phone" id="p2">
+      <div class="screen">
+        <div class="folio"><span class="mp">The MVP Post</span><span>Martes, 3 nov</span><span>Pág. 6</span>
+          <svg class="back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-label="Volver a portada"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+        </div>
+        <div class="hed">
+          <h2>Cartas mágicas</h2>
+          <p>Correo por lechuza · entrega inmediata</p>
+        </div>
+        <ol class="list">
+          <li class="letter letter--theirs letter--her">
+            <p class="body">¿Vemos algo esta noche? Yo pongo las cobijas.</p>
+            <p class="sign">— María Victoria · 3 nov, 21:59</p>
+            <span class="seal" data-seal="her">M</span>
+          </li>
+          <li class="letter letter--mine letter--him">
+            <p class="body">Trato hecho. Llevo las palomitas.</p>
+            <p class="sign">— Simón · 3 nov, 22:03</p>
+            <span class="seal" data-seal="him">S</span>
+          </li>
+          <li class="howler" id="howler">
+            <div class="howler-env">
+              <div class="howler-flap"></div>
+              <span class="seal" data-seal="tin" data-size="38">T</span>
+              <p class="howler-hed">¡Tin! ¡Tin!</p>
+              <p class="howler-sub">María Victoria quiere tin · 22:07</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+      <form class="compose" onsubmit="return false">
+        <div class="row">
+          <textarea rows="2" placeholder="Escribe tu carta…" aria-label="Escribe tu carta"></textarea>
+          <button class="send" type="submit" aria-label="Enviar carta" disabled><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 3C12 4 7 9 5 17l-1 4"/><path d="M20 3c-1 6-5 10-11 11"/><path d="M8.5 11.5 13 9"/></svg></button>
+        </div>
+        <button class="tin" type="button" data-tin><span class="seal" data-seal="tin" data-size="26">T</span>Tin</button>
+      </form>
+    </div>
+    <figcaption><b>Llega un Tin</b><span>Es un vociferador: el sobre rojo crece, abre la solapa y suelta «¡Tin! ¡Tin!» mientras la página se sacude. Si lo mandaste tú, abajo dice «Pediste tin».</span><button type="button" id="replay">Ver la llegada otra vez</button></figcaption>
+  </figure>
+
+  <!-- 3 · Buzón vacío -->
+  <figure>
+    <div class="phone" id="p3">
+      <div class="screen">
+        <div class="folio"><span class="mp">The MVP Post</span><span>Martes, 3 nov</span><span>Pág. 6</span>
+          <svg class="back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-label="Volver a portada"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>
+        </div>
+        <div class="hed">
+          <h2>Cartas mágicas</h2>
+          <p>Correo por lechuza · entrega inmediata</p>
+        </div>
+        <div class="empty">
+          <!-- lechuza propia en tinta (en la app sería un asset raster) -->
+          <svg viewBox="0 0 120 130" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M30 34c0-16 12-24 30-24s30 8 30 24"/>
+            <path d="M30 34 24 18l14 8M90 34l6-16-14 8"/>
+            <path d="M30 34c-6 20-4 48 6 66 6 10 14 16 24 16s18-6 24-16c10-18 12-46 6-66"/>
+            <circle cx="47" cy="44" r="10"/><circle cx="73" cy="44" r="10"/>
+            <circle cx="47" cy="44" r="3" fill="currentColor"/><circle cx="73" cy="44" r="3" fill="currentColor"/>
+            <path d="m56 54 4 7 4-7"/>
+            <path d="M44 74c5 3 11 3 16 0M60 74c5 3 11 3 16 0M48 86c4 3 8 3 12 0M60 86c4 3 8 3 12 0"/>
+            <path d="M46 116v8M54 116v8M66 116v8M74 116v8M10 124h100"/>
+          </svg>
+          <h3>La lechucería está en silencio</h3>
+          <p>Escríbele la primera carta a Simón. Llega al instante y con notificación.</p>
+        </div>
+      </div>
+      <form class="compose" onsubmit="return false">
+        <div class="row">
+          <textarea rows="2" aria-label="Escribe tu carta">Querido columnista:</textarea>
+          <button class="send" type="submit" aria-label="Enviar carta"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 3C12 4 7 9 5 17l-1 4"/><path d="M20 3c-1 6-5 10-11 11"/><path d="M8.5 11.5 13 9"/></svg></button>
+        </div>
+        <button class="tin" type="button" data-tin><span class="seal" data-seal="tin" data-size="26">T</span>Tin</button>
+      </form>
+    </div>
+    <figcaption><b>Buzón vacío</b><span>Una lechuza dibujada en tinta reemplaza la nota de prensa. En la app sería una ilustración raster, como las alas de Alfombra roja.</span></figcaption>
+  </figure>
+</main>
+
+<section class="alts">
+  <h2>¿Quién escribe?</h2>
+  <p>Tres maneras de distinguir las cartas de cada uno sin los lacres con la M y la S. El lacre vino queda solo en el Tin.</p>
+  <div class="boards">
+    <!-- A · Firma de pluma -->
+    <figure>
+      <div class="tile alt-a">
+        <ol class="list">
+          <li class="letter letter--theirs letter--her">
+            <p class="body">Querido columnista: tu última edición me hizo sonreír en el metro.</p>
+            <span class="signature">María Victoria</span>
+            <svg class="flourish" viewBox="0 0 120 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 9c18-6 30 4 48-1 12-3 18-7 26-4 6 2 2 7-4 6M76 7c14 2 28-1 42-4"/></svg>
+            <span class="date">3 nov, 20:49</span>
+          </li>
+          <li class="letter letter--mine letter--him">
+            <p class="body">La redacción agradece a su lectora más fiel.</p>
+            <span class="signature">Simón</span>
+            <svg class="flourish" viewBox="0 0 120 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 6c10 4 22 5 34 1 8-3 12-5 18-2 5 3-1 7-6 5M54 8c20 3 42 1 62-3"/></svg>
+            <span class="date">3 nov, 21:09</span>
+          </li>
+        </ol>
+      </div>
+      <figcaption><b>A · Firma de pluma</b><span>Cada carta cierra con el nombre escrito a pluma y un rasgo de tinta debajo: rosa vino para ella y sepia dorado para él. Como firmar una carta de verdad.</span></figcaption>
+    </figure>
+
+    <!-- B · Estampilla -->
+    <figure>
+      <div class="tile alt-b">
+        <ol class="list">
+          <li class="letter letter--theirs letter--her">
+            <p class="body">Querido columnista: tu última edición me hizo sonreír en el metro.</p>
+            <p class="sign">— María Victoria · 3 nov, 20:49</p>
+            <span class="stamp stamp--her"><span class="stamp-in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8c0-3 3-5 6-5s6 2 6 5M6 8 5 4l3 2M18 8l1-4-3 2M6 8c-1 5 0 10 3 12 1 1 2 1 3 1s2 0 3-1c3-2 4-7 3-12"/><circle cx="9.5" cy="10" r="1.8"/><circle cx="14.5" cy="10" r="1.8"/><path d="m11 13 1 1.5 1-1.5"/></svg><small>MVP</small></span></span>
+            <svg class="postmark" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="22" cy="32" r="17"/><circle cx="22" cy="32" r="13"/><path d="M42 24c4-3 8 3 12 0s8 3 10 0M42 32c4-3 8 3 12 0s8 3 10 0M42 40c4-3 8 3 12 0s8 3 10 0"/></svg>
+          </li>
+          <li class="letter letter--mine letter--him">
+            <p class="body">La redacción agradece a su lectora más fiel.</p>
+            <p class="sign">— Simón · 3 nov, 21:09</p>
+            <span class="stamp stamp--him"><span class="stamp-in"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 3C12 4 7 9 5 17l-1 4"/><path d="M20 3c-1 6-5 10-11 11"/><path d="M8.5 11.5 13 9"/></svg><small>SMG</small></span></span>
+            <svg class="postmark" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="22" cy="32" r="17"/><circle cx="22" cy="32" r="13"/><path d="M42 24c4-3 8 3 12 0s8 3 10 0M42 32c4-3 8 3 12 0s8 3 10 0M42 40c4-3 8 3 12 0s8 3 10 0"/></svg>
+          </li>
+        </ol>
+      </div>
+      <figcaption><b>B · Estampilla de lechucería</b><span>Arriba a la derecha va una estampilla perforada con su matasellos del día: la de ella rosa con una lechuza y la de él dorada con una pluma. Se lee como correo de verdad.</span></figcaption>
+    </figure>
+
+    <!-- C · Tinta de cada uno -->
+    <figure>
+      <div class="tile alt-c">
+        <ol class="list">
+          <li class="letter letter--theirs letter--her">
+            <p class="body">Querido columnista: tu última edición me hizo sonreír en el metro.</p>
+            <p class="sign"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 3C12 4 7 9 5 17l-1 4"/><path d="M20 3c-1 6-5 10-11 11"/></svg>María Victoria · 3 nov, 20:49</p>
+          </li>
+          <li class="letter letter--mine letter--him">
+            <p class="body">La redacción agradece a su lectora más fiel.</p>
+            <p class="sign"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 3C12 4 7 9 5 17l-1 4"/><path d="M20 3c-1 6-5 10-11 11"/></svg>Simón · 3 nov, 21:09</p>
+          </li>
+        </ol>
+      </div>
+      <figcaption><b>C · Tinta de cada uno</b><span>Sin marcas: cada uno escribe con su tinta. Ella en tinta vino y él en verde botella, con una plumita junto a la firma. Es la opción más limpia.</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<script>
+  // Texturas raster en canvas (como src/ui/leopard.ts): pergamino de fondo y hoja de carta.
+  function paper(w, h, base, fibers, stains, seed) {
+    let s = seed
+    const rnd = () => ((s = (s * 16807) % 2147483647) / 2147483647)
+    const c = document.createElement('canvas'); c.width = w; c.height = h
+    const g = c.getContext('2d')
+    g.fillStyle = base; g.fillRect(0, 0, w, h)
+    for (let i = 0; i < stains; i++) {
+      const x = rnd() * w, y = rnd() * h, r = 40 + rnd() * 140
+      const gr = g.createRadialGradient(x, y, 0, x, y, r)
+      gr.addColorStop(0, `rgba(140, 95, 40, ${0.05 + rnd() * 0.08})`); gr.addColorStop(1, 'rgba(140,95,40,0)')
+      g.fillStyle = gr; g.fillRect(x - r, y - r, r * 2, r * 2)
+    }
+    const img = g.getImageData(0, 0, w, h), d = img.data
+    for (let i = 0; i < d.length; i += 4) { const n = (rnd() - 0.5) * 18; d[i] += n; d[i + 1] += n; d[i + 2] += n * 0.8 }
+    g.putImageData(img, 0, 0)
+    g.lineCap = 'round'
+    for (let i = 0; i < fibers; i++) {
+      const x = rnd() * w, y = rnd() * h, a = rnd() * Math.PI, l = 6 + rnd() * 26
+      g.strokeStyle = `rgba(${rnd() < 0.5 ? '90,60,25' : '255,248,230'}, ${0.08 + rnd() * 0.12})`
+      g.lineWidth = 0.6 + rnd() * 0.6
+      g.beginPath(); g.moveTo(x, y); g.quadraticCurveTo(x + Math.cos(a) * l * 0.5 + rnd() * 4, y + Math.sin(a) * l * 0.5, x + Math.cos(a) * l, y + Math.sin(a) * l); g.stroke()
+    }
+    return c.toDataURL('image/png')
+  }
+  document.documentElement.style.setProperty('--parchment', `url(${paper(420, 420, '#e2d1ad', 900, 26, 7)})`)
+  document.documentElement.style.setProperty('--sheet', `url(${paper(320, 320, '#efe3c6', 500, 10, 31)})`)
+
+  // Bordes de hoja irregulares (barbas del papel)
+  function deckle(el, seed) {
+    let s = seed; const rnd = () => ((s = (s * 16807) % 2147483647) / 2147483647)
+    const pts = [], n = 22
+    for (let i = 0; i <= n; i++) pts.push(`${(i / n) * 100}% ${rnd() * 3}px`)
+    for (let i = 0; i <= n / 2; i++) pts.push(`calc(100% - ${rnd() * 3}px) ${(i / (n / 2)) * 100}%`)
+    for (let i = n; i >= 0; i--) pts.push(`${(i / n) * 100}% calc(100% - ${rnd() * 3}px)`)
+    for (let i = n / 2; i >= 0; i--) pts.push(`${rnd() * 3}px ${(i / (n / 2)) * 100}%`)
+    el.style.clipPath = `polygon(${pts.join(',')})`
+  }
+  // El clip va en un hijo para no cortar el lacre: envolver el contenido
+  document.querySelectorAll('.letter').forEach((el, i) => {
+    const seal = el.querySelector('.seal')
+    const sheet = document.createElement('div')
+    sheet.style.cssText = 'position:absolute;inset:0;z-index:-1;background:inherit'
+    el.style.background = 'none'; el.style.isolation = 'isolate'
+    sheet.style.backgroundColor = 'var(--surface)'
+    sheet.style.backgroundImage = getComputedStyle(el).backgroundImage
+    el.style.backgroundImage = 'none'
+    el.prepend(sheet); deckle(sheet, 11 + i * 97)
+    if (seal) el.append(seal)
+  })
+
+  // Lacres: misma forma que WaxSeal (src/ui/Marks.tsx); vino para el Tin
+  const tones = { her: ['#c2255c', '#7d1238', '#f07aa4'], him: ['#a8842f', '#5e4512', '#e6c877'], tin: ['#a3262a', '#4f0c0e', '#e0706a'] }
+  document.querySelectorAll('[data-seal]').forEach((el, i) => {
+    const [base, deep, hi] = tones[el.dataset.seal], id = 'w' + i, size = el.dataset.size || 34, t = el.textContent
+    el.innerHTML = `<svg width="${size}" height="${size}" viewBox="0 0 64 64" aria-hidden="true"><defs><radialGradient id="${id}" cx="38%" cy="32%" r="70%"><stop offset="0" stop-color="${hi}"/><stop offset=".45" stop-color="${base}"/><stop offset="1" stop-color="${deep}"/></radialGradient></defs><path d="M33 3c6 0 9 4 14 5 6 2 11 6 12 12 1 5 4 8 3 14-1 5-5 8-6 13-2 6-7 9-13 11-5 2-9 4-15 3-6-1-9-5-14-8-5-4-9-8-10-14-1-6 1-10 2-15 2-6 4-11 9-14 5-4 11-7 18-7z" fill="url(#${id})"/><circle cx="32" cy="33" r="19" fill="none" stroke="${deep}" stroke-width="2.5" opacity=".7"/><text x="32.8" y="42.8" text-anchor="middle" font-family="Bodoni Moda, serif" font-style="italic" font-size="26" fill="${hi}" opacity=".55">${t}</text><text x="32" y="42" text-anchor="middle" font-family="Bodoni Moda, serif" font-style="italic" font-size="26" fill="${deep}">${t}</text></svg>`
+    el.style.display = 'inline-block'; el.style.lineHeight = '0'
+  })
+
+  // Llegada del Tin
+  function arrive() {
+    const p = document.getElementById('p2'), h = document.getElementById('howler')
+    p.classList.remove('is-shaking'); h.classList.remove('is-arriving'); void p.offsetWidth
+    p.classList.add('is-shaking'); h.classList.add('is-arriving')
+    p.querySelector('.screen').scrollTop = 9999
+  }
+  document.getElementById('replay').onclick = arrive
+  document.querySelectorAll('[data-tin]').forEach((b) => (b.onclick = arrive))
+  window.addEventListener('load', () => setTimeout(arrive, 500))
+</script>
+</body>
+</html>

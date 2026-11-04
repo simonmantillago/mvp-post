@@ -15,7 +15,7 @@ PWA privada de pareja, regalo para **MVP**. Es un **periódico neoyorquino de 20
 - **Nombre:** **The MVP Post** (cabecera gótica). Pie: **"SMG Development®"**.
 - **Navegación:** portada → tocar titular → pasar la página → sección a pantalla completa con estética propia. Flecha ← arriba a la derecha = volver a portada (antes esquina doblada; cambiada el 2026-10-29). Una ruta por sección (deep links desde notificaciones).
 - **Secciones v1:** Llegada + login ("¿Quién lee hoy?", credenciales de prensa) · Portada + La columna (ediciones) · **Estilo · Y2K** (collage editable de fotos de la galería sin fondo + stickers + recortes; mover, girar, escalar, **fijar con candado**; burbuja de acciones tipo iOS) · **Los Ángeles de Victoria** (antes Alfombra roja; cámara en la app → polaroids con texto) · **Los vinilos de Big** (tocadiscos 3D + «Colección» en catálogo: funda con el disco asomando y quién la dedicó) · **Cartelera** (videoclub, turnos, ratings) · **Cartas mágicas** (antes Cartas al editor; chat + ¡Extra!) · Suscripción (ajustes).
-- **Estética:** portada de papel (gris claro frío, tinta negra, rosa como segunda tinta); cada sección rompe: Y2K = collage de recortes, brillo, leopardo, stickers; Alfombra roja = dark leopard, dorado, pedrería, alas de ángel, flash; Vinilos = penthouse classy (nogal, cuero, ámbar, sin brillo; Playfair Display + Lora); Cartelera = videoclub de noche; Cartas = papel y máquina de escribir.
+- **Estética:** portada de papel (gris claro frío, tinta negra, rosa como segunda tinta); cada sección rompe: Y2K = collage de recortes, brillo, leopardo, stickers; Alfombra roja = dark leopard, dorado, pedrería, alas de ángel, flash; Vinilos = penthouse classy (nogal, cuero, ámbar, sin brillo; Playfair Display + Lora); Cartelera = videoclub de noche; Cartas = lechucería: pergamino, tinta de pluma, estampillas de quién escribe y el Tin como vociferador rojo (2026-11-03).
 - **Notificaciones push de todo lo nuevo** (edición, collage, foto, ♥, canción, carta, ¡Extra!, películas) + badge numérico en el ícono. Flujo: triggers → `activity` → pg_net → Edge Function `notify` → Web Push. Ver data-model.md.
 - **iOS:** Web Push solo con la PWA instalada (iOS 16.4+), permiso pedido desde un toque. No hay Vibration API → el ¡Extra! es visual + sonido. Audio solo tras gesto. El menú nativo de copiar/pegar no admite acciones propias → la burbuja del collage es un componente propio con ese look.
 - Texturas e ilustraciones (leopardo, stickers, alas, papel, VHS, vinilos) son **assets raster**, no dibujos en CSS.
@@ -124,6 +124,7 @@ docs/                     # specs, wireframe, inspiración
 
 ### Fase 4 — Secciones
 - [x] Cartas al editor (Realtime + ¡Extra!)
+- [x] Cartas mágicas ronda 2 (2026-11-03): el ¡Extra! ahora es **Tin** (push «¡TIN! ¡TIN!», `notify` desplegada y probada en iPhone); estética de lechucería (pergamino, estampillas en vez de lacres con inicial, Tin como vociferador). Mockup: `docs/wireframes/cartas.html`. Falta ver la estética en el iPhone.
 - [x] Estilo · Y2K (collage, gestos, burbuja iOS, fijar) — falta **quitar fondo** a las fotos
 - [x] Alfombra roja (cámara, flash, polaroids, ♥)
 - [x] Los vinilos de Big (oEmbed, tocadiscos, pila de fundas)

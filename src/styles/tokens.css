@@ -141,17 +141,26 @@
   --face-display: "Monoton", sans-serif;
 }
 
-/* Cartas al editor: papel de carta y máquina de escribir */
+/* Cartas mágicas: lechucería de pergamino, tinta de pluma, estampillas y lacre vino */
 [data-section="cartas"] {
-  --ground: #dcd6ca;
-  --surface: #f2ede2;
-  --text: #1d1d1f;
-  --text-soft: #4b4740;
-  --accent: #b01f53;
-  --accent-text: #b01f53;
-  --on-accent: #ffffff;
-  --seal-him: #8a6d2c;
-  --rule: #1d1d1f;
-  --focus: #b01f53;
-  --face-display: "Special Elite", monospace;
+  --ground: #e6d7b8;        /* pergamino */
+  --surface: #f1e6cc;       /* hoja de carta */
+  --text: #2a1c10;          /* tinta sepia casi negra */
+  --text-soft: #5c4630;
+  --accent: #7e1a1c;        /* lacre vino */
+  --accent-text: #7e1a1c;
+  --on-accent: #f6ead0;
+  --rule: #3a2814;
+  --focus: #7e1a1c;
+  --gold: #9a7630;          /* filete doble dorado viejo */
+  --howler: #8c1d1d;        /* sobre del vociferador (Tin) */
+  --howler-deep: #571010;
+  --howler-flap: #3f0a0a;
+  --howler-sub: #ecd6b8;
+  --stamp-paper: #f6eedb;
+  --stamp-her: #b01f53;
+  --stamp-him: #8a6d2c;
+  --postmark: rgba(42, 28, 16, 0.55);
+  --placeholder: #7a6448;
+  --face-display: "UnifrakturCook", serif;
 }

@@ -13,6 +13,7 @@ const paths = {
   play: 'M7 5l12 7-12 7z',
   pause: 'M7 5h3v14H7zM14 5h3v14h-3z',
   send: 'M4 12l16-8-6 16-2.5-6.5z',
+  quill: 'M20 3C12 4 7 9 5 17l-1 4M20 3c-1 6-5 10-11 11M8.5 11.5 13 9',
   close: 'M6 6l12 12M18 6L6 18',
   trash: 'M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13',
   front: 'M8 8h12v12H8zM4 16V4h12',

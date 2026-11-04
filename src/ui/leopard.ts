@@ -383,3 +383,54 @@ export function glintTexture(size = 96) {
     return c.toDataURL('image/png')
   })
 }
+
+/**
+ * Pergamino para Cartas mágicas: grano por píxel, fibras cortas y manchas de humedad.
+ * Fibras y manchas se dibujan también desplazadas un lienzo para que el mosaico no tenga costuras.
+ */
+export function parchmentTexture(base = '#e2d1ad', size = 420, seed = 7, fibers = 900, stains = 26) {
+  return memo(`parchment${base}${size}${seed}`, () => {
+    const rand = rng(seed)
+    const c = document.createElement('canvas')
+    c.width = c.height = size
+    const g = c.getContext('2d')!
+    g.fillStyle = base
+    g.fillRect(0, 0, size, size)
+    const wrap = (draw: (ox: number, oy: number) => void) => {
+      for (const ox of [-size, 0, size]) for (const oy of [-size, 0, size]) draw(ox, oy)
+    }
+    for (let i = 0; i < stains; i++) {
+      const x = rand() * size, y = rand() * size, r = 40 + rand() * 140, a = 0.05 + rand() * 0.08
+      wrap((ox, oy) => {
+        const grd = g.createRadialGradient(x + ox, y + oy, 0, x + ox, y + oy, r)
+        grd.addColorStop(0, `rgba(140, 95, 40, ${a})`)
+        grd.addColorStop(1, 'rgba(140, 95, 40, 0)')
+        g.fillStyle = grd
+        g.fillRect(x + ox - r, y + oy - r, r * 2, r * 2)
+      })
+    }
+    const img = g.getImageData(0, 0, size, size)
+    const d = img.data
+    for (let i = 0; i < d.length; i += 4) {
+      const n = (rand() - 0.5) * 18
+      d[i] += n
+      d[i + 1] += n
+      d[i + 2] += n * 0.8
+    }
+    g.putImageData(img, 0, 0)
+    g.lineCap = 'round'
+    for (let i = 0; i < fibers; i++) {
+      const x = rand() * size, y = rand() * size, a = rand() * Math.PI, l = 6 + rand() * 26
+      const bend = rand() * 4
+      g.strokeStyle = `rgba(${rand() < 0.5 ? '90, 60, 25' : '255, 248, 230'}, ${0.08 + rand() * 0.12})`
+      g.lineWidth = 0.6 + rand() * 0.6
+      wrap((ox, oy) => {
+        g.beginPath()
+        g.moveTo(x + ox, y + oy)
+        g.quadraticCurveTo(x + ox + Math.cos(a) * l * 0.5 + bend, y + oy + Math.sin(a) * l * 0.5, x + ox + Math.cos(a) * l, y + oy + Math.sin(a) * l)
+        g.stroke()
+      })
+    }
+    return c.toDataURL('image/png')
+  })
+}
