@@ -4,6 +4,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 export function createDemoClient(): any {
+  const uploads = new Map<string, string>()
   const HER = 'demo-her'
   const HIM = 'demo-him'
   const ago = (min: number) => new Date(Date.now() - min * 60_000).toISOString()
@@ -50,10 +51,10 @@ export function createDemoClient(): any {
     photo_likes: [{ photo_id: 'p1', user_id: HIM }],
     collage_items: [
       { id: 'c1', author_id: HER, kind: 'photo', storage_path: 'y2k-swag-collage.webp', sticker_id: null, body: null, style: {}, bg_removed: false, x: 0.05, y: 0.08, width: 0.5, rotation: -5, z: 1, locked: true, locked_by: HER, created_at: ago(100) },
-      { id: 'c2', author_id: HIM, kind: 'sticker', storage_path: null, sticker_id: 'star-chrome', body: null, style: {}, bg_removed: false, x: 0.6, y: 0.05, width: 0.3, rotation: 12, z: 2, locked: false, locked_by: null, created_at: ago(90) },
-      { id: 'c3', author_id: HER, kind: 'text', storage_path: null, sticker_id: null, body: 'XOXO', style: { color: '#3ddc97' }, bg_removed: false, x: 0.42, y: 0.55, width: 0.55, rotation: -8, z: 3, locked: false, locked_by: null, created_at: ago(80) },
+      { id: 'c2', author_id: HIM, kind: 'text', storage_path: null, sticker_id: null, body: '4ever', style: { color: 'white' }, bg_removed: false, x: 0.6, y: 0.05, width: 0.3, rotation: 12, z: 2, locked: false, locked_by: null, created_at: ago(90) },
+      { id: 'c3', author_id: HER, kind: 'text', storage_path: null, sticker_id: null, body: 'XOXO', style: { color: 'pink' }, bg_removed: false, x: 0.42, y: 0.55, width: 0.55, rotation: -8, z: 3, locked: false, locked_by: null, created_at: ago(80) },
       { id: 'c4', author_id: HIM, kind: 'photo', storage_path: 'glam-dark-leopard.webp', sticker_id: null, body: null, style: {}, bg_removed: false, x: 0.1, y: 0.85, width: 0.45, rotation: 6, z: 4, locked: false, locked_by: null, created_at: ago(70) },
-      { id: 'c5', author_id: HER, kind: 'sticker', storage_path: null, sticker_id: 'cherries', body: null, style: {}, bg_removed: false, x: 0.62, y: 0.95, width: 0.26, rotation: -10, z: 5, locked: false, locked_by: null, created_at: ago(60) },
+      { id: 'c5', author_id: HER, kind: 'text', storage_path: null, sticker_id: null, body: 'Corazón', style: { color: 'black' }, bg_removed: false, x: 0.62, y: 0.95, width: 0.26, rotation: -10, z: 5, locked: false, locked_by: null, created_at: ago(60) },
     ],
     activity: [],
     section_reads: [],
@@ -174,8 +175,9 @@ export function createDemoClient(): any {
     removeChannel: () => {},
     storage: {
       from: () => ({
-        createSignedUrl: async (path: string) => ({ data: { signedUrl: ref(path) }, error: null }),
-        upload: async (path: string) => ({ data: { path }, error: null }),
+        // lo que se sube en la demo se ve desde memoria
+        createSignedUrl: async (path: string) => ({ data: { signedUrl: uploads.get(path) ?? ref(path) }, error: null }),
+        upload: async (path: string, blob: Blob) => (uploads.set(path, URL.createObjectURL(blob)), { data: { path }, error: null }),
         remove: async () => ({ data: null, error: null }),
       }),
     },

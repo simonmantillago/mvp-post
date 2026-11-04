@@ -1,30 +1,29 @@
-import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
+import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
 import { useCouple } from '../../hooks/useCouple'
 import { useLive, useSignedUrl } from '../../hooks/useData'
 import { compressImage, uploadImage } from '../../lib/images'
 import { supabase } from '../../lib/supabase'
 import type { CollageItem } from '../../lib/types'
 import { Icon } from '../../ui/Icon'
-import { leopardTexture, pinkLeopard } from '../../ui/leopard'
-import { RubberStamp } from '../../ui/Marks'
 import { PressNote } from '../../ui/PressNote'
 import { Section } from '../Section'
-import { stickers } from './stickers'
+import { makeCutout } from './cutout'
 import './Y2K.css'
 
 type Geo = Pick<CollageItem, 'x' | 'y' | 'width' | 'rotation'>
 type Pt = { x: number; y: number }
 type Gesture = { id: string; start: Geo; pts: Pt[]; center?: Pt; handle: boolean; moved: boolean }
+type Ink = 'pink' | 'white' | 'black'
 
-const textColors = [
-  { name: 'Rosa chicle', value: '#ff3ea5' },
-  { name: 'Menta', value: '#3ddc97' },
-  { name: 'Negro', value: '#1a1a1a' },
-  { name: 'Blanco', value: '#ffffff' },
+// Tintas del texto pegado: se guardan por nombre y el CSS las pinta con los tokens de la sección
+const inks: { name: string; value: Ink }[] = [
+  { name: 'Rosa', value: 'pink' },
+  { name: 'Blanco', value: 'white' },
+  { name: 'Negro', value: 'black' },
 ]
 const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v))
 
-/** Estilo · Y2K: collage compartido. Un dedo mueve, dos dedos escalan y giran, el sello lo deja quieto. */
+/** 2000's Collage: collage compartido. Un dedo mueve, dos dedos escalan y giran, el sello lo deja quieto. */
 export default function Y2K() {
   const { session } = useCouple()
   const { load, refresh } = useLive<CollageItem[]>('collage_items', () => supabase.from('collage_items').select('*').order('z', { ascending: true }))
@@ -33,19 +32,15 @@ export default function Y2K() {
   const [local, setLocal] = useState<Record<string, Geo>>({})
   const [selected, setSelected] = useState<string | null>(null)
   const [menuPage, setMenuPage] = useState(0)
-  const [panel, setPanel] = useState<'none' | 'stickers' | 'text' | 'cutout'>('none')
+  const [panel, setPanel] = useState<'none' | 'text' | 'cutout'>('none')
   const [busy, setBusy] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [texture, setTexture] = useState<string>()
   const [menuAt, setMenuAt] = useState<{ x: number; y: number; above: boolean } | null>(null)
   const [menuW, setMenuW] = useState(260)
   const itemEls = useRef(new Map<string, HTMLDivElement>())
   const menuRef = useRef<HTMLDivElement>(null)
   const focusMenu = useRef(false)
 
-  useEffect(() => {
-    setTexture(leopardTexture(pinkLeopard, 360, 11))
-  }, [])
   useLayoutEffect(() => {
     const el = canvasRef.current
     if (!el) return
@@ -62,7 +57,8 @@ export default function Y2K() {
     }
   }, [menuAt, menuPage, selected])
 
-  const items = (load.state === 'ready' ? load.data : []).map((it) => ({ ...it, ...local[it.id] }))
+  // Las piezas viejas de la hoja de stickers ya no se pintan
+  const items = (load.state === 'ready' ? load.data : []).filter((it) => it.kind !== 'sticker').map((it) => ({ ...it, ...local[it.id] }))
   const sel = items.find((i) => i.id === selected) ?? null
   const maxZ = items.reduce((m, i) => Math.max(m, i.z), 0)
   const height = Math.max(W * 1.5, ...items.map((i) => (i.y + i.width * 1.4) * W + 120))
@@ -111,7 +107,8 @@ export default function Y2K() {
     setSelected(id)
     setMenuPage(0)
     setMenuAt(null)
-    if (item.locked) return placeMenu(id)
+    // Fijada: no se mueve ni abre la burbuja; solo aparece el candadito para desfijarla
+    if (item.locked) return
     e.currentTarget.setPointerCapture(e.pointerId)
     pointers.current.clear()
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY })
@@ -174,6 +171,7 @@ export default function Y2K() {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault()
       setSelected(it.id)
+      if (it.locked) return
       focusMenu.current = true
       return placeMenu(it.id)
     }
@@ -244,13 +242,24 @@ export default function Y2K() {
   async function addImage(file: Blob | undefined, kind: 'photo' | 'cutout') {
     if (!file) return
     setPanel('none')
-    setBusy(kind === 'photo' ? 'Pegando la foto…' : 'Pegando el recorte…')
+    setError(null)
+    setBusy(kind === 'photo' ? 'Pegando la foto…' : 'Buscando la silueta…')
+    let blob: Blob
     try {
-      const keepAlpha = kind === 'cutout' || file.type === 'image/png' || file.type === 'image/webp'
-      const path = await uploadImage('collage', await compressImage(file, { max: 1400, keepAlpha }), session.user.id)
-      await add({ kind, storage_path: path, width: kind === 'photo' ? 0.5 : 0.4 })
+      // Recorte = como un sticker de WhatsApp: sin fondo, ceñido a la silueta y con borde blanco
+      blob =
+        kind === 'cutout'
+          ? await makeCutout(file, (label, pct) => setBusy(pct == null ? label : `${label} ${pct}%`))
+          : await compressImage(file, { max: 1400, keepAlpha: file.type === 'image/png' || file.type === 'image/webp' })
     } catch {
-      setError('No se pudo subir la imagen. Intenta con otra.')
+      setBusy(null)
+      return setError(kind === 'cutout' ? 'No encontré a nadie en esa foto. Prueba con una donde se vea bien la persona.' : 'No se pudo leer esa imagen. Intenta con otra.')
+    }
+    try {
+      const path = await uploadImage('collage', blob, session.user.id)
+      await add({ kind, storage_path: path, bg_removed: kind === 'cutout', width: kind === 'photo' ? 0.5 : 0.45 })
+    } catch {
+      setError('No se pudo subir la imagen. Revisa la conexión.')
     }
     setBusy(null)
   }
@@ -261,9 +270,9 @@ export default function Y2K() {
         const type = entry.types.find((t) => t.startsWith('image/'))
         if (type) return addImage(await entry.getType(type), 'cutout')
       }
-      setError('No hay ninguna imagen copiada. Copia una imagen o elige un PNG.')
+      setError('No hay ninguna imagen copiada. Copia una o elígela de tus fotos.')
     } catch {
-      setError('Este teléfono no dejó leer lo copiado. Elige el PNG desde tus fotos.')
+      setError('Este teléfono no dejó leer lo copiado. Elige la foto de tu galería.')
     }
   }
 
@@ -295,6 +304,7 @@ export default function Y2K() {
     const { error } = await supabase.from('collage_items').update(patch).eq('id', sel.id)
     if (error) setError('No se pudo aplicar el cambio.')
     await refresh()
+    if (action === 'lock') return setMenuAt(null)
     placeMenu(sel.id)
   }
 
@@ -303,6 +313,7 @@ export default function Y2K() {
       {label}
     </button>
   )
+  const toggle = (p: 'text' | 'cutout') => setPanel(panel === p ? 'none' : p)
 
   return (
     <Section id="y2k" className="y2k">
@@ -311,62 +322,42 @@ export default function Y2K() {
           <Icon name="image" size={18} /> Foto
           <input type="file" accept="image/*" className="visually-hidden" onChange={(e) => addImage(e.target.files?.[0], 'photo')} />
         </label>
-        <button type="button" className="y2k-tool" aria-expanded={panel === 'stickers'} onClick={() => setPanel(panel === 'stickers' ? 'none' : 'stickers')}>
-          <Icon name="star" size={18} /> Sticker
-        </button>
-        <button type="button" className="y2k-tool" aria-expanded={panel === 'cutout'} onClick={() => setPanel(panel === 'cutout' ? 'none' : 'cutout')}>
+        <button type="button" className="y2k-tool" aria-expanded={panel === 'cutout'} onClick={() => toggle('cutout')}>
           <Icon name="scissors" size={18} /> Recorte
         </button>
-        <button type="button" className="y2k-tool" aria-expanded={panel === 'text'} onClick={() => setPanel(panel === 'text' ? 'none' : 'text')}>
+        <button type="button" className="y2k-tool" aria-expanded={panel === 'text'} onClick={() => toggle('text')}>
           <Icon name="type" size={18} /> Texto
         </button>
       </div>
 
-      {panel === 'stickers' && (
-        <div className="y2k-sheet" role="group" aria-label="Hoja de stickers">
-          {Object.entries(stickers).map(([id, s]) => (
-            <button
-              key={id}
-              type="button"
-              className="y2k-sticker-pick"
-              aria-label={s.label}
-              onClick={() => {
-                setPanel('none')
-                add({ kind: 'sticker', sticker_id: id, width: id === 'xoxo-tag' ? 0.4 : 0.28 })
-              }}
-            >
-              {s.svg}
-            </button>
-          ))}
-        </div>
-      )}
       {panel === 'cutout' && (
-        <div className="y2k-cutout" role="group" aria-label="Agregar un recorte">
-          <button type="button" className="section-button" onClick={pasteCutout}>
-            Pegar imagen copiada
-          </button>
-          <label className="section-button section-button--ghost">
-            Elegir PNG
-            <input type="file" accept="image/png,image/webp" className="visually-hidden" onChange={(e) => addImage(e.target.files?.[0], 'cutout')} />
+        <div className="y2k-panel y2k-cutout" role="group" aria-label="Hacer un recorte">
+          <p className="y2k-panel-note">Elige una foto y la recorto a la silueta, como un sticker.</p>
+          <label className="y2k-pill y2k-pill--hot">
+            Elegir foto
+            <input type="file" accept="image/*" className="visually-hidden" onChange={(e) => addImage(e.target.files?.[0], 'cutout')} />
           </label>
+          <button type="button" className="y2k-pill" onClick={pasteCutout}>
+            Pegar copiada
+          </button>
         </div>
       )}
       {panel === 'text' && (
         <TextComposer
-          onAdd={(body, color) => {
+          onAdd={(body, ink) => {
             setPanel('none')
-            add({ kind: 'text', body, style: { color }, width: 0.6 })
+            add({ kind: 'text', body, style: { color: ink }, width: 0.6 })
           }}
         />
       )}
 
       {busy && (
-        <p className="y2k-status" role="status">
+        <p className="y2k-status is-busy" role="status">
           {busy}
         </p>
       )}
       {error && (
-        <p className="section-error y2k-status" role="alert">
+        <p className="y2k-status is-error" role="alert">
           {error}
         </p>
       )}
@@ -374,7 +365,7 @@ export default function Y2K() {
       <div
         ref={canvasRef}
         className="y2k-canvas"
-        style={{ height, ...(texture ? { '--leopard': `url(${texture})` } : {}) } as CSSProperties}
+        style={{ height }}
         onPointerDown={onCanvasDown}
         onPointerMove={onCanvasMove}
         onPointerUp={onCanvasUp}
@@ -383,7 +374,7 @@ export default function Y2K() {
         {load.state === 'loading' && <PressNote title="Buscando las tijeras…" />}
         {load.state === 'error' && <PressNote tone="error" title="Fe de erratas" body={load.message} />}
         {load.state === 'ready' && items.length === 0 && (
-          <PressNote title="Página en blanco" body="Pega la primera foto o un sticker. Muévelo con un dedo, gíralo con dos y fíjalo cuando quede perfecto." />
+          <PressNote title="Página en blanco" body="Pega la primera foto o haz un recorte. Muévelo con un dedo, gíralo con dos y fíjalo cuando quede perfecto." />
         )}
 
         {items.map((it) => (
@@ -404,10 +395,10 @@ export default function Y2K() {
             onKeyDown={(e) => onPieceKey(e, it)}
           >
             <PieceContent item={it} />
-            {it.locked && (
-              <span className="piece-stamp" aria-hidden="true">
-                <RubberStamp>Fijado</RubberStamp>
-              </span>
+            {it.locked && it.id === selected && (
+              <button type="button" className="piece-lock" aria-label="Desfijar" onClick={() => act('unlock')}>
+                <Icon name="lock" size={13} />
+              </button>
             )}
             {it.id === selected && !it.locked && (
               <span className="piece-handle" aria-hidden="true">
@@ -417,7 +408,7 @@ export default function Y2K() {
           </div>
         ))}
 
-        {sel && menuAt && (() => {
+        {sel && menuAt && !sel.locked && (() => {
           // La burbuja se centra sobre la pieza sin salirse del lienzo; la flecha sigue apuntando a la pieza.
           const half = menuW / 2 + 8
           const left = clamp(menuAt.x, half, W - half)
@@ -437,9 +428,7 @@ export default function Y2K() {
                 }
               }}
             >
-              {sel.locked ? (
-                menuButton('Desfijar', 'unlock')
-              ) : menuPage === 0 ? (
+              {menuPage === 0 ? (
                 <>
                   {menuButton('Al frente', 'front')}
                   {menuButton('Fijar', 'lock')}
@@ -470,36 +459,49 @@ export default function Y2K() {
 
 function PieceContent({ item }: { item: CollageItem }) {
   const url = useSignedUrl('collage', item.storage_path)
-  if (item.kind === 'sticker') return stickers[item.sticker_id ?? '']?.svg ?? null
-  if (item.kind === 'text') return <span style={{ color: item.style?.color }}>{item.body}</span>
+  if (item.kind === 'text') {
+    const len = Math.max(1, ...(item.body ?? '').split(/\s+/).map((w) => w.length))
+    return (
+      <span data-ink={inkOf(item.style?.color)} style={{ '--len': len } as CSSProperties}>
+        {item.body}
+      </span>
+    )
+  }
   return url ? <img src={url} alt="" draggable={false} decoding="async" /> : <span className="piece-pending" />
 }
 
-function TextComposer({ onAdd }: { onAdd: (body: string, color: string) => void }) {
+function TextComposer({ onAdd }: { onAdd: (body: string, ink: Ink) => void }) {
   const [body, setBody] = useState('')
-  const [color, setColor] = useState(textColors[0].value)
+  const [ink, setInk] = useState<Ink>('pink')
   return (
     <form
-      className="y2k-text"
+      className="y2k-panel y2k-text"
       onSubmit={(e) => {
         e.preventDefault()
-        if (body.trim()) onAdd(body.trim(), color)
+        if (body.trim()) onAdd(body.trim(), ink)
       }}
     >
-      <input className="section-field" value={body} maxLength={40} onChange={(e) => setBody(e.target.value)} placeholder="YOLO, XOXO, te amo…" aria-label="Texto" autoFocus />
-      <div className="y2k-colors" role="radiogroup" aria-label="Color">
-        {textColors.map((c) => (
-          <button key={c.value} type="button" role="radio" aria-checked={c.value === color} aria-label={c.name} style={{ background: c.value }} onClick={() => setColor(c.value)} />
+      <input className="y2k-field" value={body} maxLength={40} onChange={(e) => setBody(e.target.value)} placeholder="XOXO, te amo, 4ever…" aria-label="Texto" autoFocus />
+      <div className="y2k-inks" role="radiogroup" aria-label="Color">
+        {inks.map((c) => (
+          <button key={c.value} type="button" role="radio" aria-checked={c.value === ink} aria-label={c.name} data-ink={c.value} onClick={() => setInk(c.value)} />
         ))}
       </div>
-      <button type="submit" className="section-button">
+      <button type="submit" className="y2k-pill y2k-pill--hot">
         Pegar
       </button>
     </form>
   )
 }
 
+/** Los textos de antes guardaron el color en hex; los nuevos, el nombre de la tinta. */
+function inkOf(color?: string): Ink {
+  if (color === 'white' || color?.toLowerCase() === '#ffffff') return 'white'
+  if (color === 'black' || color === '#1a1a1a') return 'black'
+  return 'pink'
+}
+
 function pieceLabel(it: CollageItem) {
-  const what = it.kind === 'photo' ? 'Foto' : it.kind === 'cutout' ? 'Recorte' : it.kind === 'sticker' ? stickers[it.sticker_id ?? '']?.label ?? 'Sticker' : `Texto: ${it.body}`
+  const what = it.kind === 'photo' ? 'Foto' : it.kind === 'cutout' ? 'Recorte' : `Texto: ${it.body}`
   return it.locked ? `${what}, fijada` : what
 }

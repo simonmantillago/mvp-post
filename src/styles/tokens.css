@@ -58,20 +58,25 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
-/* Estilo · Y2K: collage chillón sobre leopardo con brillo */
+/* 2000's Collage: medio tono fucsia sobre negro, letra itálica alta, plástico brillante */
 [data-section="y2k"] {
-  --ground: #f4c9dc;
-  --surface: #ffffff;
-  --text: #1a1a1a;
-  --text-soft: #3a2a33;
-  --accent: #ff3ea5;
-  --accent-text: #b0126a;
-  --on-accent: #1a1a1a;
-  --mint: #3ddc97;
-  --chrome: #d9dde3;
-  --rule: #1a1a1a;
-  --focus: #1a1a1a;
-  --face-display: "Bagel Fat One", sans-serif;
+  --ground: #161616;
+  --surface: #0d0d0d;
+  --text: #ffffff;
+  --text-soft: #ffc2e4;
+  --accent: #ff1fa6;
+  --accent-text: #ff6cc4;
+  --on-accent: #0d0d0d;
+  --chrome: #e9ecf1;
+  --rule: #ff1fa6;
+  --focus: #ffffff;
+  /* plástico brillante de los botones: negro charol y fucsia caramelo */
+  --gloss-hi: #2a2a2a;
+  --gloss-lo: #050505;
+  --candy-hi: #ff5cc0;
+  --candy-lo: #d1007f;
+  /* Kabisat en el titular y lo que se pega; folio y botones quedan en las letras del periódico */
+  --face-display: "Kabisat", "Bagel Fat One", sans-serif;
 }
 
 /* Sociedad · Alfombra roja: dark leopard, dorado y pedrería */

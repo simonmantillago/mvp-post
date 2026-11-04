@@ -5,7 +5,7 @@ Punto de partida para la próxima sesión. Primer MVP **publicado**; de aquí en
 ## Qué está hecho y publicado
 - **Producción:** https://mvp-post.netlify.app — cada push a `main` (repo privado `simonmantillago/mvp-post`) se publica solo. Último commit publicado: ver `git log -1`.
 - **Dirección visual:** «Estilos del domingo» (ronda Impeccable). Contrato: `.impeccable/surfaces/src-app-tsx.md`. Sistema: `DESIGN.md` + `.impeccable/design.json`.
-- **Pantallas:** llegada (periódico atado con cinta cae en la puerta), login con credenciales de prensa, portada (pliegos con miniatura del mundo de cada sección), columna, redacción (solo Simón), Y2K (collage con gestos, burbuja tipo iOS, sello «Fijado»), Alfombra roja (cámara, marco de pedrería, polaroids, ♥), Los vinilos de Big (tocadiscos, pila de fundas con sello de lacre), Cartelera (turnos, estrellas), Cartas (chat + ¡Extra!), Suscripción (notificaciones por sección).
+- **Pantallas:** llegada (periódico atado con cinta cae en la puerta), login con credenciales de prensa, portada (pliegos con miniatura del mundo de cada sección), columna, redacción (solo Simón), 2000's Collage (collage con gestos, burbuja tipo iOS, candadito al seleccionar una pieza fijada, recortes tipo sticker de WhatsApp), Alfombra roja (cámara, marco de pedrería, polaroids, ♥), Los vinilos de Big (tocadiscos, pila de fundas con sello de lacre), Cartelera (turnos, estrellas), Cartas (chat + ¡Extra!), Suscripción (notificaciones por sección).
 - **Backend:** Supabase con migraciones 0001, 0002 y 0003 aplicadas; push configurado de punta a punta (triggers → `activity` → pg_net → Edge Function `notify`); variables `VITE_*` en `.env.local` y Netlify (incluye `VITE_EMAIL_HER` / `VITE_EMAIL_HIM` del login).
 - **Calidad:** auditoría técnica + revisión final por agentes (4 rondas, todo resuelto). Detector Impeccable sin hallazgos bloqueantes; quedan avisos de colores sueltos (ver deuda de tokens).
 - **Revisar sin contraseñas reales:** `npm run dev` y abrir `?demo` (ella), `?demo=el` (él), `?demo=fuera` (login). Datos falsos en `src/lib/demo.ts`, excluidos del build.
@@ -83,7 +83,7 @@ Brief: `docs/briefs/vinilos-spotify.md`; prototipo aprobado: `docs/briefs/tocadi
 
 ## Pendientes conocidos
 - **Fotos de perfil** de ambos en `public/readers/maria-victoria.jpg` y `simon.jpg` (hoy se ven iniciales).
-- **Quitar fondo** a las fotos del collage Y2K (plan: `@imgly/background-removal`; plan B MediaPipe). Hoy se pegan con fondo.
+- ~~Quitar fondo~~ hecho 2026-11-04 en el Recorte de 2000's Collage (`@imgly/background-removal`, en el teléfono). Falta medir tiempo y memoria en el iPhone; plan B MediaPipe si se cae.
 - **Probar en los dos iPhone instalados**: login real, cámara, push (activar en Suscripción), badge, Spotify/YouTube embebido.
 - **Íconos PWA definitivos** (`public/icons/`) y sonidos (¡Extra!).
 - **Primera edición real** (la escribe Simón en Redacción).

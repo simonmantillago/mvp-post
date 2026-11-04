@@ -9,7 +9,7 @@ Todas cubren: **vacío** (texto tierno que invita a crear), **cargando**, **erro
 | Ruta | Sección | Antes (MVP OS) | Tablas |
 |---|---|---|---|
 | `/` | Portada + La columna | Boot / Escritorio | `editions`, `activity` |
-| `/y2k` | Estilo · Y2K | Paparazzi (álbum) | `collage_items` |
+| `/y2k` | 2000's Collage | Paparazzi (álbum) | `collage_items` |
 | `/alfombra-roja` | Sociedad · Alfombra roja | Paparazzi (cámara) | `photos`, `photo_likes` |
 | `/vinilos` | Los vinilos de Big | CD Player | `songs` |
 | `/cartelera` | Cartelera | Blockbuster | `watch_items`, `watch_ratings` |
@@ -31,14 +31,15 @@ Todas cubren: **vacío** (texto tierno que invita a crear), **cargando**, **erro
 - **La columna** (lectura): el titular se teclea letra a letra, letra capital, cita destacada, foto con pie, y al final "Sigue en pág. N → <sección>" (`continues_to`).
 - **Escribir una edición:** solo quien escribe (él) ve el editor; guarda borrador (`published_at` null) y publica. Publicar = notificación a ella.
 
-## 2. Estilo · Y2K (collage editable)
+## 2. 2000's Collage (antes Estilo · Y2K; collage editable)
 - **Para fotos de la galería.** Lienzo libre que crece hacia abajo; ambos ven y editan el mismo collage (Realtime).
-- **Agregar:** `+ Foto` (galería; se le quita el fondo en el teléfono, con opción de dejarlo), `★ Sticker` (catálogo estático en `public/stickers/`), `✂ Recorte` (pegar imagen copiada o subir PNG), `Aa` texto pop.
+- **Agregar:** `Foto` (galería, tal cual con borde blanco), `Recorte` (sticker con la silueta recortada, ver abajo), `Texto` (tinta rosa, blanca o negra).
 - **Editar:** arrastrar mueve; dos dedos escalan y giran; agarraderas en la pieza seleccionada.
 - **Burbuja tipo iOS** al tocar una pieza (como la de Copiar/Pegar): `Al frente · Fijar · Duplicar · Eliminar · ▸` (página 2: `Atrás · Quitar fondo`). Flecha apuntando a la pieza; sale abajo o arriba según el espacio. Es un componente propio: el menú nativo de iOS no admite acciones personalizadas en la web, así que en el lienzo se desactiva el nativo (`-webkit-touch-callout: none; user-select: none`).
-- **Fijar:** la pieza queda con un candado pequeño y no se mueve ni se borra (lo garantiza también la BD). Tocar el candado → burbuja con `Desfijar`.
+- **Fijar:** la pieza no se mueve ni se borra (lo garantiza también la BD). Sin marca visible; al seleccionarla aparece un candadito sutil en la esquina y tocarlo la desfija (sin burbuja).
 - Posiciones relativas al ancho del lienzo (`x`, `width` en 0–1; `y` en anchos) para que se vea igual en ambos teléfonos. Guardar al soltar (no en cada frame).
-- Fondo: leopardo + brillo, letreros de brillo gigantes, cuadros pop. Referencias: `y2k-swag-collage.webp`, `stickers.webp`.
+- Fondo: medio tono fucsia sobre negro (imagen de Simón), letra Kabisat en el titular y lo que se pega (fecha/página y botones en la letra del periódico), botones de plástico brillante (2026-11-04).
+- Sin hoja de stickers: el **Recorte** funciona como el sticker de WhatsApp — se elige (o pega) una foto, se le quita el fondo en el teléfono, se ciñe a la silueta y lleva borde blanco. Si la imagen ya viene sin fondo («Copiar sujeto» del iPhone), se salta el modelo.
 
 ## 3. Sociedad · Alfombra roja (cámara)
 - **Para fotos tomadas en el momento** dentro de la PWA.
@@ -77,7 +78,7 @@ Cada cosa nueva genera una fila en `activity` (triggers) → Edge Function `noti
 | Evento | Notificación |
 |---|---|
 | Edición publicada | "The MVP Post · nueva edición" — titular |
-| Pieza nueva en el collage | "Estilo · Y2K" — X pegó algo nuevo (máx. 1 cada 10 min) |
+| Pieza nueva en el collage | "2000's Collage" — X pegó algo nuevo (máx. 1 cada 10 min) |
 | Foto tomada | "Alfombra roja" — X tomó una foto nueva |
 | ♥ a tu foto | "A X le encantó tu foto" (máx. 1 cada 10 min) |
 | Canción dedicada | "Los vinilos de Big" — X te dedicó "título" (sin título: "te dedicó una canción") |

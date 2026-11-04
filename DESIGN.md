@@ -10,14 +10,18 @@ colors:
   spot-text: "#b01f53"
   on-spot: "#ffffff"
   halftone: "rgba(20, 20, 20, 0.07)"
-  y2k-ground: "#f4c9dc"
-  y2k-surface: "#ffffff"
-  y2k-text: "#1a1a1a"
-  y2k-text-soft: "#3a2a33"
-  y2k-accent: "#ff3ea5"
-  y2k-accent-text: "#b0126a"
-  y2k-mint: "#3ddc97"
-  y2k-chrome: "#d9dde3"
+  y2k-ground: "#161616"
+  y2k-surface: "#0d0d0d"
+  y2k-text: "#ffffff"
+  y2k-text-soft: "#ffc2e4"
+  y2k-accent: "#ff1fa6"
+  y2k-accent-text: "#ff6cc4"
+  y2k-on-accent: "#0d0d0d"
+  y2k-chrome: "#e9ecf1"
+  y2k-gloss-hi: "#2a2a2a"
+  y2k-gloss-lo: "#050505"
+  y2k-candy-hi: "#ff5cc0"
+  y2k-candy-lo: "#d1007f"
   alfombra-ground: "#0b0a09"
   alfombra-surface: "#17140f"
   alfombra-text: "#f3eee4"
@@ -103,8 +107,9 @@ typography:
     fontWeight: 400
     lineHeight: 0.95
   display-y2k:
-    fontFamily: "Bagel Fat One, sans-serif"
+    fontFamily: "Kabisat, Bagel Fat One, sans-serif"
     fontWeight: 400
+    lineHeight: 1.32
   display-alfombra:
     fontFamily: "Bodoni Moda, serif"
     fontWeight: 400
@@ -213,7 +218,7 @@ Los materiales son imprenta y objetos: medio tono, filetes dobles, sellos de gom
 **Key Characteristics:**
 - Papel prensa frío con trama de medio tono de 3 px; tinta negra; un solo acento rosa como segunda plancha.
 - Una retícula de 6 columnas y una página de 40rem como máximo; 390 px primero.
-- Estados como marcas impresas: nuevo = sello rosa, visto = negro, fijado = sello de goma, turno = ticket perforado.
+- Estados como marcas impresas: nuevo = sello rosa, visto = negro, fijado = candadito que solo aparece al seleccionar la pieza (2000's Collage), turno = ticket perforado.
 - Cada sección redefine los roles de color y una cara display propia; los componentes solo leen roles.
 - Pasar la página es un desdoblamiento desde el lomo (View Transitions), no un deslizamiento de app.
 
@@ -234,7 +239,7 @@ Papel y tinta con una segunda plancha rosa en la portada; cada sección trae su 
 
 ### Mundos de sección
 Cada mundo asigna sus valores a los roles genéricos:
-- **Y2K** (collage chillón sobre leopardo rosa): suelo Rosa Chicle (y2k-ground), superficie blanca, acento Rosa Fucsia Burbuja (y2k-accent) con **texto negro encima** (y2k-text como `on-accent`), Menta (y2k-mint) y Cromo (y2k-chrome) para las píldoras de herramientas. El foco es negro, no rosa.
+- **2000's Collage** (antes Estilo · Y2K; rediseño 2026-11-04): el fondo es la imagen de medio tono fucsia sobre negro que eligió Simón (`public/sections/y2k/fondo-halftone.webp`), fija detrás del lienzo con un `::before` en `position: fixed` (iOS no respeta `background-attachment`). Superficie Negro Charol (y2k-surface) para la barra y los paneles, texto blanco, acento Fucsia Caramelo (y2k-accent) con **texto negro encima** (y2k-on-accent). Los botones son plástico brillante de celular de 2003: mitad superior con reflejo, negro charol (gloss-hi → gloss-lo) con filete fucsia en reposo y fucsia caramelo (candy-hi → candy-lo) al activarse. El foco es blanco.
 - **Alfombra roja** (dark leopard con lirios vino, dorado, pedrería): fondo fotográfico fijo en pantalla sobre suelo Negro Laca (alfombra-ground), acento Dorado Viejo (alfombra-gold) también como filete, Dorado Claro (alfombra-gold-text) para texto, Vino (alfombra-wine) para el corazón de «me gusta», Blanco Polaroid (alfombra-polaroid).
 - **Los vinilos de Big** (penthouse de noche): Nogal Oscuro (vinilos-ground), Cuero (vinilos-leather), acento Ámbar de Lámpara (vinilos-amber), filete Tabaco (vinilos-rule). Lacres: rosa (spot) para ella, Latón (vinilos-seal-him) para él.
 - **Cartelera** (videoclub de noche): Azul Medianoche (cartelera-ground), acento Amarillo Marquesina (cartelera-marquee), Neón Rosa (cartelera-neon) solo para la pestaña activa y el halo superior.
@@ -253,7 +258,7 @@ Cada mundo asigna sus valores a los roles genéricos:
 **Headline / Label:** Antonio 500/700 (sans-serif)
 **Body:** Libre Caslon Text 400, 400 italic, 700 (Georgia)
 **Los vinilos de Big:** la sección entera cambia de voz (2026-10-29): títulos en Playfair Display 500 y 500 italic (`--face-display`; el título de la sección va en itálica), y el cuerpo, la dedicatoria y las notas en Lora 400 y 400 italic (`--face-body` y `--face-dedication` redefinidos en `[data-section="vinilos"]`). La dedicatoria va en Lora italic, sin comillas.
-**Display por sección:** Bagel Fat One (Y2K), Bodoni Moda 400 + italic (Alfombra), Playfair Display (Vinilos), Monoton (Cartelera), UnifrakturCook (título de Cartas mágicas, la gótica de la cabecera), Special Elite (las cartas de él)
+**Display por sección:** Kabisat Demo Italic Tall en 2000's Collage para el titular, el texto pegado, el campo de texto y los avisos (elegida por Simón; la línea de fecha/página y los botones quedan en Antonio, como en todo el periódico, 2026-11-04; `src/sections/y2k/fonts/kabisat-2000s.ttf`). La demo no trae tildes, ñ ni dígitos: las vocales con tilde y la ñ se compusieron con el acento de su «Ẃ» y su «˜», y los dígitos son los de Orbitron Black (OFL) inclinados 20° a su altura. Mide ~1 em por letra y sus mayúsculas miden 1.22 em: tamaños un par de pasos más chicos e interlineado ≥ 1.3. Resto: Bodoni Moda 400 + italic (Alfombra), Playfair Display (Vinilos), Monoton (Cartelera), UnifrakturCook (título de Cartas mágicas, la gótica de la cabecera), Special Elite (las cartas de él)
 
 **Character:** Gótica de cabecera + gótica condensada de titular + serif de periódico: la voz de un diario de gran tirada. Las caras display de sección son la voz de cada mundo y aparecen también en la portada, en el nombre de cada pliego, como los logos de sección de un diario.
 
@@ -293,7 +298,7 @@ El papel es plano; la profundidad viene de objetos físicos puestos encima: cred
 - **Levantado** (`box-shadow: 0 10px 24px -12px rgba(0,0,0,0.45)`, token `--shadow-lift`): credenciales de prensa.
 - **Página sobre la mesa** (`0 30px 60px -30px rgba(0,0,0,0.45), 0 0 0 1px rgba(20,20,20,0.08)`): la portada en escritorio.
 - **Objeto en la mesa** (`0 6px 14px -8px rgba(0,0,0,0.35)` en cartas; `0 10px 18px -10px rgba(0,0,0,0.9)` en polaroids sobre fondo oscuro): hojas y fotos sueltas.
-- **Recorte** (`filter: drop-shadow(0 6px 6px rgba(0,0,0,0.28))`): piezas del collage Y2K, que siguen su silueta.
+- **Recorte** (`filter: drop-shadow(0 8px 8px rgba(0,0,0,0.5))`): piezas del collage, que siguen su silueta. Los recortes son como stickers de WhatsApp: se quita el fondo en el teléfono (`@imgly/background-removal`), se ciñe a la silueta y se le hornea un borde blanco grueso.
 - **Fuera de registro** (`-3px 2px 0 rgba(194,37,92,0.28)` y `translate: 2px -1px`): banda de sección, cinta de llegada. El sello «Nuevo» usa `-2px 1px 0` en tinta.
 
 ### Named Rules
@@ -320,7 +325,7 @@ Rectangulares, en Antonio 700 en mayúsculas con 0.06–0.08em de tracking, mín
 
 ### Chips
 - **Style:** pill con filete de 1 px en `--rule`, texto `--text-soft`, Libre Caslon 0.875rem, 2.25rem de alto.
-- **State:** presionado = fondo y filete `--accent`, texto `--on-accent`. Las píldoras Y2K son cromadas (degradado blanco a `--chrome`, borde negro de 2 px) y pasan a rosa al activarse.
+- **State:** presionado = fondo y filete `--accent`, texto `--on-accent`. Las píldoras de 2000's Collage son de plástico negro brillante con filete fucsia y pasan a fucsia caramelo al activarse.
 
 ### Cards / Containers
 No hay tarjetas genéricas; cada contenedor es un objeto del mundo: credencial laminada con pinza (se voltea en 3D, 560 ms), cupón recortado, carta con lacre, polaroid, funda de vinilo con el disco asomando (Colección de vinilos), lomo de VHS. Los paneles de formulario de sección usan `--surface` sin radio y relleno s4.
@@ -343,7 +348,7 @@ No hay tarjetas genéricas; cada contenedor es un objeto del mundo: credencial l
 - **Pestañas (Cartelera):** tres columnas, filete inferior de 3 px que pasa a `--neon` en la activa.
 
 ### Sello «Nuevo» y sello de goma
-El sello «Nuevo» es un rectángulo rosa en Antonio 700 de 0.75rem con 0.14em de tracking, girado −4°, y cambia en su sitio sin mover la fila. El sello de goma (`RubberStamp`) marca estados («Fijado», «Visto»): doble filete de 3 px en `--stamp-ink`, fondo blanco al 55 %, girado −9°, con máscara de tinta irregular.
+El sello «Nuevo» es un rectángulo rosa en Antonio 700 de 0.75rem con 0.14em de tracking, girado −4°, y cambia en su sitio sin mover la fila. El sello de goma (`RubberStamp`) marca estados («Visto»): doble filete de 3 px en `--stamp-ink`, fondo blanco al 55 %, girado −9°, con máscara de tinta irregular.
 
 ### Polaroid y carrete de efectos
 Las fotos de Alfombra roja son polaroids (Blanco Polaroid, pie en Bodoni itálica) que se revelan con un efecto elegido por quien la tomó: Original, Grano, Vintage, Flash, Noir o Digicam 2003 (este último con la fecha estampada en naranja LCD). El efecto es CSS sobre la foto (`.fx-<id>`: filtro + una capa con `--grain` o los roles `--fx-*`); el archivo guardado no cambia. En la polaroid grande, la autora o el autor desliza un carrete de miniaturas (la misma foto con cada efecto) y toca una; la elegida lleva filete `--accent`. Una foto recién tomada no se sube de inmediato: se abre como polaroid con pie, carrete y las acciones Descartar / Publicar. Las polaroids propias se borran desde un botón en su esquina inferior, que pide un segundo toque («¿Borrar?», en vino).

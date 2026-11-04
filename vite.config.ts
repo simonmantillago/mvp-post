@@ -32,7 +32,9 @@ export default defineConfig({
         ],
       },
       injectManifest: {
-        globPatterns: ['**/*.{js,css,html,png,webp,svg,woff2,mp3}'],
+        globPatterns: ['**/*.{js,css,html,png,webp,svg,woff2,ttf,mp3}'],
+        // el motor del quitafondos solo se baja al hacer el primer recorte
+        globIgnores: ['**/ort*.js'],
       },
     }),
   ],

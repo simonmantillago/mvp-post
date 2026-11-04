@@ -36,7 +36,7 @@ function compose(a: Activity, who: string): { title: string; body: string } {
     case 'edition_published':
       return { title: 'The MVP Post · nueva edición', body: p ? `“${p}” — por ${who}` : `${who} publicó una columna nueva` }
     case 'collage_added':
-      return { title: 'Estilo · Y2K', body: `${who} pegó algo nuevo en el collage` }
+      return { title: "2000's Collage", body: `${who} pegó algo nuevo en el collage` }
     case 'photo_taken':
       return { title: 'Los Ángeles de Victoria', body: p ? `${who}: “${p}”` : `${who} tomó una foto nueva` }
     case 'photo_liked':
