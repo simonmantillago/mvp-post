@@ -41,7 +41,8 @@ async function removeBg(c: HTMLCanvasElement, progress: CutoutProgress) {
   return toCanvas(out)
 }
 
-/** Recorta al contorno del sujeto, limpia el halo semitransparente y agrega el borde blanco grueso. */
+/** Recorta al contorno del sujeto, limpia el halo semitransparente y agrega el borde blanco grueso.
+ *  Devuelve también la versión sin borde, del mismo tamaño, para «Quitar borde» sin que el sujeto salte. */
 function sticker(src: HTMLCanvasElement) {
   const ctx = src.getContext('2d')!
   const img = ctx.getImageData(0, 0, src.width, src.height)
@@ -88,13 +89,21 @@ function sticker(src: HTMLCanvasElement) {
       o.drawImage(sil, pad + Math.cos(a) * rr, pad + Math.sin(a) * rr)
     }
   o.drawImage(src, x0, y0, w, h, pad, pad, w, h)
-  return out
+
+  const bare = document.createElement('canvas')
+  bare.width = out.width
+  bare.height = out.height
+  bare.getContext('2d')!.drawImage(src, x0, y0, w, h, pad, pad, w, h)
+  return { out, bare }
 }
 
-export async function makeCutout(file: Blob, progress: CutoutProgress): Promise<Blob> {
+const webp = (c: HTMLCanvasElement) => new Promise<Blob>((ok, ko) => c.toBlob((b) => (b ? ok(b) : ko(new Error('canvas'))), 'image/webp', 0.86))
+
+export async function makeCutout(file: Blob, progress: CutoutProgress): Promise<{ framed: Blob; bare: Blob }> {
   let c = await toCanvas(file)
   if (!alreadyCut(c)) c = await removeBg(c, progress)
   progress('Pegando el sticker…')
-  const out = sticker(c)
-  return new Promise((ok, ko) => out.toBlob((b) => (b ? ok(b) : ko(new Error('canvas'))), 'image/webp', 0.86))
+  const { out, bare } = sticker(c)
+  const [framed, plain] = await Promise.all([webp(out), webp(bare)])
+  return { framed, bare: plain }
 }

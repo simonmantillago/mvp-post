@@ -247,20 +247,26 @@ export default function Y2K() {
     setError(null)
     setBusy(kind === 'photo' ? 'Pegando la foto…' : 'Buscando la silueta…')
     let blob: Blob
+    let bare: Blob | null = null
     try {
-      // Recorte = como un sticker de WhatsApp: sin fondo, ceñido a la silueta y con borde blanco
-      blob =
-        kind === 'cutout'
-          ? await makeCutout(file, (label, pct) => setBusy(pct == null ? label : `${label} ${pct}%`))
-          : await compressImage(file, { max: 1200, keepAlpha: file.type === 'image/png' || file.type === 'image/webp' })
+      // Sticker = como uno de WhatsApp: sin fondo, ceñido a la silueta y con borde blanco (más una copia sin borde)
+      if (kind === 'cutout') {
+        const made = await makeCutout(file, (label, pct) => setBusy(pct == null ? label : `${label} ${pct}%`))
+        blob = made.framed
+        bare = made.bare
+      } else blob = await compressImage(file, { max: 1200, keepAlpha: file.type === 'image/png' || file.type === 'image/webp' })
     } catch {
       setBusy(null)
       return setError(kind === 'cutout' ? 'No encontré a nadie en esa foto. Prueba con una donde se vea bien la persona.' : 'No se pudo leer esa imagen. Intenta con otra.')
     }
     try {
-      const path = await uploadImage('collage', blob, session.user.id)
+      const [path, barePath] = await Promise.all([
+        uploadImage('collage', blob, session.user.id),
+        bare ? uploadImage('collage', bare, session.user.id) : Promise.resolve(null),
+      ])
       seedLocalUrl('collage', path, blob)
-      await add({ kind, storage_path: path, bg_removed: kind === 'cutout', width: kind === 'photo' ? 0.5 : 0.45 })
+      if (bare && barePath) seedLocalUrl('collage', barePath, bare)
+      await add({ kind, storage_path: path, bg_removed: kind === 'cutout', width: kind === 'photo' ? 0.5 : 0.45, style: barePath ? { bare: barePath } : {} })
     } catch {
       setError('No se pudo subir la imagen. Revisa la conexión.')
     }
@@ -289,7 +295,7 @@ export default function Y2K() {
       // «Duplicar» reutiliza el mismo archivo: solo se borra cuando ya no lo usa ninguna otra pieza
       if (sel.storage_path) {
         const { data: others, error: lookErr } = await supabase.from('collage_items').select('id').eq('storage_path', sel.storage_path).limit(1)
-        if (!lookErr && !others?.length) await supabase.storage.from('collage').remove([sel.storage_path])
+        if (!lookErr && !others?.length) await supabase.storage.from('collage').remove([sel.storage_path, ...(sel.style?.bare ? [sel.style.bare] : [])])
       }
       setSelected(null)
       setMenuAt(null)
@@ -307,7 +313,7 @@ export default function Y2K() {
       straighten: { rotation: 0 },
       bigger: { width: clamp(sel.width * 1.15, 0.08, 1.2) },
       smaller: { width: clamp(sel.width / 1.15, 0.08, 1.2) },
-      // el borde blanco de las fotos se quita o se pone; los recortes lo llevan en la imagen
+      // el borde blanco se quita o se pone: en fotos lo pinta el CSS; en stickers se cambia a la copia sin borde
       frame: { style: { ...sel.style, frame: sel.style?.frame === 'none' ? 'white' : 'none' } },
     }[action]
     const { error } = await supabase.from('collage_items').update(patch).eq('id', sel.id)
@@ -367,8 +373,8 @@ export default function Y2K() {
         )}
 
         {panel === 'cutout' && (
-          <div className="y2k-panel y2k-cutout" role="group" aria-label="Hacer un recorte">
-            <p className="y2k-panel-note">Elige una foto y la recorto como un sticker.</p>
+          <div className="y2k-panel y2k-cutout" role="group" aria-label="Hacer un sticker">
+            <p className="y2k-panel-note">Elige una foto y la convierto en sticker.</p>
             <label className="y2k-pill y2k-pill--main">
               <Icon name="image" size={17} /> Galería
               <input type="file" accept="image/*" className="visually-hidden" onChange={(e) => addImage(e.target.files?.[0], 'cutout')} />
@@ -395,7 +401,7 @@ export default function Y2K() {
             </button>
             <button type="button" role="menuitem" className="y2k-add-item" onClick={() => choose('cutout')}>
               <span className="y2k-add-icon"><Icon name="scissors" size={18} /></span>
-              <span className="y2k-add-label">Recorte</span>
+              <span className="y2k-add-label">Sticker</span>
             </button>
             <label role="menuitem" className="y2k-add-item">
               <span className="y2k-add-icon"><Icon name="image" size={18} /></span>
@@ -437,7 +443,7 @@ export default function Y2K() {
         {load.state === 'loading' && <PressNote title="Buscando las tijeras…" />}
         {load.state === 'error' && <PressNote tone="error" title="Fe de erratas" body={load.message} />}
         {load.state === 'ready' && items.length === 0 && (
-          <PressNote title="Página en blanco" body="Pega la primera foto o haz un recorte. Muévelo con un dedo, gíralo con dos y fíjalo cuando quede perfecto." />
+          <PressNote title="Página en blanco" body="Pega la primera foto o haz un sticker. Muévelo con un dedo, gíralo con dos y fíjalo cuando quede perfecto." />
         )}
 
         {items.map((it) => (
@@ -503,7 +509,7 @@ export default function Y2K() {
               {menuPage === 1 && (
                 <>
                   {pageButton(0)}
-                  {sel.kind === 'photo' && menuButton(sel.style?.frame === 'none' ? 'Poner borde' : 'Quitar borde', 'frame')}
+                  {hasFrameToggle(sel) && menuButton(sel.style?.frame === 'none' ? 'Poner borde' : 'Quitar borde', 'frame')}
                   {menuButton('Enderezar', 'straighten')}
                   {menuButton('Al fondo', 'back')}
                   {pageButton(2)}
@@ -525,8 +531,14 @@ export default function Y2K() {
   )
 }
 
+/** Fotos siempre; stickers solo si se guardaron con su copia sin borde (los primeros no la tienen). */
+function hasFrameToggle(it: CollageItem) {
+  return it.kind === 'photo' || (it.kind === 'cutout' && !!it.style?.bare)
+}
+
 function PieceContent({ item }: { item: CollageItem }) {
-  const url = useSignedUrl('collage', item.storage_path)
+  const bare = item.kind === 'cutout' && item.style?.frame === 'none' && item.style?.bare
+  const url = useSignedUrl('collage', bare || item.storage_path)
   if (item.kind === 'text') {
     const len = Math.max(1, ...(item.body ?? '').split(/\s+/).map((w) => w.length))
     return (
@@ -570,6 +582,6 @@ function inkOf(color?: string): Ink {
 }
 
 function pieceLabel(it: CollageItem) {
-  const what = it.kind === 'photo' ? 'Foto' : it.kind === 'cutout' ? 'Recorte' : `Texto: ${it.body}`
+  const what = it.kind === 'photo' ? 'Foto' : it.kind === 'cutout' ? 'Sticker' : `Texto: ${it.body}`
   return it.locked ? `${what}, fijada` : what
 }
