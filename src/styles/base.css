@@ -79,27 +79,52 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em
 }
 
 /* Deslizar desde el borde para volver (src/paper/swipeBack.ts): la sección se va hacia la derecha
-   bajo el dedo y la portada, que sigue montada, espera quieta debajo. Las dos capas flotan fijas
-   en la pantalla mientras dura el gesto; fuera de él no cambian nada (display: contents). */
-.page-layer { display: contents; }
+   bajo el dedo y la portada, que sigue montada, espera quieta debajo. Mientras dura el gesto las dos
+   capas se apilan arriba de la página (absolutas, no fijas: iOS recorta lo fijo antes del borde de
+   abajo en la app instalada); fuera de él no cambian nada (display: contents). */
+.page-layer,
+.layer-inner { display: contents; }
 .front-layer.is-under,
 .page-layer.is-swiping {
   display: block !important;
-  position: fixed;
-  inset: 0;
-  overflow: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
   pointer-events: none;
 }
-.front-layer.is-under {
-  z-index: 44;
-  background: var(--paper);
+.is-under > .layer-inner,
+.is-swiping > .layer-inner {
+  display: block;
+  position: relative; /* top negativo: el contenido queda en el punto donde estaba */
 }
+/* Fondo de cada capa alargado hasta el borde de la pantalla */
+.front-layer.is-under::before,
+.page-layer.is-swiping::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: calc(-1 * var(--swipe-extra, 0px));
+  z-index: -1;
+}
+.front-layer.is-under { z-index: 44; }
+.front-layer.is-under::before { background: var(--paper); }
 .page-layer.is-swiping {
   z-index: 45; /* sobre la portada; la flecha de volver (40) se esconde mientras */
-  box-shadow: var(--shadow-edge);
   will-change: transform;
 }
+.page-layer.is-swiping::before {
+  background: inherit;
+  box-shadow: var(--shadow-edge);
+}
 html.is-swiping-back .back-button { visibility: hidden; }
+/* Lo que se sale por la derecha al deslizar no ensancha la página (si no, el iPhone aleja el zoom) */
+html.is-swiping-back #root {
+  position: relative;
+  overflow-x: clip;
+}
 
 /* Pasar la página (View Transitions): la página nueva entra desdoblándose
    desde el lomo derecho; la vieja se queda debajo. */

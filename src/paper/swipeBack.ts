@@ -9,50 +9,54 @@ import { useEffect, type RefObject } from 'react'
  * y la portada, que sigue montada, ya está debajo en el punto donde se dejó.
  * Al soltar pasado un tercio (o con un tirón), se vuelve; si no, la sección regresa a su sitio.
  *
- * Mientras dura, las dos capas flotan fijas en la pantalla (`.front-layer.is-under` debajo,
- * `.page-layer.is-swiping` encima) y cada una guarda su scroll en `scrollTop`. Como varias
- * secciones pintan su fondo en <html>, la capa de la sección se lleva una copia de ese fondo.
+ * Mientras dura, la portada (`.front-layer.is-under`) y la sección (`.page-layer.is-swiping`)
+ * se apilan arriba de la página, con la ventana en scroll 0, y cada una corre su contenido
+ * (`.layer-inner`, `top` negativo) al punto donde estaba. No son `position: fixed` a propósito:
+ * en la app instalada (barra de estado translúcida) iOS recorta lo fijo antes del borde de abajo
+ * y quedaba una franja negra. Lo que sí es fijo dentro de la sección (p. ej. el «+» del Collage)
+ * se ubica respecto a la capa, que mide lo mismo que la ventana, así que no se mueve.
+ * Como varias secciones pintan su fondo en <html>, la capa se lleva una copia de ese fondo, y un
+ * `::before` lo alarga hasta el borde de la pantalla (`--swipe-extra`).
  */
 const EDGE = 30 // px desde el borde donde empieza el gesto
 const SLOP = 8 // px antes de decidir si es horizontal
 const COMMIT = 0.33 // fracción del ancho para volver al soltar
 const FLICK = 0.45 // px/ms: un tirón rápido vuelve aunque sea corto
 
-/**
- * Alto real de la pantalla. En la app instalada (barra de estado translúcida), iOS da a lo fijo
- * un alto más corto que la pantalla y por abajo quedaba una franja vacía; ahí la app ocupa
- * toda la pantalla, así que vale `screen.height`.
- */
-function fullHeight() {
-  const standalone = matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone === true
-  return Math.max(window.innerHeight, standalone ? screen.height : 0)
-}
-
-function sizeLayer(l: HTMLElement, h: number) {
-  l.style.bottom = 'auto'
-  l.style.height = `${h}px`
-}
-
-function unsizeLayer(l: HTMLElement) {
-  l.style.bottom = ''
-  l.style.height = ''
-}
-
 const BG = ['backgroundImage', 'backgroundSize', 'backgroundPosition', 'backgroundRepeat', 'backgroundColor'] as const
+
+/** Cuánto le falta a la ventana para llegar al borde de la pantalla (en la app instalada), con margen. */
+function extraBelow() {
+  const standalone = matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone === true
+  return Math.max(0, (standalone ? screen.height : 0) - window.innerHeight) + 120
+}
+
+function lift(layer: HTMLElement, cls: string, y: number) {
+  layer.style.height = `${window.innerHeight}px`
+  layer.classList.add(cls)
+  const inner = layer.firstElementChild as HTMLElement | null
+  if (inner) inner.style.top = `${-y}px`
+}
+
+function drop(layer: HTMLElement, cls: string) {
+  layer.classList.remove(cls)
+  layer.style.height = ''
+  const inner = layer.firstElementChild as HTMLElement | null
+  if (inner) inner.style.top = ''
+}
 
 /** Deja la portada como estaba (la llama también App al mostrar la portada tras volver). */
 export function clearSwipe(front: HTMLElement | null) {
-  document.documentElement.classList.remove('is-swiping-back')
-  if (!front) return
-  front.classList.remove('is-under')
-  unsizeLayer(front)
+  const root = document.documentElement
+  root.classList.remove('is-swiping-back')
+  root.style.removeProperty('--swipe-extra')
+  if (front) drop(front, 'is-under')
 }
 
 function clearPage(page: HTMLElement) {
-  page.classList.remove('is-swiping')
+  drop(page, 'is-swiping')
   page.style.transform = ''
   page.style.transition = ''
-  unsizeLayer(page)
   for (const k of BG) page.style[k] = ''
 }
 
@@ -89,19 +93,17 @@ export function useSwipeBack({
       const p = page.current
       if (!f || !p) return false
       pageY = window.scrollY
+      const root = document.documentElement
       // La sección se lleva su fondo, que vive en <html>
-      const bg = getComputedStyle(document.documentElement)
+      const bg = getComputedStyle(root)
       for (const k of BG) p.style[k] = bg[k]
       p.style.transition = 'none'
-      const h = fullHeight()
-      sizeLayer(f, h)
-      sizeLayer(p, h)
-      document.documentElement.classList.add('is-swiping-back')
-      f.classList.add('is-under')
-      p.classList.add('is-swiping')
-      f.scrollTop = frontY.current // la portada espera debajo en el punto donde se dejó
-      p.scrollTop = pageY // y la sección sigue donde estaba
+      root.style.setProperty('--swipe-extra', `${extraBelow()}px`)
+      root.classList.add('is-swiping-back')
       place(0)
+      lift(f, 'is-under', frontY.current) // la portada espera debajo en el punto donde se dejó
+      lift(p, 'is-swiping', pageY) // y la sección sigue donde estaba
+      window.scrollTo(0, 0)
       return true
     }
 

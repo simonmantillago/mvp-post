@@ -111,28 +111,32 @@ export default function App() {
       <Suspense fallback={<PressNote title="En prensa…" />}>
         {/* La portada no se desmonta al entrar a una sección: al volver sigue igual, sin recargar las fotos */}
         <div ref={frontLayer} className="front-layer" style={{ display: atFront ? 'contents' : 'none' }}>
-          <ErrorBoundary>
-            <FrontPage active={atFront} />
-          </ErrorBoundary>
+          <div className="layer-inner">
+            <ErrorBoundary>
+              <FrontPage active={atFront} />
+            </ErrorBoundary>
+          </div>
         </div>
         {!atFront && (
           // Capa de la sección: al deslizar para volver se va hacia la derecha (swipeBack.ts)
           <div ref={pageLayer} className="page-layer">
-            {/* Una por ruta: si una sección falla, al volver a la portada se reinicia */}
-            <ErrorBoundary key={location.pathname}>
-              <Routes>
-                <Route path="/columna/:number" element={<Column />} />
-                <Route path="/redaccion" element={<Newsroom />} />
-                <Route path="/redaccion/:id" element={<Newsroom />} />
-                <Route path="/y2k" element={<Y2K />} />
-                <Route path="/alfombra-roja" element={<RedCarpet />} />
-                <Route path="/vinilos" element={<Vinyls />} />
-                <Route path="/cartelera" element={<Cartelera />} />
-                <Route path="/cartas" element={<Letters />} />
-                <Route path="/suscripcion" element={<Subscription />} />
-                <Route path="*" element={<Navigate to="/" replace />} />
-              </Routes>
-            </ErrorBoundary>
+            <div className="layer-inner">
+              {/* Una por ruta: si una sección falla, al volver a la portada se reinicia */}
+              <ErrorBoundary key={location.pathname}>
+                <Routes>
+                  <Route path="/columna/:number" element={<Column />} />
+                  <Route path="/redaccion" element={<Newsroom />} />
+                  <Route path="/redaccion/:id" element={<Newsroom />} />
+                  <Route path="/y2k" element={<Y2K />} />
+                  <Route path="/alfombra-roja" element={<RedCarpet />} />
+                  <Route path="/vinilos" element={<Vinyls />} />
+                  <Route path="/cartelera" element={<Cartelera />} />
+                  <Route path="/cartas" element={<Letters />} />
+                  <Route path="/suscripcion" element={<Subscription />} />
+                  <Route path="*" element={<Navigate to="/" replace />} />
+                </Routes>
+              </ErrorBoundary>
+            </div>
           </div>
         )}
       </Suspense>
