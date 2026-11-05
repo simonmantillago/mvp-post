@@ -286,7 +286,11 @@ export default function Y2K() {
     if (action === 'delete') {
       const { error } = await supabase.from('collage_items').delete().eq('id', sel.id)
       if (error) return setError('No se pudo quitar esa pieza.')
-      if (sel.storage_path) await supabase.storage.from('collage').remove([sel.storage_path])
+      // «Duplicar» reutiliza el mismo archivo: solo se borra cuando ya no lo usa ninguna otra pieza
+      if (sel.storage_path) {
+        const { data: others, error: lookErr } = await supabase.from('collage_items').select('id').eq('storage_path', sel.storage_path).limit(1)
+        if (!lookErr && !others?.length) await supabase.storage.from('collage').remove([sel.storage_path])
+      }
       setSelected(null)
       setMenuAt(null)
       return refresh()
