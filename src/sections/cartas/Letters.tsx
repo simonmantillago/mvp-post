@@ -164,7 +164,7 @@ export default function Letters() {
         <div ref={endRef} />
       </div>
 
-      <form className="letters-compose" onSubmit={(e) => send('text', e)}>
+      <form className="letters-compose" data-swipe-freeze onSubmit={(e) => send('text', e)}>
         {error && (
           <p className="section-error" role="alert">
             {error}

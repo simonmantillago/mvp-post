@@ -17,6 +17,9 @@ import { useEffect, type RefObject } from 'react'
  * se ubica respecto a la capa, que mide lo mismo que la ventana, así que no se mueve.
  * Como varias secciones pintan su fondo en <html>, la capa se lleva una copia de ese fondo, y un
  * `::before` lo alarga hasta el borde de la pantalla (`--swipe-extra`).
+ * Lo que va pegado con `position: sticky` (el recuadro de escribir de Cartas) se marca con
+ * `data-swipe-freeze`: mientras dura el gesto queda clavado en el punto de la pantalla donde estaba,
+ * porque iOS lo recoloca a destiempo dentro de una capa que se mueve y se veía saltar.
  */
 const EDGE = 30 // px desde el borde donde empieza el gesto
 const SLOP = 8 // px antes de decidir si es horizontal
@@ -53,7 +56,31 @@ export function clearSwipe(front: HTMLElement | null) {
   if (front) drop(front, 'is-under')
 }
 
+const FREEZE = ['position', 'top', 'bottom', 'left', 'width', 'margin'] as const
+
+/** Clava lo pegajoso en su sitio de la pantalla (se mide antes de mover las capas). */
+function measureFrozen(page: HTMLElement) {
+  return [...page.querySelectorAll<HTMLElement>('[data-swipe-freeze]')].map((el) => ({ el, r: el.getBoundingClientRect() }))
+}
+
+function freeze(items: { el: HTMLElement; r: DOMRect }[]) {
+  for (const { el, r } of items) {
+    // fixed dentro de una capa con transform = relativo a la capa, que arranca en el borde de arriba de la pantalla
+    el.style.position = 'fixed'
+    el.style.top = `${r.top}px`
+    el.style.bottom = 'auto'
+    el.style.left = `${r.left}px`
+    el.style.width = `${r.width}px`
+    el.style.margin = '0'
+  }
+}
+
+function unfreeze(page: HTMLElement) {
+  for (const el of page.querySelectorAll<HTMLElement>('[data-swipe-freeze]')) for (const k of FREEZE) el.style[k] = ''
+}
+
 function clearPage(page: HTMLElement) {
+  unfreeze(page)
   drop(page, 'is-swiping')
   page.style.transform = ''
   page.style.transition = ''
@@ -93,6 +120,7 @@ export function useSwipeBack({
       const p = page.current
       if (!f || !p) return false
       pageY = window.scrollY
+      const frozen = measureFrozen(p)
       const root = document.documentElement
       // La sección se lleva su fondo, que vive en <html>
       const bg = getComputedStyle(root)
@@ -103,6 +131,7 @@ export function useSwipeBack({
       place(0)
       lift(f, 'is-under', frontY.current) // la portada espera debajo en el punto donde se dejó
       lift(p, 'is-swiping', pageY) // y la sección sigue donde estaba
+      freeze(frozen)
       window.scrollTo(0, 0)
       return true
     }
