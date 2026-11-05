@@ -18,18 +18,41 @@ const SLOP = 8 // px antes de decidir si es horizontal
 const COMMIT = 0.33 // fracción del ancho para volver al soltar
 const FLICK = 0.45 // px/ms: un tirón rápido vuelve aunque sea corto
 
+/**
+ * Alto real de la pantalla. En la app instalada (barra de estado translúcida), iOS da a lo fijo
+ * un alto más corto que la pantalla y por abajo quedaba una franja vacía; ahí la app ocupa
+ * toda la pantalla, así que vale `screen.height`.
+ */
+function fullHeight() {
+  const standalone = matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone === true
+  return Math.max(window.innerHeight, standalone ? screen.height : 0)
+}
+
+function sizeLayer(l: HTMLElement, h: number) {
+  l.style.bottom = 'auto'
+  l.style.height = `${h}px`
+}
+
+function unsizeLayer(l: HTMLElement) {
+  l.style.bottom = ''
+  l.style.height = ''
+}
+
 const BG = ['backgroundImage', 'backgroundSize', 'backgroundPosition', 'backgroundRepeat', 'backgroundColor'] as const
 
 /** Deja la portada como estaba (la llama también App al mostrar la portada tras volver). */
 export function clearSwipe(front: HTMLElement | null) {
   document.documentElement.classList.remove('is-swiping-back')
-  front?.classList.remove('is-under')
+  if (!front) return
+  front.classList.remove('is-under')
+  unsizeLayer(front)
 }
 
 function clearPage(page: HTMLElement) {
   page.classList.remove('is-swiping')
   page.style.transform = ''
   page.style.transition = ''
+  unsizeLayer(page)
   for (const k of BG) page.style[k] = ''
 }
 
@@ -70,6 +93,9 @@ export function useSwipeBack({
       const bg = getComputedStyle(document.documentElement)
       for (const k of BG) p.style[k] = bg[k]
       p.style.transition = 'none'
+      const h = fullHeight()
+      sizeLayer(f, h)
+      sizeLayer(p, h)
       document.documentElement.classList.add('is-swiping-back')
       f.classList.add('is-under')
       p.classList.add('is-swiping')
