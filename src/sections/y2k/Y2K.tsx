@@ -1,7 +1,7 @@
 import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
 import { useCouple } from '../../hooks/useCouple'
 import { useLive, useSignedUrl } from '../../hooks/useData'
-import { compressImage, uploadImage } from '../../lib/images'
+import { compressImage, seedLocalUrl, uploadImage } from '../../lib/images'
 import { supabase } from '../../lib/supabase'
 import type { CollageItem } from '../../lib/types'
 import { Icon } from '../../ui/Icon'
@@ -26,7 +26,7 @@ const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v))
 /** 2000's Collage: collage compartido. Un dedo mueve, dos dedos escalan y giran, el sello lo deja quieto. */
 export default function Y2K() {
   const { session } = useCouple()
-  const { load, refresh } = useLive<CollageItem[]>('collage_items', () => supabase.from('collage_items').select('*').order('z', { ascending: true }))
+  const { load, refresh, mutate } = useLive<CollageItem[]>('collage_items', () => supabase.from('collage_items').select('*').order('z', { ascending: true }))
   const canvasRef = useRef<HTMLDivElement>(null)
   const [W, setW] = useState(360)
   const [local, setLocal] = useState<Record<string, Geo>>({})
@@ -232,10 +232,11 @@ export default function Y2K() {
     const { data, error } = await supabase
       .from('collage_items')
       .insert({ author_id: session.user.id, x: 0.25, y: spawnY(), width: 0.45, rotation: Math.round(Math.random() * 12 - 6), z: maxZ + 1, ...row })
-      .select('id')
-      .single()
+      .select('*')
+      .single<CollageItem>()
     if (error || !data) return setError('No se pudo pegar. Revisa la conexión.')
-    await refresh()
+    // se pinta ya con la fila que devolvió el insert; el tiempo real trae el resto
+    mutate((list) => (list.some((i) => i.id === data.id) ? list : [...list, data]))
     setSelected(data.id)
     placeMenu(data.id)
   }
@@ -251,13 +252,14 @@ export default function Y2K() {
       blob =
         kind === 'cutout'
           ? await makeCutout(file, (label, pct) => setBusy(pct == null ? label : `${label} ${pct}%`))
-          : await compressImage(file, { max: 1400, keepAlpha: file.type === 'image/png' || file.type === 'image/webp' })
+          : await compressImage(file, { max: 1200, keepAlpha: file.type === 'image/png' || file.type === 'image/webp' })
     } catch {
       setBusy(null)
       return setError(kind === 'cutout' ? 'No encontré a nadie en esa foto. Prueba con una donde se vea bien la persona.' : 'No se pudo leer esa imagen. Intenta con otra.')
     }
     try {
       const path = await uploadImage('collage', blob, session.user.id)
+      seedLocalUrl('collage', path, blob)
       await add({ kind, storage_path: path, bg_removed: kind === 'cutout', width: kind === 'photo' ? 0.5 : 0.45 })
     } catch {
       setError('No se pudo subir la imagen. Revisa la conexión.')
@@ -278,7 +280,7 @@ export default function Y2K() {
   }
 
   // ---- acciones de la burbuja -----------------------------------------------
-  async function act(action: 'front' | 'back' | 'lock' | 'unlock' | 'duplicate' | 'delete' | 'straighten' | 'bigger' | 'smaller') {
+  async function act(action: 'front' | 'back' | 'lock' | 'unlock' | 'duplicate' | 'delete' | 'straighten' | 'bigger' | 'smaller' | 'frame') {
     if (!sel) return
     setError(null)
     if (action === 'delete') {
@@ -301,6 +303,8 @@ export default function Y2K() {
       straighten: { rotation: 0 },
       bigger: { width: clamp(sel.width * 1.15, 0.08, 1.2) },
       smaller: { width: clamp(sel.width / 1.15, 0.08, 1.2) },
+      // el borde blanco de las fotos se quita o se pone; los recortes lo llevan en la imagen
+      frame: { style: { ...sel.style, frame: sel.style?.frame === 'none' ? 'white' : 'none' } },
     }[action]
     const { error } = await supabase.from('collage_items').update(patch).eq('id', sel.id)
     if (error) setError('No se pudo aplicar el cambio.')
@@ -309,6 +313,17 @@ export default function Y2K() {
     placeMenu(sel.id)
   }
 
+  // ‹ › entre las páginas de la burbuja, como el menú de copiar del iPhone
+  const pageButton = (to: number) =>
+    to > menuPage ? (
+      <button type="button" aria-label="Más opciones" onClick={() => setMenuPage(to)}>
+        <Icon name="chevron" size={16} />
+      </button>
+    ) : (
+      <button type="button" aria-label="Volver" onClick={() => setMenuPage(to)}>
+        <Icon name="chevron-left" size={16} />
+      </button>
+    )
   const menuButton = (label: string, action: Parameters<typeof act>[0], extra = '') => (
     <button type="button" className={extra} onClick={() => act(action)}>
       {label}
@@ -429,7 +444,7 @@ export default function Y2K() {
               if (el) itemEls.current.set(it.id, el)
               else itemEls.current.delete(it.id)
             }}
-            className={`piece piece--${it.kind}${it.id === selected ? ' is-selected' : ''}${it.locked ? ' is-locked' : ''}`}
+            className={`piece piece--${it.kind}${it.style?.frame === 'none' ? ' is-bare' : ''}${it.id === selected ? ' is-selected' : ''}${it.locked ? ' is-locked' : ''}`}
             style={{ left: it.x * W, top: it.y * W, width: it.width * W, zIndex: it.z, rotate: `${it.rotation}deg`, '--w': `${it.width * W}px` } as CSSProperties}
             role="button"
             tabIndex={0}
@@ -472,25 +487,30 @@ export default function Y2K() {
                 }
               }}
             >
-              {menuPage === 0 ? (
+              {menuPage === 0 && (
                 <>
                   {menuButton('Al frente', 'front')}
                   {menuButton('Fijar', 'lock')}
                   {menuButton('Duplicar', 'duplicate')}
                   {menuButton('Eliminar', 'delete', 'is-destructive')}
-                  <button type="button" aria-label="Más opciones" onClick={() => setMenuPage(1)}>
-                    <Icon name="chevron" size={16} />
-                  </button>
+                  {pageButton(1)}
                 </>
-              ) : (
+              )}
+              {menuPage === 1 && (
                 <>
-                  <button type="button" aria-label="Volver" onClick={() => setMenuPage(0)}>
-                    <Icon name="chevron-left" size={16} />
-                  </button>
-                  {menuButton('Más grande', 'bigger')}
-                  {menuButton('Más pequeña', 'smaller')}
+                  {pageButton(0)}
+                  {sel.kind === 'photo' && menuButton(sel.style?.frame === 'none' ? 'Poner borde' : 'Quitar borde', 'frame')}
                   {menuButton('Enderezar', 'straighten')}
                   {menuButton('Al fondo', 'back')}
+                  {pageButton(2)}
+                </>
+              )}
+              {/* el tamaño se cambia con dos dedos; esto queda al final por si acaso */}
+              {menuPage === 2 && (
+                <>
+                  {pageButton(1)}
+                  {menuButton('Más grande', 'bigger')}
+                  {menuButton('Más pequeña', 'smaller')}
                 </>
               )}
             </div>

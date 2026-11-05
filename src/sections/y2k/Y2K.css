@@ -271,7 +271,9 @@
 }
 .piece:active { cursor: grabbing; }
 .piece img { display: block; width: 100%; height: auto; pointer-events: none; }
-.piece--photo img { border: 0.35rem solid #fff; }
+.piece--photo img { border: 0.35rem solid var(--text); }
+/* «Quitar borde» en la burbuja */
+.piece--photo.is-bare img { border: 0; }
 .piece--text span {
   display: block;
   /* la palabra más larga cabe a lo ancho de la pieza (Kabisat ≈ 1 em por letra) */

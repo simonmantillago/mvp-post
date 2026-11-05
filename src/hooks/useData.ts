@@ -56,7 +56,13 @@ export function useLive<T>(table: string, query: () => PromiseLike<{ data: unkno
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [table, refresh, ...deps])
 
-  return { load, refresh }
+  /** Cambio local inmediato (p. ej. la fila recién insertada) sin esperar a volver a consultar. */
+  const mutate = useCallback((fn: (data: T) => T) => {
+    seq.current++
+    setLoad((prev) => (prev.state === 'ready' ? { ...prev, data: fn(prev.data) } : prev))
+  }, [])
+
+  return { load, refresh, mutate }
 }
 
 export function offline() {

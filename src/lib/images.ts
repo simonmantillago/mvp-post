@@ -36,3 +36,8 @@ export async function signedUrl(bucket: string, path: string) {
   cache.set(key, { url: data.signedUrl, expires: Date.now() + 3600_000 })
   return data.signedUrl
 }
+
+/** Lo que uno mismo acaba de subir ya está en el teléfono: se muestra esa copia en vez de pedir enlace y bajarla otra vez. */
+export function seedLocalUrl(bucket: string, path: string, blob: Blob) {
+  cache.set(`${bucket}/${path}`, { url: URL.createObjectURL(blob), expires: Number.MAX_SAFE_INTEGER })
+}
