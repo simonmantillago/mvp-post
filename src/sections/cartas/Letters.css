@@ -9,9 +9,14 @@ html[data-section="cartas"] {
 }
 html[data-section="cartas"] body,
 .section--cartas { background: transparent; }
+/* Sin rebote al pasarse del final: el recuadro de escribir no se despega del borde */
+html[data-section="cartas"] { overscroll-behavior-y: none; }
 .section--cartas {
   display: flex;
   flex-direction: column;
+  /* El recuadro de escribir es lo último: sin el margen de abajo de las secciones,
+     al llegar al final queda en el mismo sitio que mientras se desliza */
+  padding-bottom: 0;
 }
 /* Título y subtítulo a todo el ancho: solo la línea del folio deja sitio a la flecha */
 .section--cartas .folio { padding-right: var(--gutter); }
