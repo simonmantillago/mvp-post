@@ -18,20 +18,6 @@ export function useTurn() {
   }
 }
 
-/**
- * Deslizar hacia atrás en el iPhone (o el botón atrás del navegador) ya trae su propia animación:
- * ahí la página no se pasa (`html.no-turn`). Solo la flecha ← pasa la página hacia atrás.
- */
-let backFromButton = false
-window.addEventListener('popstate', () => {
-  const root = document.documentElement
-  if (!backFromButton) {
-    root.classList.add('no-turn')
-    window.setTimeout(() => root.classList.remove('no-turn'), 700)
-  }
-  backFromButton = false
-})
-
 /** Qué ruta hay en cada entrada del historial de esta apertura (por el `idx` que guarda react-router). */
 const trail = new Map<number, string>()
 const historyIdx = () => (window.history.state as { idx?: number } | null)?.idx
@@ -56,13 +42,8 @@ export function BackButton({ to = '/' }: { to?: string }) {
     // Si se llegó desde ahí, se vuelve atrás en el historial (como deslizar): la portada queda donde se dejó
     // y deslizar hacia atrás después no regresa a la sección
     const idx = historyIdx()
-    if (typeof idx === 'number' && idx > 0 && trail.get(idx - 1) === to) {
-      backFromButton = true
-      const root = document.documentElement
-      root.classList.add('turn-back')
-      window.setTimeout(() => root.classList.remove('turn-back'), 700)
-      navigate(-1)
-    } else turn(to, true)
+    if (typeof idx === 'number' && idx > 0 && trail.get(idx - 1) === to) navigate(-1)
+    else turn(to, true)
   }
   return createPortal(
     <button type="button" className="back-button" aria-label="Volver a la portada" onClick={back}>

@@ -103,10 +103,6 @@ html.turn-back::view-transition-new(root) {
   to { clip-path: inset(0 0 0 0); }
 }
 
-/* Deslizar hacia atrás en el iPhone: iOS ya anima, aquí no se pasa la página */
-html.no-turn::view-transition-old(root),
-html.no-turn::view-transition-new(root) { animation: none; }
-
 @media (prefers-reduced-motion: reduce) {
   ::view-transition-old(root),
   ::view-transition-new(root) { animation: none; }
