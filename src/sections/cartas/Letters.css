@@ -15,7 +15,7 @@ html[data-section="cartas"] body,
 }
 /* Título y subtítulo a todo el ancho: solo la línea del folio deja sitio a la flecha */
 .section--cartas .folio { padding-right: var(--gutter); }
-.section--cartas .folio-line { padding-right: 3.5rem; }
+.section--cartas .folio-line { margin-right: 0; }
 .section--cartas .folio-title {
   font-weight: 700;
   font-size: clamp(2.5rem, 12vw, 3.2rem);
