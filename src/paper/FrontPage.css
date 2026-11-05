@@ -228,8 +228,13 @@
   line-height: 1.35;
   text-transform: uppercase;
 }
-/* el nombre nunca se parte; el sello «Nuevo» baja si no cabe al lado */
-.story[data-section="y2k"] .story-name-text { white-space: nowrap; }
+/* el nombre nunca se parte; el sello «Nuevo» baja si no cabe al lado.
+   Borde negro como el título dentro de la sección: el trazo va detrás del relleno para no comerse la letra */
+.story[data-section="y2k"] .story-name-text {
+  white-space: nowrap;
+  -webkit-text-stroke: 0.1em var(--ink);
+  paint-order: stroke fill;
+}
 /* La foto flota a la derecha y el título va a la izquierda, en su altura */
 .story--float-right .story-photo { float: right; width: 48%; margin: 0 0 var(--s2) var(--s3); }
 .story--float-right .story-photo img { aspect-ratio: 4 / 5; }
