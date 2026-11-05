@@ -222,6 +222,14 @@
 .story--lead-left .story-photo { float: left; width: 48%; margin: 0 var(--s3) var(--s2) 0; }
 /* Bodoni en itálica, como el título dentro de la sección */
 .story[data-section="alfombra"] .story-name { font-style: italic; }
+/* 2000's Collage: Kabisat es ancha y sus mayúsculas miden 1.22 em → en una sola línea, a la medida del ancho, sin encimarse */
+.story[data-section="y2k"] .story-name {
+  font-size: min(5.7vw, 2.3rem);
+  line-height: 1.35;
+  text-transform: uppercase;
+}
+/* el nombre nunca se parte; el sello «Nuevo» baja si no cabe al lado */
+.story[data-section="y2k"] .story-name-text { white-space: nowrap; }
 /* La foto flota a la derecha y el título va a la izquierda, en su altura */
 .story--float-right .story-photo { float: right; width: 48%; margin: 0 0 var(--s2) var(--s3); }
 .story--float-right .story-photo img { aspect-ratio: 4 / 5; }

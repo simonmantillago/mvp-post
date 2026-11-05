@@ -1,11 +1,6 @@
 /* 2000's Collage: medio tono fucsia sobre negro, letra itálica alta y botones de plástico brillante de celular de 2003 */
 
-/* Kabisat Demo Italic Tall (fuente de Simón). La demo no trae tildes ni ñ: se compusieron con el acento de «Ẃ» y la «˜» de la misma fuente. */
-@font-face {
-  font-family: "Kabisat";
-  src: url("./fonts/kabisat-2000s.ttf") format("truetype");
-  font-display: block;
-}
+/* La @font-face de Kabisat vive en styles/base.css: la portada también la usa antes de entrar a la sección */
 
 .y2k {
   position: relative;

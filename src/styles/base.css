@@ -9,13 +9,20 @@
 @import "@fontsource/lora/latin-400.css";
 @import "@fontsource/lora/latin-400-italic.css";
 @import "@fontsource/special-elite/latin-400.css";
-@import "@fontsource/bagel-fat-one/latin-400.css";
 @import "@fontsource/bodoni-moda/latin-400.css";
 @import "@fontsource/bodoni-moda/latin-400-italic.css";
 @import "@fontsource/playfair-display/latin-500.css";
 @import "@fontsource/playfair-display/latin-500-italic.css";
 @import "@fontsource/monoton/latin-400.css";
 @import "./tokens.css";
+
+/* Kabisat Demo Italic Tall (fuente de Simón) para 2000's Collage, con tildes, ñ y dígitos compuestos
+   (ver src/sections/y2k/fonts/README.md). Global porque el título de la portada también la usa. */
+@font-face {
+  font-family: "Kabisat";
+  src: url("../sections/y2k/fonts/kabisat-2000s.ttf") format("truetype");
+  font-display: block;
+}
 
 *, *::before, *::after { box-sizing: border-box; }
 

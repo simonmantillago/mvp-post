@@ -107,7 +107,7 @@ typography:
     fontWeight: 400
     lineHeight: 0.95
   display-y2k:
-    fontFamily: "Kabisat, Bagel Fat One, sans-serif"
+    fontFamily: "Kabisat, Antonio, sans-serif"
     fontWeight: 400
     lineHeight: 1.32
   display-alfombra:

@@ -149,7 +149,7 @@ function Story({ s, unseen, photoLast = false }: { s: SectionEntry; unseen: numb
   )
   const name = (
     <h3 className="story-name">
-      {s.name}
+      <span className="story-name-text">{s.name}</span>
       {unseen > 0 && (
         <span className="story-new">
           Nuevo<span className="visually-hidden">: {unseen} sin ver</span>
