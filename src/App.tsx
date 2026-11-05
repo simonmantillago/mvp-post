@@ -8,14 +8,15 @@ import { Login } from './paper/Login'
 import { FrontPage } from './paper/FrontPage'
 import { Column } from './paper/Column'
 import { PressNote } from './ui/PressNote'
+import { loaders } from './sections/prefetch'
 
 const Newsroom = lazy(() => import('./paper/Newsroom'))
-const Y2K = lazy(() => import('./sections/y2k/Y2K'))
-const RedCarpet = lazy(() => import('./sections/alfombra-roja/RedCarpet'))
-const Vinyls = lazy(() => import('./sections/vinilos/Vinyls'))
-const Cartelera = lazy(() => import('./sections/cartelera/Cartelera'))
-const Letters = lazy(() => import('./sections/cartas/Letters'))
-const Subscription = lazy(() => import('./sections/suscripcion/Subscription'))
+const Y2K = lazy(loaders.y2k)
+const RedCarpet = lazy(loaders.alfombra)
+const Vinyls = lazy(loaders.vinilos)
+const Cartelera = lazy(loaders.cartelera)
+const Letters = lazy(loaders.cartas)
+const Subscription = lazy(loaders.suscripcion)
 
 /** La llegada se ve una vez por apertura de la app (y mientras se resuelve la sesión). */
 function useArrival() {

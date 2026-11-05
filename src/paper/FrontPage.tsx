@@ -1,7 +1,9 @@
+import { useEffect } from 'react'
 import { Link } from 'react-router'
 import { useCouple } from '../hooks/useCouple'
 import { useMarkSeen, useUnseen } from '../hooks/useData'
 import { sections, type SectionEntry } from '../sections/registry'
+import { prefetchAllQuietly, prefetchSection } from '../sections/prefetch'
 import { Halftone } from '../ui/Halftone'
 import { Icon } from '../ui/Icon'
 import { formatFull, formatShort } from './dates'
@@ -20,6 +22,7 @@ export function FrontPage() {
   const { load } = usePublishedEditions()
   const unseen = useUnseen()
   useMarkSeen('portada')
+  useEffect(() => prefetchAllQuietly(), [])
 
   const editions = load.state === 'ready' ? load.data : []
   const lead = editions[0]
@@ -140,9 +143,11 @@ function plana(list: SectionEntry[]) {
 
 /** Un artículo de la plana por sección: foto a color, título en la voz de su mundo, bajada y la entrada a la sección. */
 function Story({ s, unseen, photoLast = false }: { s: SectionEntry; unseen: number; photoLast?: boolean }) {
+  // Al apoyar el dedo ya se empieza a traer la sección: la página se pasa mientras llega
+  const early = { onPointerDown: () => prefetchSection(s.id), onFocus: () => prefetchSection(s.id) }
   const photo = (
     <figure className="story-photo">
-      <Link to={s.path} viewTransition className="story-photo-link" tabIndex={-1} aria-hidden="true">
+      <Link to={s.path} viewTransition className="story-photo-link" tabIndex={-1} aria-hidden="true" {...early}>
         <img src={s.cover} alt="" loading="lazy" decoding="async" style={{ objectFit: s.coverFit ?? 'cover', objectPosition: s.coverPosition, aspectRatio: s.coverAspect }} />
       </Link>
       <figcaption className="story-caption">{s.caption}</figcaption>
@@ -160,7 +165,7 @@ function Story({ s, unseen, photoLast = false }: { s: SectionEntry; unseen: numb
   )
   const page = <p className="story-page">Pág. {s.page}</p>
   const go = (
-    <Link to={s.path} viewTransition className="story-go">
+    <Link to={s.path} viewTransition className="story-go" {...early}>
       {s.layout === 'pair' ? 'Ver' : 'Ver sección'} <Icon name="arrow-right" size={18} />
       {s.layout === 'pair' && <span className="visually-hidden"> {s.name}</span>}
     </Link>

@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
 import { useCouple } from '../../hooks/useCouple'
 import { useLive, useSignedUrl } from '../../hooks/useData'
+import { live as queries } from '../queries'
 import { compressImage, seedLocalUrl, uploadImage } from '../../lib/images'
 import { supabase } from '../../lib/supabase'
 import type { CollageItem } from '../../lib/types'
@@ -26,7 +27,7 @@ const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v))
 /** 2000's Collage: collage compartido. Un dedo mueve, dos dedos escalan y giran, el sello lo deja quieto. */
 export default function Y2K() {
   const { session } = useCouple()
-  const { load, refresh, mutate } = useLive<CollageItem[]>('collage_items', () => supabase.from('collage_items').select('*').order('z', { ascending: true }))
+  const { load, refresh, mutate } = useLive<CollageItem[]>(queries.collage.table, queries.collage.query, [], queries.collage)
   const canvasRef = useRef<HTMLDivElement>(null)
   const [W, setW] = useState(360)
   const [local, setLocal] = useState<Record<string, Geo>>({})
@@ -350,7 +351,7 @@ export default function Y2K() {
   }
 
   return (
-    <Section id="y2k" className="y2k">
+    <Section id="y2k" className="y2k" ready={load.state !== 'loading'}>
       {adding && <div className="y2k-scrim" aria-hidden="true" onPointerDown={() => setAdding(false)} />}
       <div
         className="y2k-dock"
@@ -547,7 +548,7 @@ function PieceContent({ item }: { item: CollageItem }) {
       </span>
     )
   }
-  return url ? <img src={url} alt="" draggable={false} decoding="async" /> : <span className="piece-pending" />
+  return url ? <img src={url} alt="" draggable={false} decoding="async" /> : <span className="piece-pending" data-pending />
 }
 
 function TextComposer({ onAdd }: { onAdd: (body: string, ink: Ink) => void }) {

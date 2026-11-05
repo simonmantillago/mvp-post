@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { supabase } from '../lib/supabase'
-import { signedUrl } from '../lib/images'
+import { cachedSignedUrl, signedUrl } from '../lib/images'
+import { fetchLive, readLive, writeLive, type LiveQuery } from '../lib/liveCache'
 import type { SectionId } from '../lib/types'
 
 export type Load<T> =
@@ -11,9 +12,14 @@ export type Load<T> =
 /**
  * Consulta + recarga cuando cambia la tabla (Realtime), al volver a la app y al recuperar la red.
  * Si falla y ya había datos, se conservan (`stale` explica por qué). Las respuestas viejas se descartan.
+ * Con `cache`, arranca con lo último que se vio (guardado en el teléfono) y lo actualiza por detrás.
  */
-export function useLive<T>(table: string, query: () => PromiseLike<{ data: unknown; error: { message: string } | null }>, deps: unknown[] = []) {
-  const [load, setLoad] = useState<Load<T>>({ state: 'loading' })
+export function useLive<T>(table: string, query: LiveQuery, deps: unknown[] = [], opts: { cache?: string } = {}) {
+  const key = opts.cache
+  const [load, setLoad] = useState<Load<T>>(() => {
+    const hit = key ? readLive<T>(key) : undefined
+    return hit === undefined ? { state: 'loading' } : { state: 'ready', data: hit }
+  })
   const queryRef = useRef(query)
   queryRef.current = query
   const seq = useRef(0)
@@ -21,17 +27,20 @@ export function useLive<T>(table: string, query: () => PromiseLike<{ data: unkno
   const refresh = useCallback(async () => {
     const mine = ++seq.current
     let res: { data: unknown; error: { message: string } | null }
-    try {
-      res = await queryRef.current()
-    } catch (e) {
-      res = { data: null, error: { message: e instanceof Error ? e.message : 'Error de red' } }
+    if (key) res = await fetchLive(key, () => queryRef.current())
+    else {
+      try {
+        res = await queryRef.current()
+      } catch (e) {
+        res = { data: null, error: { message: e instanceof Error ? e.message : 'Error de red' } }
+      }
     }
     if (mine !== seq.current) return
     if (res.error) {
       const message = offline() ? 'Sin conexión: esto es lo último que se cargó.' : 'No se pudo actualizar. Intenta de nuevo en un momento.'
       setLoad((prev) => (prev.state === 'ready' ? { ...prev, stale: message } : { state: 'error', message }))
     } else setLoad({ state: 'ready', data: res.data as T })
-  }, [])
+  }, [key])
 
   useEffect(() => {
     refresh()
@@ -59,8 +68,13 @@ export function useLive<T>(table: string, query: () => PromiseLike<{ data: unkno
   /** Cambio local inmediato (p. ej. la fila recién insertada) sin esperar a volver a consultar. */
   const mutate = useCallback((fn: (data: T) => T) => {
     seq.current++
-    setLoad((prev) => (prev.state === 'ready' ? { ...prev, data: fn(prev.data) } : prev))
-  }, [])
+    setLoad((prev) => {
+      if (prev.state !== 'ready') return prev
+      const data = fn(prev.data)
+      if (key) writeLive(key, data)
+      return { ...prev, data }
+    })
+  }, [key])
 
   return { load, refresh, mutate }
 }
@@ -70,11 +84,12 @@ export function offline() {
 }
 
 export function useSignedUrl(bucket: string, path: string | null | undefined) {
-  const [url, setUrl] = useState<string | null>(null)
+  const [url, setUrl] = useState<string | null>(() => (path ? cachedSignedUrl(bucket, path) : null))
   useEffect(() => {
     let alive = true
-    setUrl(null)
-    if (path) signedUrl(bucket, path).then((u) => alive && setUrl(u)).catch(() => alive && setUrl(null))
+    const hit = path ? cachedSignedUrl(bucket, path) : null
+    setUrl(hit)
+    if (path && !hit) signedUrl(bucket, path).then((u) => alive && setUrl(u)).catch(() => alive && setUrl(null))
     return () => {
       alive = false
     }

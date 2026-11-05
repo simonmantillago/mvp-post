@@ -9,6 +9,45 @@ cleanupOutdatedCaches()
 precacheAndRoute(self.__WB_MANIFEST)
 registerRoute(new NavigationRoute(createHandlerBoundToURL('/index.html')))
 
+// Fotos guardadas en el teléfono: las de Supabase (buckets privados) y las portadas de Spotify, YouTube y TMDB.
+// Las rutas de Storage son únicas (uuid) y no cambian, así que la llave es la ruta sin el token del enlace firmado:
+// aunque el enlace sea nuevo, la foto sale de aquí sin volver a bajarla.
+const IMAGES = 'imagenes-v1'
+const MAX_IMAGES = 400
+const IMAGE_HOSTS = /(^|\.)(scdn\.co|spotifycdn\.com|ytimg\.com|tmdb\.org)$/
+
+function imageKey(url: URL): string | null {
+  if (url.pathname.startsWith('/storage/v1/object/sign/')) return url.origin + url.pathname
+  if (IMAGE_HOSTS.test(url.hostname)) return url.href
+  return null
+}
+
+registerRoute(
+  ({ request, url }) => request.method === 'GET' && request.destination === 'image' && imageKey(url) !== null,
+  async ({ request, url }) => {
+    const key = imageKey(url)!
+    const cache = await caches.open(IMAGES)
+    const hit = await cache.match(key)
+    if (hit) return hit
+    try {
+      // Se pide con CORS para poder guardarla con su tamaño real (una respuesta opaca no se sabe si salió bien)
+      const res = await fetch(url.href, { mode: 'cors', credentials: 'omit' })
+      if (res.ok) {
+        await cache.put(key, res.clone())
+        trim(cache)
+      }
+      return res
+    } catch {
+      return fetch(request)
+    }
+  },
+)
+
+async function trim(cache: Cache) {
+  const keys = await cache.keys()
+  for (const k of keys.slice(0, Math.max(0, keys.length - MAX_IMAGES))) await cache.delete(k)
+}
+
 self.addEventListener('install', () => self.skipWaiting())
 self.addEventListener('activate', (event) => event.waitUntil(self.clients.claim()))
 

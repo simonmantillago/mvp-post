@@ -8,6 +8,8 @@ const cols = 'id, number, author_id, headline, body, cover_path, cover_caption, 
 export function usePublishedEditions() {
   return useLive<Edition[]>('editions', () =>
     supabase.from('editions').select(cols).not('published_at', 'is', null).order('number', { ascending: false }),
+    [],
+    { cache: 'editions_published' },
   )
 }
 

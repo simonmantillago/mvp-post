@@ -1,0 +1,148 @@
+/* Telón de sección: la primera vez que se entra, cubre el pliego con su propio mundo hasta que esté armado */
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: 35; /* sobre el dock del Collage (30) y bajo la flecha de volver (40): siempre se puede salir */
+  display: grid;
+  place-items: center;
+  padding: var(--safe-top) var(--gutter) 0;
+  background: var(--ground);
+  color: var(--text);
+}
+.curtain.is-leaving {
+  animation: curtain-out 380ms var(--ease-out) forwards;
+  pointer-events: none;
+}
+@keyframes curtain-out {
+  to { opacity: 0; filter: blur(6px); }
+}
+
+.curtain-plate {
+  display: grid;
+  justify-items: center;
+  gap: var(--s5);
+  max-width: 22rem;
+  text-align: center;
+  translate: 0 -6vh;
+}
+.curtain-name {
+  margin: 0;
+  font: 400 var(--size-h2) / 1.15 var(--face-display);
+  text-wrap: balance;
+}
+.curtain-name .name-line { display: block; }
+.curtain-line {
+  margin: 0;
+  font: italic 400 var(--size-body) / 1.4 var(--face-body);
+  color: var(--text-soft);
+}
+
+/* Genérico (Ángeles, Cartas): un filete de imprenta que se tira una y otra vez */
+.curtain-rule {
+  width: 6rem;
+  height: 2px;
+  background: var(--accent);
+  transform-origin: left;
+  animation: curtain-rule 1.4s var(--ease-out) infinite;
+}
+@keyframes curtain-rule {
+  from { transform: scaleX(0); }
+  70%, to { transform: scaleX(1); opacity: 0; }
+}
+
+/* 2000's Collage: el medio tono de fondo y un cursor de SMS parpadeando al final de la línea */
+.curtain--y2k {
+  background: url("/sections/y2k/fondo-halftone.webp") center / cover no-repeat, var(--ground);
+}
+.curtain--y2k .curtain-plate {
+  padding: var(--s5) var(--s5) var(--s4);
+  background: rgba(0, 0, 0, 0.6);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.curtain--y2k .curtain-name {
+  font-size: min(9vw, 2.6rem);
+  line-height: 1.32;
+  color: var(--accent-text);
+}
+.curtain--y2k .curtain-line {
+  font: 400 var(--size-small) / 1.4 var(--face-display);
+  color: var(--text);
+}
+.curtain--y2k .curtain-line::after {
+  content: "";
+  display: inline-block;
+  width: 0.55em;
+  height: 1.1em;
+  margin-left: 0.2em;
+  vertical-align: -0.15em;
+  background: var(--accent);
+  animation: curtain-caret 0.9s steps(1) infinite;
+}
+@keyframes curtain-caret {
+  50% { opacity: 0; }
+}
+
+/* Los vinilos de Big: la pared de nogal y un disco que gira a su ritmo */
+.curtain--vinilos {
+  background:
+    radial-gradient(120% 55% at 80% 0%, rgba(232, 166, 75, 0.18), transparent 60%),
+    radial-gradient(140% 100% at 50% 30%, transparent 40%, rgba(8, 5, 3, 0.55) 100%),
+    linear-gradient(rgba(20, 13, 8, 0.45), rgba(20, 13, 8, 0.45)),
+    url("/sections/vinilos/nogal-pared.webp") 0 0 / 720px 720px,
+    var(--ground);
+}
+.curtain--vinilos .curtain-name { font-style: italic; font-weight: 500; }
+.curtain-record {
+  position: relative;
+  width: 5.5rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle, var(--ground) 0 4%, var(--accent) 4.5% 30%, var(--vinyl) 31% 33%, transparent 33.5%),
+    repeating-radial-gradient(circle, var(--vinyl) 0 1.2px, var(--vinyl-groove) 1.2px 2.4px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.55);
+  animation: curtain-spin 1.8s linear infinite;
+}
+.curtain-record::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 20deg, transparent 0 18%, rgba(255, 255, 255, 0.09) 22%, transparent 26% 68%, rgba(255, 255, 255, 0.06) 72%, transparent 76%);
+}
+@keyframes curtain-spin { to { rotate: 360deg; } }
+
+/* Cartelera: la marquesina del videoclub con los bombillos corriendo */
+.curtain--cartelera {
+  background:
+    radial-gradient(90% 40% at 50% 0%, rgba(255, 79, 139, 0.18), transparent 70%),
+    var(--ground);
+}
+.curtain--cartelera .curtain-name {
+  color: var(--accent);
+  text-shadow: 0 0 2px rgba(255, 246, 214, 0.9), 0 0 8px rgba(255, 210, 63, 0.8), 0 0 24px rgba(255, 79, 139, 0.4);
+}
+.curtain-bulbs { display: flex; gap: var(--s3); }
+.curtain-bulbs span {
+  width: 0.6rem;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(255, 210, 63, 0.8);
+  opacity: 0.25;
+  animation: curtain-bulb 0.7s steps(1) infinite;
+}
+@keyframes curtain-bulb {
+  0% { opacity: 1; }
+  30% { opacity: 0.25; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .curtain.is-leaving { animation-duration: 0.01ms; }
+  .curtain-rule,
+  .curtain--y2k .curtain-line::after,
+  .curtain-record,
+  .curtain-bulbs span { animation: none; }
+  .curtain-bulbs span { opacity: 1; }
+}

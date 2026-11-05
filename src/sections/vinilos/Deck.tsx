@@ -68,7 +68,7 @@ export function Deck({ song, by }: { song: Song; by: string }) {
 
   return (
     <section className="deck" aria-label="Tocadiscos">
-      <div className={`turntable is-${mode}`}>
+      <div className={`turntable is-${mode}`} data-pending={mode === 'loading' || undefined}>
         {mode !== '2d' && <canvas ref={canvas} className="turntable-canvas" role="img" aria-label={`Tocadiscos con «${song.title}» en el plato`} />}
         {mode === '2d' && (
           <div className="platter">

@@ -1,7 +1,7 @@
 import { useState, type CSSProperties, type ReactNode } from 'react'
 import { useCouple } from '../../hooks/useCouple'
 import { useLive } from '../../hooks/useData'
-import { supabase } from '../../lib/supabase'
+import { live } from '../queries'
 import type { WatchItem, WatchRating, WatchSpin } from '../../lib/types'
 import { Icon } from '../../ui/Icon'
 import { PressNote } from '../../ui/PressNote'
@@ -29,15 +29,9 @@ function whoseTurn(items: WatchItem[], spins: WatchSpin[], other: (id: string) =
 export default function Cartelera() {
   const { session, me, isMe, nameOf, partner, herId } = useCouple()
   const uid = session.user.id
-  const { load, refresh } = useLive<WatchItem[]>('watch_items', () =>
-    supabase.from('watch_items').select('*').order('created_at', { ascending: false }),
-  )
-  const { load: ratingsLoad, refresh: refreshRatings } = useLive<WatchRating[]>('watch_ratings', () =>
-    supabase.from('watch_ratings').select('item_id, user_id, rating, comment'),
-  )
-  const { load: spinsLoad, refresh: refreshSpins } = useLive<WatchSpin[]>('watch_spins', () =>
-    supabase.from('watch_spins').select('id, chooser, spun_by, created_at').order('created_at', { ascending: false }).limit(5),
-  )
+  const { load, refresh } = useLive<WatchItem[]>(live.watchItems.table, live.watchItems.query, [], live.watchItems)
+  const { load: ratingsLoad, refresh: refreshRatings } = useLive<WatchRating[]>(live.watchRatings.table, live.watchRatings.query, [], live.watchRatings)
+  const { load: spinsLoad, refresh: refreshSpins } = useLive<WatchSpin[]>(live.watchSpins.table, live.watchSpins.query, [], live.watchSpins)
   const [tab, setTab] = useState<Tab>('want')
   const [open, setOpen] = useState<string | null>(null)
   const [adding, setAdding] = useState(false)
@@ -71,7 +65,7 @@ export default function Cartelera() {
   }
 
   return (
-    <Section id="cartelera">
+    <Section id="cartelera" ready={load.state !== 'loading'}>
       <div className="section-body cartelera">
         <div className="ticket-row">
           <p className="ticket">

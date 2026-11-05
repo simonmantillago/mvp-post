@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { useCouple } from '../../hooks/useCouple'
 import { useLive } from '../../hooks/useData'
+import { live } from '../queries'
 import { supabase } from '../../lib/supabase'
 import type { Message } from '../../lib/types'
 import { formatShort, formatTime } from '../../paper/dates'
@@ -62,9 +63,7 @@ function Owl() {
 /** Cartas mágicas: lechucería de pergamino. Cada carta lleva su estampilla; el Tin es un sobre rojo con lacre de llama. */
 export default function Letters() {
   const { session, isMe, isHer, nameOf, partner } = useCouple()
-  const { load } = useLive<Message[]>('messages', () =>
-    supabase.from('messages').select('id, author_id, kind, body, created_at, read_at').order('created_at', { ascending: false }).limit(50),
-  )
+  const { load } = useLive<Message[]>(live.messages.table, live.messages.query, [], live.messages)
   const [text, setText] = useState('')
   const [sending, setSending] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -123,7 +122,7 @@ export default function Letters() {
   }
 
   return (
-    <Section id="cartas" className={shake ? 'is-extra' : ''} header={<p className="letters-dek">Correo por lechuza · entrega inmediata</p>}>
+    <Section id="cartas" ready={load.state !== 'loading'} className={shake ? 'is-extra' : ''} header={<p className="letters-dek">Correo por lechuza · entrega inmediata</p>}>
       <div className="letters section-body">
         {load.state === 'loading' && <PressNote title="Abriendo el correo…" />}
         {load.state === 'error' && <PressNote tone="error" title="Fe de erratas" body={load.message} />}

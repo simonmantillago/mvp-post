@@ -121,11 +121,13 @@ export function createDemoClient(): any {
       limit: (n: number) => ((limit = n), b),
       single: () => ((single = 'one'), b),
       maybeSingle: () => ((single = 'maybe'), b),
-      then: (res: any, rej: any) => Promise.resolve(run()).then(res, rej),
+      // `?demo&lento`: cada consulta tarda 2 s, para revisar los estados de carga (el telón de sección)
+      then: (res: any, rej: any) => (slow ? new Promise((r) => setTimeout(r, 2000)) : Promise.resolve()).then(run).then(res, rej),
     }
     return b
   }
 
+  const slow = new URLSearchParams(location.search).has('lento')
   const asHim = new URLSearchParams(location.search).get('demo') === 'el'
   const demoSession = asHim
     ? { user: { id: HIM, email: import.meta.env.VITE_EMAIL_HIM ?? 'el@demo' }, access_token: 'demo' }
@@ -177,6 +179,7 @@ export function createDemoClient(): any {
       from: () => ({
         // lo que se sube en la demo se ve desde memoria
         createSignedUrl: async (path: string) => ({ data: { signedUrl: uploads.get(path) ?? ref(path) }, error: null }),
+        createSignedUrls: async (paths: string[]) => ({ data: paths.map((path) => ({ path, signedUrl: uploads.get(path) ?? ref(path), error: null })), error: null }),
         upload: async (path: string, blob: Blob) => (uploads.set(path, URL.createObjectURL(blob)), { data: { path }, error: null }),
         remove: async () => ({ data: null, error: null }),
       }),

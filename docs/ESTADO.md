@@ -81,6 +81,17 @@ Brief: `docs/briefs/vinilos-spotify.md`; prototipo aprobado: `docs/briefs/tocadi
 - Ronda 2 (2026-11-03): título y subtítulo a todo el ancho (solo la línea del folio deja sitio a la flecha); el Tin pasó de franja a **sobre rojo** chico del lado de quien lo manda, con lacre de **llama en relieve**, que llega volando; botón Tin = lacre redondo junto a enviar; recuadro de escribir redondeado. Propuestas en `docs/wireframes/cartas-tin.html` (elegida la 2).
 - La lechuza del vacío es SVG de trazo; si se quiere ilustrada, pasarla a asset raster.
 
+## Carga rápida de las secciones (2026-11-05)
+Collage, Vinilos y Cartelera tardaban al entrar porque todo se volvía a pedir a la red en cada visita.
+- **Caché de datos** (`src/lib/liveCache.ts`): `useLive(..., { cache })` arranca con lo último que se vio (guardado en `localStorage`) y lo actualiza por detrás. Las consultas de entrada están en `src/sections/queries.ts`. Se borra al cerrar sesión.
+- **Enlaces firmados en lote** (`src/lib/images.ts`): las fotos pedidas a la vez van en una sola llamada `createSignedUrls`; los enlaces (1 h) se guardan en el teléfono y se pintan desde el primer render.
+- **Service worker** (`src/sw.ts`): guarda las fotos de Storage con la ruta como llave (sin el token) y las portadas de Spotify/YouTube/TMDB en la caché `imagenes-v1` (máx. 400). Se borra al cerrar sesión.
+- **Precarga** (`src/sections/prefetch.ts`): con la portada quieta se dejan listos el código y los datos de todas las secciones; al apoyar el dedo en un titular se adelantan además sus fotos (y three.js en Vinilos).
+- **Nogal y cuero** ahora son `.webp` fijos en `public/sections/vinilos/` (antes se dibujaban en canvas al entrar).
+- **Telón de sección** (`src/sections/Curtain.tsx`) solo la primera vez sin nada guardado.
+- Demo: `?demo&lento` hace que cada consulta tarde 2 s para revisar los estados de carga. Probado a 390 y 1440 px.
+- **Falta:** comprobarlo en el iPhone instalado (la caché de fotos del service worker solo funciona en el build publicado).
+
 ## Pendientes conocidos
 - **Fotos de perfil** de ambos en `public/readers/maria-victoria.jpg` y `simon.jpg` (hoy se ven iniciales).
 - ~~Quitar fondo~~ hecho 2026-11-04 en el Recorte de 2000's Collage (`@imgly/background-removal`, en el teléfono). Falta medir tiempo y memoria en el iPhone; plan B MediaPipe si se cae.

@@ -1,5 +1,6 @@
 // Texturas raster generadas en canvas una vez por sesión (no son dibujos en CSS):
-// piel de leopardo con rosetas de verdad, pedrería dorada y nogal.
+// piel de leopardo con rosetas de verdad y pedrería dorada.
+// (El nogal y el cuero de Los vinilos de Big son archivos fijos en public/sections/vinilos/.)
 const cache = new Map<string, string>()
 
 function rng(seed: number) {
@@ -216,109 +217,6 @@ export function gemRing(size = 160) {
     for (let k = 0; k < n; k++) {
       const a = (k / n) * Math.PI * 2
       gem(g, cx + Math.cos(a) * R, cx + Math.sin(a) * R, 8.5, rand)
-    }
-    return c.toDataURL('image/png')
-  })
-}
-
-/** Nogal: vetas largas casi paralelas, bandas de tono y alguna figura (catedral) suave. Encaja en horizontal. */
-export function walnutTexture(size = 480) {
-  return memo(`walnut2${size}`, () => {
-    const rand = rng(17)
-    const c = document.createElement('canvas')
-    c.width = c.height = size
-    const g = c.getContext('2d')!
-    // bandas de tono a lo largo de la tabla
-    for (let y = 0; y < size; y += 2) {
-      const band = Math.sin(y * 0.021) * 0.5 + Math.sin(y * 0.057 + 1.3) * 0.3 + Math.sin(y * 0.13) * 0.2
-      const l = 14 + band * 5
-      g.fillStyle = `hsl(24, 42%, ${l}%)`
-      g.fillRect(0, y, size, 2)
-    }
-    // vetas: líneas finas que siguen la misma deriva, con una catedral en el centro
-    const drift = (x: number) => Math.sin((x / size) * Math.PI * 2) * 6
-    for (let i = 0; i < 90; i++) {
-      const y0 = rand() * size
-      const cathedral = Math.abs(y0 - size / 2) < 60 ? (60 - Math.abs(y0 - size / 2)) * 0.5 : 0
-      g.strokeStyle = rand() > 0.35 ? `rgba(12, 6, 3, ${0.25 + rand() * 0.35})` : `rgba(150, 98, 55, ${0.12 + rand() * 0.18})`
-      g.lineWidth = 0.5 + rand() * 1.4
-      g.beginPath()
-      for (let x = 0; x <= size; x += 8) {
-        const arch = cathedral * Math.exp(-(((x - size / 2) / (size * 0.18)) ** 2))
-        const y = y0 + drift(x) - arch + Math.sin(x * 0.03 + i) * 0.8
-        if (x === 0) g.moveTo(x, y)
-        else g.lineTo(x, y)
-      }
-      g.stroke()
-    }
-    // poros
-    for (let i = 0; i < 900; i++) {
-      g.fillStyle = 'rgba(0,0,0,0.25)'
-      g.fillRect(rand() * size, rand() * size, 1.5 + rand() * 3, 0.6)
-    }
-    return c.toDataURL('image/png')
-  })
-}
-
-/**
- * Pared de nogal para el fondo de Los vinilos de Big: veta vertical continua que se repite sin costuras
- * en los dos ejes (las bandas y las vetas usan periodos que caben exactos en el lienzo).
- */
-export function walnutWallTexture(size = 720) {
-  return memo(`walnutwall${size}`, () => {
-    const rand = rng(29)
-    const c = document.createElement('canvas')
-    c.width = c.height = size
-    const g = c.getContext('2d')!
-    const tau = (Math.PI * 2) / size
-    // bandas de tono a lo ancho (la veta corre de arriba abajo)
-    for (let x = 0; x < size; x += 2) {
-      const band = Math.sin(x * tau * 5) * 0.5 + Math.sin(x * tau * 11 + 1.3) * 0.3 + Math.sin(x * tau * 23) * 0.2
-      g.fillStyle = `hsl(24, 40%, ${12 + band * 4}%)`
-      g.fillRect(x, 0, 2, size)
-    }
-    // vetas: líneas finas verticales que ondulan con periodo exacto; se dibujan también desplazadas
-    // un lienzo a cada lado para que crucen el borde sin cortarse
-    for (let i = 0; i < 120; i++) {
-      const x0 = rand() * size
-      const amp = 2 + rand() * 6
-      const k = 1 + Math.floor(rand() * 3)
-      const ph = rand() * 6
-      g.strokeStyle = rand() > 0.35 ? `rgba(10, 5, 2, ${0.22 + rand() * 0.3})` : `rgba(150, 98, 55, ${0.08 + rand() * 0.14})`
-      g.lineWidth = 0.5 + rand() * 1.4
-      for (const dx of [-size, 0, size]) {
-        g.beginPath()
-        for (let y = 0; y <= size; y += 8) {
-          const x = x0 + dx + Math.sin(y * tau * k + ph) * amp
-          if (y === 0) g.moveTo(x, y)
-          else g.lineTo(x, y)
-        }
-        g.stroke()
-      }
-    }
-    // poros, alargados en el sentido de la veta
-    for (let i = 0; i < 1600; i++) {
-      g.fillStyle = 'rgba(0,0,0,0.22)'
-      g.fillRect(rand() * size, rand() * size, 0.6, 1.5 + rand() * 3)
-    }
-    return c.toDataURL('image/png')
-  })
-}
-
-/** Cuero: grano fino irregular. */
-export function leatherTexture(size = 200) {
-  return memo(`leather${size}`, () => {
-    const rand = rng(23)
-    const c = document.createElement('canvas')
-    c.width = c.height = size
-    const g = c.getContext('2d')!
-    g.fillStyle = '#4a2f22'
-    g.fillRect(0, 0, size, size)
-    for (let i = 0; i < 2600; i++) {
-      g.fillStyle = rand() > 0.5 ? 'rgba(0,0,0,0.18)' : 'rgba(255,220,180,0.06)'
-      g.beginPath()
-      g.ellipse(rand() * size, rand() * size, 0.6 + rand() * 1.8, 0.5 + rand() * 1.2, rand() * Math.PI, 0, Math.PI * 2)
-      g.fill()
     }
     return c.toDataURL('image/png')
   })

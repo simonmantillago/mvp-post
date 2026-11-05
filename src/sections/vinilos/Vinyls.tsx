@@ -1,11 +1,11 @@
 import { useEffect, useState, type CSSProperties, type FormEvent } from 'react'
 import { useCouple } from '../../hooks/useCouple'
 import { useLive } from '../../hooks/useData'
+import { live } from '../queries'
 import { supabase } from '../../lib/supabase'
 import type { Song } from '../../lib/types'
 import { formatShort } from '../../paper/dates'
 import { Icon } from '../../ui/Icon'
-import { leatherTexture, walnutTexture, walnutWallTexture } from '../../ui/leopard'
 import { PressNote } from '../../ui/PressNote'
 import { Section } from '../Section'
 import { Deck } from './Deck'
@@ -15,20 +15,19 @@ import './Vinyls.css'
 type Filter = 'all' | 'mine' | 'theirs'
 
 /** Los vinilos de Big: el tocadiscos arriba y la pila de fundas dedicadas abajo. */
+// Nogal y cuero: texturas fijas en public/ (antes se dibujaban en canvas al entrar y trababan la entrada en el iPhone)
+const wood = { '--walnut': 'url(/sections/vinilos/nogal.webp)', '--leather-tex': 'url(/sections/vinilos/cuero.webp)' } as CSSProperties
+
 export default function Vinyls() {
   const { session, isMe, nameOf, partner } = useCouple()
-  const { load } = useLive<Song[]>('songs', () =>
-    supabase.from('songs').select('id, author_id, url, platform, title, artist, dedication, cover_url, created_at').order('created_at', { ascending: false }),
-  )
+  const { load } = useLive<Song[]>(live.songs.table, live.songs.query, [], live.songs)
   const [currentId, setCurrentId] = useState<string | null>(null)
   const [filter, setFilter] = useState<Filter>('all')
   const [adding, setAdding] = useState(false)
-  const [wood, setWood] = useState<{ walnut: string; leather: string }>()
   useEffect(() => {
-    setWood({ walnut: walnutTexture(), leather: leatherTexture() })
     // La pared de nogal va en <html>, para que cubra toda la pantalla y no solo la columna
     const root = document.documentElement
-    root.style.setProperty('--wall', `url(${walnutWallTexture()})`)
+    root.style.setProperty('--wall', 'url(/sections/vinilos/nogal-pared.webp)')
     return () => {
       root.style.removeProperty('--wall')
     }
@@ -39,8 +38,8 @@ export default function Vinyls() {
   const shown = songs.filter((s) => (filter === 'all' ? true : filter === 'mine' ? isMe(s.author_id) : !isMe(s.author_id)))
 
   return (
-    <Section id="vinilos">
-      <div className="section-body vinyls" style={wood ? ({ '--walnut': `url(${wood.walnut})`, '--leather-tex': `url(${wood.leather})` } as CSSProperties) : undefined}>
+    <Section id="vinilos" ready={load.state !== 'loading'}>
+      <div className="section-body vinyls" style={wood}>
         {current ? (
           <Deck song={current} by={nameOf(current.author_id)} />
         ) : (

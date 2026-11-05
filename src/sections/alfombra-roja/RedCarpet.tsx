@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { useCouple } from '../../hooks/useCouple'
 import { useLive, useSignedUrl } from '../../hooks/useData'
+import { live } from '../queries'
 import { compressImage, uploadImage } from '../../lib/images'
 import { supabase } from '../../lib/supabase'
 import type { Photo, PhotoEffect } from '../../lib/types'
@@ -18,8 +19,8 @@ type Like = { photo_id: string; user_id: string }
 /** Los Ángeles de Victoria (antes Alfombra roja): fotos tomadas en el momento, con flash, que caen como polaroids. */
 export default function RedCarpet() {
   const { session, me, isMe, nameOf } = useCouple()
-  const { load, refresh } = useLive<Photo[]>('photos', () => supabase.from('photos').select('id, author_id, storage_path, caption, effect, created_at').order('created_at', { ascending: false }))
-  const { load: likesLoad } = useLive<Like[]>('photo_likes', () => supabase.from('photo_likes').select('photo_id, user_id'))
+  const { load, refresh } = useLive<Photo[]>(live.photos.table, live.photos.query, [], live.photos)
+  const { load: likesLoad } = useLive<Like[]>(live.photoLikes.table, live.photoLikes.query, [], live.photoLikes)
   const [grain, setGrain] = useState<string>()
   const [developing, setDeveloping] = useState<string | null>(null)
   const [viewing, setViewing] = useState<Photo | null>(null)
@@ -49,7 +50,7 @@ export default function RedCarpet() {
   }
 
   return (
-    <Section id="alfombra" className="red-carpet" header={<p className="carpet-dek">Sección dedicada a tomarle fotos al ángel más hermoso que he conocido.</p>}>
+    <Section id="alfombra" className="red-carpet" ready={load.state !== 'loading'} header={<p className="carpet-dek">Sección dedicada a tomarle fotos al ángel más hermoso que he conocido.</p>}>
       <div className="carpet-ground" aria-hidden="true" />
       <div className="section-body" style={grain ? ({ '--grain': `url(${grain})` } as CSSProperties) : undefined}>
         <Camera
