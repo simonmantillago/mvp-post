@@ -52,7 +52,7 @@ export const sections: SectionEntry[] = [
     path: '/vinilos',
     name: 'Los vinilos de Big',
     page: 4,
-    dek: 'Tras mudarse a Napa, Big abre su nuevo negocio: vinilos dedicados al amor de su vida. Cada funda lleva un lacre y una dedicatoria escrita a mano.',
+    dek: 'Tras mudarse a Napa, Big abre su nuevo negocio de vinilos de las canciones de su historia de amor. La tienda tiene una sola clienta y es el amor de su vida, cada disco llega con una dedicatoria escrita a mano.',
     cover: '/portada/big.webp',
     caption: 'Big, en la inauguración de su tienda en Napa.',
     coverPosition: '50% 30%',
