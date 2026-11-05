@@ -13,6 +13,8 @@ export default defineConfig({
       srcDir: 'src',
       filename: 'sw.ts',
       registerType: 'autoUpdate',
+      // El registro vive en src/lib/recover.ts: busca versión nueva al volver a la app y recarga sin que se note
+      injectRegister: false,
       // Íconos definitivos se producen con la dirección visual del periódico.
       includeAssets: ['icons/apple-touch-icon.png'],
       manifest: {
@@ -23,7 +25,7 @@ export default defineConfig({
         display: 'standalone',
         orientation: 'portrait',
         start_url: '/',
-        background_color: '#f4f1ea',
+        background_color: '#e2e4e5',
         theme_color: '#1c1c1c',
         icons: [
           { src: 'icons/icon-192.png', sizes: '192x192', type: 'image/png' },

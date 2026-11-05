@@ -16,3 +16,19 @@
   font: italic var(--size-body) / 1.45 var(--face-body);
   color: var(--text-soft);
 }
+
+/* Botón de la fe de erratas: va aquí y no en Section.css porque también sale fuera de las secciones */
+.press-note-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0 var(--s4);
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--on-accent);
+  font: 700 var(--size-body) / 1 var(--face-head);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}

@@ -115,7 +115,8 @@ docs/                     # specs, wireframe, inspiración
 - [x] Alfombra roja ronda 2: alas más abiertas, fondo con lirios, pie en Bodoni, efectos de revelado por foto (0003 aplicada), audio de paparazzi real (2026-10-24)
 - [x] Portada como periódico: un artículo por sección con foto a color y composición variada; Carrie's Column; Los Ángeles de Victoria y Cartas mágicas (2026-10-24)
 - [x] Alfombra roja ronda 3: alas con transparencia real (arregla el negro en iPhone), destellos de diamante en alas y marco, vista previa antes de publicar, borrar polaroids (2026-10-24). Falta probar en el iPhone.
-- [ ] Fotos de ambos en `public/readers/` y íconos PWA definitivos; sonidos
+- [x] Íconos PWA («MVP» gótico, `public/icons/`, 2026-11-05)
+- [ ] Fotos de ambos en `public/readers/`; sonidos
 
 ### Fase 3 — El periódico
 - [x] Llegada + login (credenciales de prensa)
@@ -134,6 +135,8 @@ docs/                     # specs, wireframe, inspiración
 - [x] Los vinilos de Big ronda 2: búsqueda en Spotify (Edge Function `spotify-search`), «Dedicar canción», tocadiscos 3D en three.js, aguja = play/pausa con la iFrame API (2026-10-24). Secretos de Spotify cargados y búsqueda verificada (2026-10-25). Ronda 3: cámara de frente fijada con la captura de Simón, botón redondo play/pausa, dedicatoria en EB Garamond. Rondas 4–5: embeds ocultos, «+ Añadir», íconos de Spotify y YouTube (2026-10-25). Ronda 6: tapa completa, bordes suaves, «Colección» en catálogo, tocadiscos más cerca, letras Playfair Display + Lora, fondo de pared de nogal (2026-10-29). Falta probar en el iPhone.
 
 - [x] Carga rápida de secciones (2026-11-05): caché de datos por sección, enlaces firmados en lote, fotos y portadas guardadas por el service worker, precarga desde la portada, nogal/cuero como .webp, telón solo la primera vez. Probado en demo a 390/1440. **Falta:** probar en el iPhone.
+
+- [x] Revisión de punta a punta (2026-11-05): recuperación tras publicar (ErrorBoundary, recarga y actualización del SW), caché HTTP en Netlify, texturas fijas en Ángeles y Cartas, perfiles guardados, preconnect, Kabisat woff2, imágenes. Quedan las de baja prioridad (ver docs/ESTADO.md).
 
 ### Fase 5 — Cierre
 - [ ] Pruebas en ambos iPhone instalados (cámara, audio, push, badge)

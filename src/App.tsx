@@ -8,6 +8,7 @@ import { Login } from './paper/Login'
 import { FrontPage } from './paper/FrontPage'
 import { Column } from './paper/Column'
 import { PressNote } from './ui/PressNote'
+import { ErrorBoundary } from './ui/ErrorBoundary'
 import { loaders } from './sections/prefetch'
 
 const Newsroom = lazy(() => import('./paper/Newsroom'))
@@ -45,6 +46,7 @@ function ScrollToTop() {
 }
 
 export default function App() {
+  const location = useLocation()
   const session = useSession()
   const arrival = useArrival()
 
@@ -57,21 +59,24 @@ export default function App() {
   return (
     <CoupleProvider session={session}>
       <ScrollToTop />
-      <Suspense fallback={<PressNote title="En prensa…" />}>
-        <Routes>
-          <Route path="/" element={<FrontPage />} />
-          <Route path="/columna/:number" element={<Column />} />
-          <Route path="/redaccion" element={<Newsroom />} />
-          <Route path="/redaccion/:id" element={<Newsroom />} />
-          <Route path="/y2k" element={<Y2K />} />
-          <Route path="/alfombra-roja" element={<RedCarpet />} />
-          <Route path="/vinilos" element={<Vinyls />} />
-          <Route path="/cartelera" element={<Cartelera />} />
-          <Route path="/cartas" element={<Letters />} />
-          <Route path="/suscripcion" element={<Subscription />} />
-          <Route path="*" element={<FrontPage />} />
-        </Routes>
-      </Suspense>
+      {/* Una por ruta: si una sección falla, al volver a la portada se reinicia */}
+      <ErrorBoundary key={location.pathname}>
+        <Suspense fallback={<PressNote title="En prensa…" />}>
+          <Routes>
+            <Route path="/" element={<FrontPage />} />
+            <Route path="/columna/:number" element={<Column />} />
+            <Route path="/redaccion" element={<Newsroom />} />
+            <Route path="/redaccion/:id" element={<Newsroom />} />
+            <Route path="/y2k" element={<Y2K />} />
+            <Route path="/alfombra-roja" element={<RedCarpet />} />
+            <Route path="/vinilos" element={<Vinyls />} />
+            <Route path="/cartelera" element={<Cartelera />} />
+            <Route path="/cartas" element={<Letters />} />
+            <Route path="/suscripcion" element={<Subscription />} />
+            <Route path="*" element={<FrontPage />} />
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
     </CoupleProvider>
   )
 }

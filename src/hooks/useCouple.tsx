@@ -1,6 +1,7 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
+import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
+import { readLive, writeLive } from '../lib/liveCache'
 import type { Profile } from '../lib/types'
 import { readerByEmail, type Reader } from '../paper/readers'
 
@@ -20,14 +21,19 @@ type Couple = {
 const CoupleContext = createContext<Couple | null>(null)
 
 export function CoupleProvider({ session, children }: { session: Session; children: ReactNode }) {
-  const [profiles, setProfiles] = useState<Profile[]>([])
+  // Los nombres salen desde el primer cuadro con lo guardado; se actualizan por detrás
+  const [profiles, setProfiles] = useState<Profile[]>(() => readLive<Profile[]>('profiles') ?? [])
 
   useEffect(() => {
     const load = () =>
       supabase
         .from('profiles')
         .select('id, display_name, nick, avatar_path, sounds_enabled, muted_sections')
-        .then(({ data }) => data && setProfiles(data as Profile[]))
+        .then(({ data }) => {
+          if (!data) return
+          writeLive('profiles', data)
+          setProfiles(data as Profile[])
+        })
     load()
     const channel = supabase
       .channel('profiles')
@@ -39,19 +45,23 @@ export function CoupleProvider({ session, children }: { session: Session; childr
   }, [session.user.id])
 
   const uid = session.user.id
-  const me = profiles.find((p) => p.id === uid) ?? null
-  const partner = profiles.find((p) => p.id !== uid) ?? null
-  const reader = readerByEmail(session.user.email)
-  const value: Couple = {
-    session,
-    me,
-    partner,
-    reader,
-    nameOf: (id) => profiles.find((p) => p.id === id)?.display_name || '—',
-    isMe: (id) => id === uid,
-    isHer: (id) => !!id && (id === uid ? reader?.key === 'ella' : reader?.key !== 'ella'),
-    herId: reader?.key === 'ella' ? uid : partner?.id,
-  }
+  const email = session.user.email
+  // Un solo objeto mientras no cambien los perfiles ni la sesión: así no se repinta todo el árbol en cada render
+  const value = useMemo<Couple>(() => {
+    const me = profiles.find((p) => p.id === uid) ?? null
+    const partner = profiles.find((p) => p.id !== uid) ?? null
+    const reader = readerByEmail(email)
+    return {
+      session,
+      me,
+      partner,
+      reader,
+      nameOf: (id) => profiles.find((p) => p.id === id)?.display_name || '—',
+      isMe: (id) => id === uid,
+      isHer: (id) => !!id && (id === uid ? reader?.key === 'ella' : reader?.key !== 'ella'),
+      herId: reader?.key === 'ella' ? uid : partner?.id,
+    }
+  }, [profiles, session, uid, email])
   return <CoupleContext.Provider value={value}>{children}</CoupleContext.Provider>
 }
 

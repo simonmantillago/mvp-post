@@ -7,3 +7,5 @@ La demo viene incompleta y se completó así:
 - **0–9**: la demo los trae vacíos; se usan los de **Orbitron Black** (SIL OFL 1.1, @fontsource/orbitron), escalados a la altura de Kabisat e inclinados 20°.
 
 Scripts (fontTools): `acentos.py` y `digitos.py` están en `scripts/fonts/` (`python acentos.py original.ttf k1.ttf` y luego `python digitos.py k1.ttf orbitron-latin-900-normal.woff kabisat-2000s.ttf`; pide `pip install fonttools brotli`). El .ttf original lo tiene Simón.
+
+La app usa `kabisat-2000s.woff2` (16 KB), generada desde el .ttf con wawoff2 (2026-11-05). Si se edita el .ttf, hay que volver a generar el .woff2.

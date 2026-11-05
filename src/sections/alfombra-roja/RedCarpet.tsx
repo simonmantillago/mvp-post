@@ -7,12 +7,19 @@ import { supabase } from '../../lib/supabase'
 import type { Photo, PhotoEffect } from '../../lib/types'
 import { formatShort } from '../../paper/dates'
 import { Icon } from '../../ui/Icon'
-import { gemRing, grainTexture, rhinestoneFrame, glintTexture } from '../../ui/leopard'
 import { PressNote } from '../../ui/PressNote'
 import { Section } from '../Section'
 import { digicamStamp, EFFECTS } from './effects'
 import { BURST, prepareShutter, shutterBurst } from './paparazzi'
 import './RedCarpet.css'
+
+// Texturas fijas en public/ (antes se dibujaban en canvas al entrar y trababan la entrada en el iPhone)
+const TEX = {
+  grain: '/sections/alfombra/grano.webp',
+  frame: '/sections/alfombra/marco-pedreria.webp',
+  ring: '/sections/alfombra/aro-pedreria.webp',
+  glint: '/sections/alfombra/destello.webp',
+}
 
 type Like = { photo_id: string; user_id: string }
 
@@ -21,13 +28,8 @@ export default function RedCarpet() {
   const { session, me, isMe, nameOf } = useCouple()
   const { load, refresh } = useLive<Photo[]>(live.photos.table, live.photos.query, [], live.photos)
   const { load: likesLoad } = useLive<Like[]>(live.photoLikes.table, live.photoLikes.query, [], live.photoLikes)
-  const [grain, setGrain] = useState<string>()
   const [developing, setDeveloping] = useState<string | null>(null)
   const [viewing, setViewing] = useState<Photo | null>(null)
-
-  useEffect(() => {
-    setGrain(grainTexture())
-  }, [])
 
   // Efecto elegido en el carrete: se ve al instante en la polaroid y en el carrete, hasta que llega la fila guardada
   const [chosen, setChosen] = useState<Record<string, PhotoEffect>>({})
@@ -52,7 +54,7 @@ export default function RedCarpet() {
   return (
     <Section id="alfombra" className="red-carpet" ready={load.state !== 'loading'} header={<p className="carpet-dek">Sección dedicada a tomarle fotos al ángel más hermoso que he conocido.</p>}>
       <div className="carpet-ground" aria-hidden="true" />
-      <div className="section-body" style={grain ? ({ '--grain': `url(${grain})` } as CSSProperties) : undefined}>
+      <div className="section-body" style={{ '--grain': `url(${TEX.grain})` } as CSSProperties}>
         <Camera
           userId={session.user.id}
           sounds={me?.sounds_enabled ?? true}
@@ -203,9 +205,7 @@ function Camera({ userId, sounds, onShot }: { userId: string; sounds: boolean; o
   const [draft, setDraft] = useState<{ blob: Blob; url: string; at: string } | null>(null)
 
   const [wingsMissing, setWingsMissing] = useState(false)
-  const frame = rhinestoneFrame()
-  const ring = gemRing()
-  const glint = glintTexture()
+  const { frame, ring, glint } = TEX
 
   function stop() {
     streamRef.current?.getTracks().forEach((t) => t.stop())

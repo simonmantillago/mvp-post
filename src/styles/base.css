@@ -21,7 +21,7 @@
    (ver src/sections/y2k/fonts/README.md). Global porque el título de la portada también la usa. */
 @font-face {
   font-family: "Kabisat";
-  src: url("../sections/y2k/fonts/kabisat-2000s.ttf") format("truetype");
+  src: url("../sections/y2k/fonts/kabisat-2000s.woff2") format("woff2");
   font-display: block;
 }
 

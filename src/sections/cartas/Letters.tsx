@@ -6,7 +6,6 @@ import { supabase } from '../../lib/supabase'
 import type { Message } from '../../lib/types'
 import { formatShort, formatTime } from '../../paper/dates'
 import { Icon } from '../../ui/Icon'
-import { parchmentTexture } from '../../ui/leopard'
 import { WaxSeal } from '../../ui/Marks'
 import { PressNote } from '../../ui/PressNote'
 import { Section } from '../Section'
@@ -76,8 +75,8 @@ export default function Letters() {
   // El pergamino va en <html>, para que cubra toda la pantalla y no solo la columna
   useEffect(() => {
     const root = document.documentElement
-    root.style.setProperty('--parchment', `url(${parchmentTexture()})`)
-    root.style.setProperty('--sheet', `url(${parchmentTexture('#efe3c6', 320, 31, 500, 10)})`)
+    root.style.setProperty('--parchment', 'url(/sections/cartas/pergamino.webp)')
+    root.style.setProperty('--sheet', 'url(/sections/cartas/pliego.webp)')
     return () => {
       root.style.removeProperty('--parchment')
       root.style.removeProperty('--sheet')

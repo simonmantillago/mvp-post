@@ -18,12 +18,12 @@ Punto de partida para la próxima sesión. Primer MVP **publicado**; de aquí en
 - **Alas más abiertas:** `.wings` a `min(240%, (100vw − 0.5rem) × 1.53)`; la cámara va a sangre y recorta en el borde de la pantalla. En el teléfono las puntas llegan casi al borde.
 - **Fondo:** leopardo oscuro con lirios vino (`public/sections/alfombra/fondo.webp`, imagen del usuario), fijo en pantalla con `position: sticky` en `.carpet-ground::before`. La miniatura del pliego en la portada usa la misma imagen.
 - **Pie de polaroid** en Bodoni Moda itálica.
-- **Efectos de revelado:** columna `photos.effect` (migración `0003_photo_effects.sql`, **aplicada**). Efectos: Original, Grano, Vintage, Flash, Noir y Digicam 2003, hechos con CSS (`.fx-<id>`, `src/sections/alfombra-roja/effects.ts`, grano de `grainTexture()`). Solo quien tomó la foto ve el carrete en la polaroid grande.
+- **Efectos de revelado:** columna `photos.effect` (migración `0003_photo_effects.sql`, **aplicada**). Efectos: Original, Grano, Vintage, Flash, Noir y Digicam 2003, hechos con CSS (`.fx-<id>`, `src/sections/alfombra-roja/effects.ts`, grano de `public/sections/alfombra/grano.webp`). Solo quien tomó la foto ve el carrete en la polaroid grande.
 - **Audio de paparazzi:** `public/sections/alfombra/paparazzi.mp3` (1,5 s). Se precarga al tocar «Encender la cámara»; si no carga, suena el clic sintetizado. `BURST = [35, 155, 265, 470, 570, 720]` está medido sobre los clics del audio. **Falta oírlo en el iPhone.**
 
 ## Alfombra roja · ronda 3 (publicado 2026-10-24)
 - **Bug del iPhone corregido:** en iOS, `mix-blend-mode: screen` no se aplicaba a las alas y su fondo negro tapaba el título, la cabecera, el fondo y los botones. Ahora `alas.webp` tiene transparencia real: el negro pasa a alfa según el brillo, y la imagen está recortada al par de alas (759 × 846). Se generó con Pillow desde la imagen original (commit 29a8095) y ya no usa ningún blend. No queda ningún `mix-blend-mode` fuera del grano de las polaroids, que está aislado en cada foto.
-- **Destellos de diamante** (`glintTexture()` en `src/ui/leopard.ts`): cruces finísimas que se abren y se cierran en su sitio (3,6 s, con retrasos distintos). Hay 12 sobre las alas, donde asoman fuera del marco, y 6 sobre la banda de pedrería del marco (`WING_GLINTS` / `FRAME_GLINTS`). Con movimiento reducido no aparecen.
+- **Destellos de diamante** (`public/sections/alfombra/destello.webp`): cruces finísimas que se abren y se cierran en su sitio (3,6 s, con retrasos distintos). Hay 12 sobre las alas, donde asoman fuera del marco, y 6 sobre la banda de pedrería del marco (`WING_GLINTS` / `FRAME_GLINTS`). Con movimiento reducido no aparecen.
 - **Vista previa antes de subir:** al tomar la foto, o al elegirla con la cámara del sistema, se abre la polaroid sin subir. Ahí se escribe el pie y se elige el efecto, y se **publica** o se **descarta**. Solo se sube al publicar.
 - **Borrar polaroids propias:** botón en la esquina inferior de la polaroid grande; el primer toque pregunta «¿Borrar?» y el segundo borra la fila y el archivo.
 - **Disparador con camarita** (ícono `camera`, `aria-label` «Tomar la foto») en lugar de la palabra «Flash». **Bajada** bajo el título: «Sección dedicada a tomarle fotos al ángel más hermoso que he conocido.» (`.carpet-dek`, Bodoni itálica).
@@ -77,7 +77,7 @@ Brief: `docs/briefs/vinilos-spotify.md`; prototipo aprobado: `docs/briefs/tocadi
 
 ## Cartas mágicas: Tin y lechucería (2026-11-03)
 - El botón ¡Extra! se llama **Tin** (palabra clave de la pareja). En la base sigue siendo `messages.kind = 'nudge'` / `activity.kind = 'extra'`; solo cambió el texto. Push «¡TIN! ¡TIN!» — «X quiere tin»: `notify` desplegada y probada en el iPhone.
-- Estética nueva (mockup aprobado en `docs/wireframes/cartas.html`): pergamino raster (`parchmentTexture` en `src/ui/leopard.ts`), título en UnifrakturCook, filete doble dorado con «Correo por lechuza · entrega inmediata», hojas con barbas y doblez, **estampilla + matasellos** por autor (se descartaron los lacres con M y S), Tin como vociferador rojo que abre la solapa al llegar, buzón vacío con lechuza en tinta, botón de enviar con pluma. «Visto» → «Leída».
+- Estética nueva (mockup aprobado en `docs/wireframes/cartas.html`): pergamino raster (`public/sections/cartas/pergamino.webp`), título en UnifrakturCook, filete doble dorado con «Correo por lechuza · entrega inmediata», hojas con barbas y doblez, **estampilla + matasellos** por autor (se descartaron los lacres con M y S), Tin como vociferador rojo que abre la solapa al llegar, buzón vacío con lechuza en tinta, botón de enviar con pluma. «Visto» → «Leída».
 - Ronda 2 (2026-11-03): título y subtítulo a todo el ancho (solo la línea del folio deja sitio a la flecha); el Tin pasó de franja a **sobre rojo** chico del lado de quien lo manda, con lacre de **llama en relieve**, que llega volando; botón Tin = lacre redondo junto a enviar; recuadro de escribir redondeado. Propuestas en `docs/wireframes/cartas-tin.html` (elegida la 2).
 - La lechuza del vacío es SVG de trazo; si se quiere ilustrada, pasarla a asset raster.
 
@@ -92,11 +92,19 @@ Collage, Vinilos y Cartelera tardaban al entrar porque todo se volvía a pedir a
 - Demo: `?demo&lento` hace que cada consulta tarde 2 s para revisar los estados de carga. Probado a 390 y 1440 px.
 - **Falta:** comprobarlo en el iPhone instalado (la caché de fotos del service worker solo funciona en el build publicado).
 
+## Revisión de punta a punta (2026-11-05)
+- **Recuperación tras publicar** (`src/lib/recover.ts`, `src/ui/ErrorBoundary.tsx`): si una sección no carga porque la app abierta es de una versión vieja, recarga sola una vez; cualquier otro error muestra «Fe de erratas» con «Volver a cargar» en vez de pantalla en blanco. El service worker se registra ahí (`injectRegister: false`), busca versión nueva cada vez que se vuelve a la app y recarga cuando ella sale. `netlify.toml`: `/assets/*` inexistente da 404 (antes devolvía index.html), `/assets/*` con caché `immutable` y `sw.js`/manifiesto `no-cache`.
+- **Íconos** en `public/icons/` (ver DESIGN.md). Color de fondo del manifiesto = papel.
+- **Texturas fijas** de Ángeles (grano, marco, aro, destello) y Cartas (pergamino, pliego); `src/ui/leopard.ts` eliminado.
+- **Perfiles** guardados en el teléfono (nombres sin «—» al abrir); el contexto de la pareja ya no se recrea en cada render.
+- `preconnect` a Supabase en `index.html`; Kabisat en woff2 (51 → 16 KB); `escudo.webp` 191 → 74 KB; fuera `swag.webp` y `cartas.webp` (solo los usaba la demo).
+- **Quedan (baja prioridad):** índice y poda de `activity`, `(select auth.uid())` en RLS, marcar sección vista en una sola RPC, quitar `@fontsource/bagel-fat-one`, liberar las copias en memoria de lo subido.
+
 ## Pendientes conocidos
 - **Fotos de perfil** de ambos en `public/readers/maria-victoria.jpg` y `simon.jpg` (hoy se ven iniciales).
 - ~~Quitar fondo~~ hecho 2026-11-04 en el Recorte de 2000's Collage (`@imgly/background-removal`, en el teléfono). Falta medir tiempo y memoria en el iPhone; plan B MediaPipe si se cae.
 - **Probar en los dos iPhone instalados**: login real, cámara, push (activar en Suscripción), badge, Spotify/YouTube embebido.
-- **Íconos PWA definitivos** (`public/icons/`) y sonidos (¡Extra!).
+- Sonidos (¡Extra!). Los íconos PWA ya existen (2026-11-05); para verlos en el iPhone hay que volver a añadir la app a la pantalla de inicio.
 - **Primera edición real** (la escribe Simón en Redacción).
 - **Deuda de tokens** (reportada por el documentador): varios colores escritos directo en CSS/TSX en vez de tokens (FrontPage, Arrival, Vinilos, Cartelera, polaroids, `Marks.tsx` usa hex en vez de `--seal-her/--seal-him`). No afecta el look.
 - **Cartelera ronda 2 (2026-10-29, en código):** búsqueda TMDB (`movie-search`), portada en el cassette, burbuja con crítica, mover entre estantes, Ruletazo. `0004` aplicada, `movie-search` desplegada y `TMDB_API_KEY` cargada. Falta probar la búsqueda real en el iPhone.

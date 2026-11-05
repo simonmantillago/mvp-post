@@ -37,7 +37,7 @@ export function createDemoClient(): any {
     watch_items: [
       { id: 'w1', title: 'Película de ejemplo', kind: 'movie', status: 'want', season: null, episode: null, poster_url: '/portada/cartelera.webp', tmdb_id: 1, year: 2003, overview: 'Una columnista de Manhattan se pregunta si el amor cabe en una suscripción. Sinopsis de ejemplo para revisar la burbuja.', note: '', added_by: HER, picked_by: null, started_at: null, finished_at: null, created_at: ago(500) },
       { id: 'w2', title: 'Serie larga', kind: 'series', status: 'want', season: null, episode: null, poster_url: null, tmdb_id: null, year: null, overview: '', note: '', added_by: HIM, picked_by: null, started_at: null, finished_at: null, created_at: ago(400) },
-      { id: 'w3', title: 'Comedia romántica', kind: 'movie', status: 'want', season: null, episode: null, poster_url: '/portada/swag.webp', tmdb_id: 3, year: 2004, overview: 'Dos que se conocen en un videoclub discuten por la última copia.', note: '', added_by: HER, picked_by: null, started_at: null, finished_at: null, created_at: ago(300) },
+      { id: 'w3', title: 'Comedia romántica', kind: 'movie', status: 'want', season: null, episode: null, poster_url: '/portada/collage.webp', tmdb_id: 3, year: 2004, overview: 'Dos que se conocen en un videoclub discuten por la última copia.', note: '', added_by: HER, picked_by: null, started_at: null, finished_at: null, created_at: ago(300) },
       { id: 'w4', title: 'La de los sábados', kind: 'series', status: 'watching', season: 2, episode: 5, poster_url: '/portada/big.webp', tmdb_id: 4, year: 1998, overview: 'Cuatro amigas, una ciudad y muchos sábados.', note: '', added_by: HIM, picked_by: HIM, started_at: ago(200), finished_at: null, created_at: ago(1000) },
       { id: 'w5', title: 'Clásico de los 2000', kind: 'movie', status: 'watched', season: null, episode: null, poster_url: '/portada/angeles.webp', tmdb_id: 5, year: 2001, overview: 'Un clásico de ejemplo.', note: '', added_by: HER, picked_by: HER, started_at: ago(3000), finished_at: ago(2900), created_at: ago(4000) },
     ],
@@ -137,8 +137,8 @@ export function createDemoClient(): any {
   const tracks = [
     ['Luz de domingo', 'Orquesta del Penthouse', 'Noches de nogal', '/portada/big.webp'],
     ['Luz de domingo (en vivo)', 'Orquesta del Penthouse', 'En vivo en la terraza', '/portada/cartelera.webp'],
-    ['Domingo en Manhattan', 'Trío de jazz', 'Columnas', '/portada/swag.webp'],
-    ['Carta a una lectora', 'La Redacción', 'Primera edición', '/portada/cartas.webp'],
+    ['Domingo en Manhattan', 'Trío de jazz', 'Columnas', '/portada/collage.webp'],
+    ['Carta a una lectora', 'La Redacción', 'Primera edición', '/portada/escudo.webp'],
     ['Ángel de medianoche', 'Las Polaroids', 'Flash', '/portada/angeles.webp'],
   ].map(([title, artist, album, cover], i) => ({
     id: `demo${i}`, uri: `spotify:track:demo${i}`, url: `https://open.spotify.com/track/demo${i}`,
@@ -148,7 +148,7 @@ export function createDemoClient(): any {
   const movies = [
     ['Noches de videoclub', 'movie', 2003, '/portada/cartelera.webp'],
     ['Noches de videoclub 2', 'movie', 2005, '/portada/big.webp'],
-    ['La columnista', 'series', 1998, '/portada/swag.webp'],
+    ['La columnista', 'series', 1998, '/portada/collage.webp'],
     ['Cartas desde Manhattan', 'movie', 2002, null],
     ['Ángeles de medianoche', 'series', 2004, '/portada/angeles.webp'],
   ].map(([title, kind, year, poster], i) => ({

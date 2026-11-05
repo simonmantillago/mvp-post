@@ -1,5 +1,5 @@
 /* Cartas mágicas: lechucería de pergamino, tinta de pluma, estampillas y lacre vino.
-   Las texturas (--parchment, --sheet) son raster de canvas (parchmentTexture en src/ui/leopard.ts). */
+   Las texturas (--parchment, --sheet) son raster fijos (public/sections/cartas/pergamino.webp y pliego.webp). */
 html[data-section="cartas"] {
   background:
     /* bordes tostados, como un pergamino viejo */
