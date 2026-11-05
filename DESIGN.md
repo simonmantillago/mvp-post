@@ -386,7 +386,7 @@ Sello de cera SVG (`WaxSeal`) con la inicial hundida en Bodoni italic. Rosa para
 - `prefers-reduced-motion` anula transiciones de página y reduce toda animación a 0,01 ms.
 
 ### Ícono de la app
-`public/icons/` (apple-touch-icon 180, 192, 512 y 512 maskable, 2026-11-05): «MVP» en UnifrakturCook 700 tinta sobre papel prensa (#e2e4e5) con trama de medio tono muy suave, segunda plancha rosa levemente fuera de registro y el doble filete de la cabecera debajo (filete fino arriba). En la versión maskable el contenido ocupa el 66 % central.
+`public/icons/` (apple-touch-icon 180, 192, 512 y 512 maskable; invertido el 2026-11-05): «MVP» en UnifrakturCook 700 en papel claro (#f4f4f2) sobre tinta (#141414), con la segunda plancha rosa (#c2255c) levemente fuera de registro detrás. Solo las letras: sin filetes ni trama. En la versión maskable el contenido ocupa el 66 % central.
 
 ## Do's and Don'ts
 
