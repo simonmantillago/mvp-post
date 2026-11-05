@@ -47,7 +47,7 @@ export function Column() {
       {load.state === 'loading' && <PressNote title="En prensa…" />}
       {load.state === 'error' && <PressNote tone="error" title="Fe de erratas" body={load.message} />}
       {load.state === 'ready' && !edition && (
-        <PressNote title="Esta edición no existe" body="Quizá todavía está en la redacción." action={<Link to="/" viewTransition>Volver a la portada</Link>} />
+        <PressNote title="Esta edición no existe" body="Quizá todavía está en la redacción." action={<Link replace to="/" viewTransition>Volver a la portada</Link>} />
       )}
 
       {edition && (
@@ -82,7 +82,7 @@ export function Column() {
           </p>
 
           {next && (
-            <Link to={next.path} viewTransition className="column-next">
+            <Link replace to={next.path} viewTransition className="column-next">
               <span>Sigue en la pág. {next.page}</span>
               <strong>{next.name}</strong>
               <Icon name="arrow-right" />

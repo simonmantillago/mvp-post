@@ -1,5 +1,5 @@
-import { lazy, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { Navigate, Route, Routes, useLocation } from 'react-router'
+import { lazy, Suspense, useCallback, useEffect, useLayoutEffect, useRef, useState, type RefObject } from 'react'
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router'
 import { useSession } from './hooks/useSession'
 import { CoupleProvider } from './hooks/useCouple'
 import { isSupabaseConfigured } from './lib/supabase'
@@ -7,7 +7,7 @@ import { Arrival } from './paper/Arrival'
 import { Login } from './paper/Login'
 import { FrontPage } from './paper/FrontPage'
 import { Column } from './paper/Column'
-import { useHistoryTrail } from './paper/nav'
+import { clearSwipe, useSwipeBack } from './paper/swipeBack'
 import { PressNote } from './ui/PressNote'
 import { ErrorBoundary } from './ui/ErrorBoundary'
 import { loaders } from './sections/prefetch'
@@ -42,9 +42,8 @@ function useArrival() {
  * la portada vuelve al punto donde se dejó (con la flecha o deslizando hacia atrás).
  * El scroll lo maneja la app, no el navegador, para que no salte al volver.
  */
-function ScrollMemory({ atFront }: { atFront: boolean }) {
+function ScrollMemory({ atFront, frontY, layer }: { atFront: boolean; frontY: RefObject<number>; layer: RefObject<HTMLDivElement | null> }) {
   const { pathname } = useLocation()
-  const frontY = useRef(0)
   const frontShown = useRef(false)
 
   useEffect(() => {
@@ -59,22 +58,44 @@ function ScrollMemory({ atFront }: { atFront: boolean }) {
 
   useLayoutEffect(() => {
     if (atFront) {
+      clearSwipe(layer.current) // si se volvió deslizando, la capa deja de flotar en este mismo cuadro
       window.scrollTo(0, frontY.current)
       frontShown.current = true
     } else {
       frontShown.current = false
       window.scrollTo(0, 0)
     }
-  }, [atFront, pathname])
+  }, [atFront, pathname, frontY, layer])
   return null
+}
+
+/** Al tocar una notificación con la app abierta, el service worker pide ir a la sección sin recargar. */
+function useOpenFromPush() {
+  const navigate = useNavigate()
+  useEffect(() => {
+    const sw = navigator.serviceWorker
+    if (!sw) return
+    const onMessage = (e: MessageEvent) => {
+      if (e.data?.type !== 'open' || typeof e.data.url !== 'string') return
+      navigate(e.data.url, { replace: true })
+      e.ports[0]?.postMessage('ok')
+    }
+    sw.addEventListener('message', onMessage)
+    return () => sw.removeEventListener('message', onMessage)
+  }, [navigate])
 }
 
 export default function App() {
   const location = useLocation()
   const session = useSession()
   const arrival = useArrival()
-  useHistoryTrail()
+  const navigate = useNavigate()
   const atFront = location.pathname === '/'
+  const frontY = useRef(0)
+  const frontLayer = useRef<HTMLDivElement>(null)
+  const toFront = useCallback(() => navigate('/', { replace: true }), [navigate])
+  useSwipeBack({ enabled: atFront === false && !!session, layer: frontLayer, frontY, onBack: toFront })
+  useOpenFromPush()
 
   if (!isSupabaseConfigured) {
     return <PressNote title="Fe de erratas" body="Falta configurar Supabase en .env.local." />
@@ -84,11 +105,11 @@ export default function App() {
 
   return (
     <CoupleProvider session={session}>
-      <ScrollMemory atFront={atFront} />
+      <ScrollMemory atFront={atFront} frontY={frontY} layer={frontLayer} />
       {/* Un solo Suspense para todo: al entrar a una sección, la portada sigue a la vista hasta que la sección está lista */}
       <Suspense fallback={<PressNote title="En prensa…" />}>
         {/* La portada no se desmonta al entrar a una sección: al volver sigue igual, sin recargar las fotos */}
-        <div style={{ display: atFront ? 'contents' : 'none' }}>
+        <div ref={frontLayer} className="front-layer" style={{ display: atFront ? 'contents' : 'none' }}>
           <ErrorBoundary>
             <FrontPage active={atFront} />
           </ErrorBoundary>

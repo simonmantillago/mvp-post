@@ -75,7 +75,7 @@ export default function Newsroom() {
       setMessage('No se pudo guardar. Revisa la conexión e intenta otra vez.')
       return
     }
-    if (publish) navigate(`/columna/${data.number}`, { viewTransition: true })
+    if (publish) navigate(`/columna/${data.number}`, { replace: true, viewTransition: true })
     else {
       setMessage('Borrador guardado.')
       if (!id) navigate(`/redaccion/${data.id}`, { replace: true })
@@ -158,7 +158,7 @@ export default function Newsroom() {
           <ul>
             {drafts.data.map((d) => (
               <li key={d.id}>
-                <Link to={`/redaccion/${d.id}`}>
+                <Link replace to={`/redaccion/${d.id}`}>
                   {d.headline || 'Sin titular'} <span>{formatShort(d.created_at)}</span>
                 </Link>
               </li>

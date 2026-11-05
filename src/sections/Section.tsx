@@ -1,4 +1,4 @@
-import { useEffect, type ReactNode } from 'react'
+import { useLayoutEffect, type ReactNode } from 'react'
 import { useMarkSeen } from '../hooks/useData'
 import type { SectionId } from '../lib/types'
 import { BackButton, Folio, SectionName } from '../paper/nav'
@@ -23,7 +23,8 @@ export function Section({
 }) {
   const entry = sectionById(id)!
   useMarkSeen(id)
-  useEffect(() => {
+  // En layout: al volver, la portada no llega a pintarse con los colores de la sección
+  useLayoutEffect(() => {
     const root = document.documentElement
     root.dataset.section = id
     return () => {

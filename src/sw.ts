@@ -79,7 +79,21 @@ self.addEventListener('notificationclick', (event) => {
       const open = windows[0]
       if (open) {
         await open.focus()
-        return open.navigate(url)
+        // Con la app abierta, se le pide ir a la sección sin recargar (App.tsx, useOpenFromPush):
+        // así no queda una entrada en el historial y el gesto de volver sigue siendo el de la app.
+        // Si no contesta (versión vieja abierta), se navega como antes.
+        const target = new URL(url)
+        const handled = await new Promise<boolean>((resolve) => {
+          const channel = new MessageChannel()
+          const timer = setTimeout(() => resolve(false), 3000)
+          channel.port1.onmessage = () => {
+            clearTimeout(timer)
+            resolve(true)
+          }
+          open.postMessage({ type: 'open', url: target.pathname + target.search }, [channel.port2])
+        })
+        if (!handled) return open.navigate(url)
+        return
       }
       return self.clients.openWindow(url)
     })(),

@@ -51,7 +51,7 @@ export function FrontPage({ active = true }: { active?: boolean }) {
 
       {load.state === 'ready' && lead && (
         <article className="front-lead">
-          <Link to={`/columna/${lead.number}`} viewTransition className="front-lead-link">
+          <Link replace to={`/columna/${lead.number}`} viewTransition className="front-lead-link">
             <Halftone path={lead.cover_path} alt={lead.cover_caption || 'Foto de la columna'} className="front-cover" />
             <h2 className="front-hed">{lead.headline}</h2>
           </Link>
@@ -60,7 +60,7 @@ export function FrontPage({ active = true }: { active?: boolean }) {
           </p>
           {lead.cover_caption && <p className="front-caption">{lead.cover_caption}</p>}
           {lede && <p className="front-lede">{lede}</p>}
-          <Link to={`/columna/${lead.number}`} viewTransition className="front-more">
+          <Link replace to={`/columna/${lead.number}`} viewTransition className="front-more">
             Seguir leyendo la columna <Icon name="arrow-right" size={18} />
           </Link>
         </article>
@@ -73,7 +73,7 @@ export function FrontPage({ active = true }: { active?: boolean }) {
           {reader?.columnist ? (
             <>
               <p className="front-standfirst">Escribe la primera columna. Cuando la publiques, a ella le llegará la noticia.</p>
-              <Link to="/redaccion" viewTransition className="front-cta">
+              <Link replace to="/redaccion" viewTransition className="front-cta">
                 <Icon name="pen" size={18} /> Escribir la primera columna
               </Link>
             </>
@@ -107,7 +107,7 @@ export function FrontPage({ active = true }: { active?: boolean }) {
             <ul>
               {editions.slice(1).map((e) => (
                 <li key={e.id}>
-                  <Link to={`/columna/${e.number}`} viewTransition>
+                  <Link replace to={`/columna/${e.number}`} viewTransition>
                     <span>N.º {e.number}</span> {e.headline}
                   </Link>
                 </li>
@@ -117,11 +117,11 @@ export function FrontPage({ active = true }: { active?: boolean }) {
         )}
         <p className="front-foot-links">
           {reader?.columnist && (
-            <Link to="/redaccion" viewTransition>
+            <Link replace to="/redaccion" viewTransition>
               Redacción
             </Link>
           )}
-          <Link to="/suscripcion" viewTransition>
+          <Link replace to="/suscripcion" viewTransition>
             Suscripción
           </Link>
         </p>
@@ -148,7 +148,7 @@ function Story({ s, unseen, photoLast = false }: { s: SectionEntry; unseen: numb
   const early = { onPointerDown: () => prefetchSection(s.id), onFocus: () => prefetchSection(s.id) }
   const photo = (
     <figure className="story-photo">
-      <Link to={s.path} viewTransition className="story-photo-link" tabIndex={-1} aria-hidden="true" {...early}>
+      <Link replace to={s.path} viewTransition className="story-photo-link" tabIndex={-1} aria-hidden="true" {...early}>
         <img src={s.cover} alt="" loading="lazy" decoding="async" style={{ objectFit: s.coverFit ?? 'cover', objectPosition: s.coverPosition, aspectRatio: s.coverAspect }} />
       </Link>
       <figcaption className="story-caption">{s.caption}</figcaption>
@@ -166,7 +166,7 @@ function Story({ s, unseen, photoLast = false }: { s: SectionEntry; unseen: numb
   )
   const page = <p className="story-page">Pág. {s.page}</p>
   const go = (
-    <Link to={s.path} viewTransition className="story-go" {...early}>
+    <Link replace to={s.path} viewTransition className="story-go" {...early}>
       {s.layout === 'pair' ? 'Ver' : 'Ver sección'} <Icon name="arrow-right" size={18} />
       {s.layout === 'pair' && <span className="visually-hidden"> {s.name}</span>}
     </Link>

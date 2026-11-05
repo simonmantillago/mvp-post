@@ -3,7 +3,10 @@
    Cada sección redefine los mismos roles bajo [data-section="…"]: los componentes
    solo leen roles (--ground, --ink, --spot…), nunca colores sueltos. */
 
-:root {
+/* .front-layer: la portada vuelve a declarar sus tokens, porque al deslizar para volver
+   se ve encima de una sección mientras <html> todavía lleva los de esa sección */
+:root,
+.front-layer {
   /* Papel prensa frío, tinta negra y rosa de segunda plancha */
   --paper: #e2e4e5;
   --paper-shade: #d3d6d8;
@@ -53,6 +56,7 @@
 
   --radius: 2px;
   --shadow-lift: 0 10px 24px -12px rgba(0, 0, 0, 0.45);
+  --shadow-edge: 14px 0 28px -10px rgba(0, 0, 0, 0.5);
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);

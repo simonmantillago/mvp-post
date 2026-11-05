@@ -78,6 +78,20 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em
   background-size: 3px 3px;
 }
 
+/* Deslizar desde el borde para volver (src/paper/swipeBack.ts): la portada, que sigue montada,
+   flota sobre la sección y entra desde la izquierda bajo el dedo */
+.front-layer.is-swiping {
+  display: block !important;
+  position: fixed;
+  inset: 0;
+  z-index: 45; /* sobre la flecha de volver (40) y el telón (35) */
+  overflow: hidden;
+  background: var(--paper);
+  box-shadow: var(--shadow-edge);
+  pointer-events: none;
+  will-change: transform;
+}
+
 /* Pasar la página (View Transitions): la página nueva entra desdoblándose
    desde el lomo derecho; la vieja se queda debajo. */
 ::view-transition-old(root) {

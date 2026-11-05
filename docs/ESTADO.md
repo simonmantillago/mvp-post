@@ -103,12 +103,19 @@ Collage, Vinilos y Cartelera tardaban al entrar porque todo se volvía a pedir a
 ## Volver a la portada sin parpadeo (2026-11-05)
 - La portada ya no se desmonta al entrar a una sección: queda oculta (`display: none`) y al volver se muestra tal cual, sin recrear las fotos. Antes, al deslizar hacia atrás en el iPhone, todas las imágenes parpadeaban porque la portada se montaba de nuevo.
 - El scroll lo maneja la app (`ScrollMemory` en `App.tsx`, `history.scrollRestoration = 'manual'`): las secciones abren arriba y la portada vuelve al punto donde se dejó, con la flecha o deslizando.
-- La flecha ← hace `navigate(-1)` cuando la entrada anterior del historial es la portada (`useHistoryTrail` en `nav.tsx`); si se entró por un enlace directo (notificación), abre la portada desde arriba como antes.
 - Al volver se recuentan los «Nuevo» y se marca la portada como vista (`useUnseen(active)`, `useMarkSeen(..., active)`).
 - Al entrar a una sección, la portada sigue a la vista hasta que la sección está lista (un solo `<Suspense>` envuelve portada y secciones en `App.tsx`; así no sale «En prensa…»).
 
 ## Pasar la página: probado y descartado (2026-11-05)
 Con `<BrowserRouter>` react-router ignora `viewTransition`, así que la animación de `base.css` (`page-unfold`, `page-unfold-back`) no se ve. Se activó un rato con `createBrowserRouter` + `RouterProvider` (commit d42c98c) y a Simón no le gustó: en el iPhone notaba más parpadeos al cambiar de página. Se volvió a `<BrowserRouter>`. Los `viewTransition` de los enlaces y el CSS siguen en el código pero no hacen nada.
+
+## Deslizar para volver, hecho por la app (2026-11-05)
+- En la app instalada, el gesto de volver de iOS enseñaba una pantalla blanca mientras se deslizaba (no tenía la captura de la portada). Ahora **toda la app navega con `replace`**, sin entradas en el historial, así que iOS no ofrece su gesto, y el gesto es propio: `src/paper/swipeBack.ts`.
+- Desde los primeros 30 px del borde izquierdo, la portada (que sigue montada, en `.front-layer`) entra desde la izquierda bajo el dedo, en el punto donde se dejó. Al soltar pasado un tercio del ancho, o con un tirón, vuelve; si no, se retira. El scroll vertical no lo activa.
+- `.front-layer` vuelve a declarar los tokens de `:root` (en `tokens.css`) porque mientras se desliza `<html>` todavía lleva los de la sección. `data-section` en `<html>` se quita en `useLayoutEffect` (Section.tsx).
+- Notificaciones con la app abierta: el service worker manda `{ type: 'open', url }` y la app navega sin recargar (`useOpenFromPush` en App.tsx); si no contesta en 3 s, `client.navigate()` como antes.
+- Todo enlace nuevo debe llevar `replace` (o usar `useTurn`).
+- Probado con toques simulados de iPhone en Chromium. **Falta:** sentirlo en el iPhone.
 
 ## Pendientes conocidos
 - **Fotos de perfil** de ambos en `public/readers/maria-victoria.jpg` y `simon.jpg` (hoy se ven iniciales).
