@@ -290,6 +290,24 @@
         ],
         "createdAt": "2026-10-24T07:29:25.177Z",
         "reason": "Claude: wireframe/decision-round sketch, not shipping UI; fonts there are placeholders predating DESIGN.md"
+      },
+      {
+        "rule": "italic-serif-display",
+        "value": "*",
+        "files": [
+          "docs/wireframes/alfombra-fuente.html"
+        ],
+        "createdAt": "2026-11-05T05:57:53.497Z",
+        "reason": "Comparison mockup: option A reproduces the shipped Bodoni italic title of Los Ángeles de Victoria (DESIGN.md)"
+      },
+      {
+        "rule": "hero-eyebrow-chip",
+        "value": "*",
+        "files": [
+          "docs/wireframes/alfombra-fuente.html"
+        ],
+        "createdAt": "2026-11-05T05:57:53.742Z",
+        "reason": "Comparison mockup: reproduces the app's existing folio line (Página N) and front-page kicker, not a SaaS hero"
       }
     ]
   }

@@ -6,6 +6,7 @@ import { Halftone } from '../ui/Halftone'
 import { Icon } from '../ui/Icon'
 import { formatFull, formatShort } from './dates'
 import { blocks, usePublishedEditions } from './editions'
+import { SectionName } from './nav'
 import './FrontPage.css'
 
 /** El arranque de la columna en la portada: unas líneas, cortadas en palabra. */
@@ -149,7 +150,7 @@ function Story({ s, unseen, photoLast = false }: { s: SectionEntry; unseen: numb
   )
   const name = (
     <h3 className="story-name">
-      <span className="story-name-text">{s.name}</span>
+      <span className="story-name-text"><SectionName name={s.name} lines={s.nameLines} /></span>
       {unseen > 0 && (
         <span className="story-new">
           Nuevo<span className="visually-hidden">: {unseen} sin ver</span>

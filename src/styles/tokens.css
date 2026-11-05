@@ -104,6 +104,8 @@
   --fx-cool: rgba(0, 180, 255, 0.08);
   --fx-stamp: #ff8a1e;
   --face-display: "Bodoni Moda", serif;
+  /* Títulos (portada y sección) en capitales romanas talladas, inspiradas en Trajan; el resto sigue en Bodoni */
+  --face-title: "Cinzel", "Bodoni Moda", serif;
 }
 
 /* Los vinilos de Big: penthouse de noche */

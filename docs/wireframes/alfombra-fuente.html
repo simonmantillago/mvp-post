@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Los Ángeles de Victoria · fuente</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Marcellus+SC&display=swap" rel="stylesheet">
+<style>
+  @font-face { font-family: "Bodoni Moda"; font-style: italic; src: url(/node_modules/@fontsource/bodoni-moda/files/bodoni-moda-latin-400-italic.woff2) format("woff2"); }
+  @font-face { font-family: Antonio; font-weight: 500; src: url(/node_modules/@fontsource/antonio/files/antonio-latin-500-normal.woff2) format("woff2"); }
+  @font-face { font-family: Caslon; src: url(/node_modules/@fontsource/libre-caslon-text/files/libre-caslon-text-latin-400-normal.woff2) format("woff2"); }
+  @font-face { font-family: Caslon; font-style: italic; src: url(/node_modules/@fontsource/libre-caslon-text/files/libre-caslon-text-latin-400-italic.woff2) format("woff2"); }
+
+  :root {
+    --paper: #e2e4e5; --ink: #141414; --ink-soft: #4a4945; --spot: #c2255c;
+    --ground: #0b0a09; --text: #f3eee4; --gold: #d9b65c; --rule: #c9a24a;
+    --head: Antonio, "Arial Narrow", sans-serif; --body: Caslon, Georgia, serif;
+    --page: #2a2a2a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--page); color: #eee; font: 16px/1.5 var(--body); padding: 40px 16px 80px; }
+  .doc { max-width: 1320px; margin: 0 auto 32px; }
+  .doc h1 { font: 500 1.6rem/1.1 var(--head); letter-spacing: .04em; text-transform: uppercase; }
+  .doc p { max-width: 70ch; margin-top: 8px; color: #bbb; }
+
+  .grid { max-width: 1320px; margin: 0 auto; display: grid; gap: 28px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 390px), 1fr)); }
+  .option { display: grid; gap: 14px; align-content: start; }
+  .tag { font: 500 .8rem/1 var(--head); letter-spacing: .14em; text-transform: uppercase; color: #ddd; }
+  .tag b { color: var(--gold); font-weight: 500; }
+  .note { font: italic .9rem/1.4 var(--body); color: #aaa; }
+
+  /* Portada */
+  .story { container-type: inline-size; background: var(--paper); color: var(--ink); padding: 18px 16px; display: flow-root; }
+  .story .kicker { font: 500 .7rem/1 var(--head); letter-spacing: .14em; text-transform: uppercase; color: var(--spot); border-top: 2px solid var(--ink); padding-top: 8px; margin-bottom: 10px; }
+  .story img { float: right; width: 48%; margin: 0 0 8px 12px; aspect-ratio: 4/5; object-fit: contain; background: #111; }
+  .story-name { font: 400 var(--ssz, 1.9rem)/1.05 var(--f); font-style: var(--fs); letter-spacing: var(--ls); text-transform: var(--tt); margin-bottom: 8px; text-wrap: balance; }
+  .l { display: block; white-space: nowrap; }
+  .story-dek { font: .875rem/1.5 var(--body); }
+
+  /* Sección */
+  .section { position: relative; color: var(--text); padding: 20px 16px 28px; min-height: 420px;
+    background: linear-gradient(180deg, transparent, rgba(11,10,9,.7)), url(/sections/alfombra/fondo.webp) center / cover, var(--ground); }
+  .folio { font: 500 .7rem/1 var(--head); letter-spacing: .14em; text-transform: uppercase; color: var(--text); opacity: .8; }
+  .folio-title { margin-top: 16px; font: 400 clamp(2.4rem, 11vw, 3.4rem)/.95 var(--f); font-size: var(--fsz, clamp(2.4rem, 11vw, 3.4rem)); font-style: var(--fs); letter-spacing: var(--ls); text-transform: var(--tt); color: var(--gold); text-wrap: balance; }
+  .dek { max-width: 30ch; margin-top: 10px; font: italic 400 1.0625rem/1.4 "Bodoni Moda", serif; }
+  .memories { margin-top: 120px; padding-bottom: 8px; border-bottom: 1px solid var(--rule); font: 400 1.6rem/1 var(--f); font-style: var(--fs); letter-spacing: var(--ls); text-transform: var(--tt); color: var(--gold); }
+
+  .o-bodoni { --f: "Bodoni Moda", serif; --fs: italic; --ls: -0.01em; --tt: none; }
+  .o-cinzel { --f: "Cinzel", serif; --fs: normal; --ls: 0.04em; --tt: none; --fsz: clamp(2.1rem, 9.6vw, 3rem); --ssz: min(1.9rem, calc((52cqi - 12px) / 6.95)); }
+  .o-marcellus { --f: "Marcellus SC", serif; --fs: normal; --ls: 0.03em; --tt: none; --fsz: clamp(2.2rem, 10vw, 3.1rem); --ssz: min(1.9rem, calc((52cqi - 12px) / 5.75)); }
+</style>
+</head>
+<body>
+  <header class="doc">
+    <h1>Los Ángeles de Victoria · prueba de fuente</h1>
+    <p>Título del artículo en la portada y títulos dentro de la sección. Trajan Pro es de pago (Adobe), así que no se puede incluir tal cual; Cinzel y Marcellus SC son gratuitas y salen del mismo modelo: las capitales romanas grabadas en piedra.</p>
+  </header>
+
+  <main class="grid">
+    <section class="option o-bodoni">
+      <p class="tag">A · Actual — <b>Bodoni Moda itálica</b></p>
+      <article class="story">
+        <p class="kicker">Página 3</p>
+        <img src="/portada/angeles.webp" alt="">
+        <h2 class="story-name"><span class="l">Los Ángeles</span> <span class="l">de Victoria</span></h2>
+        <p class="story-dek">Sección dedicada a tomarle fotos al ángel más hermoso que he conocido.</p>
+      </article>
+      <div class="section">
+        <p class="folio">Página 3 · The MVP Post</p>
+        <h1 class="folio-title"><span class="l">Los Ángeles</span> <span class="l">de Victoria</span></h1>
+        <p class="dek">Sección dedicada a tomarle fotos al ángel más hermoso que he conocido.</p>
+        <h2 class="memories">Recuerdos</h2>
+      </div>
+    </section>
+
+    <section class="option o-cinzel">
+      <p class="tag">B · Recomendada — <b>Cinzel</b></p>
+      <article class="story">
+        <p class="kicker">Página 3</p>
+        <img src="/portada/angeles.webp" alt="">
+        <h2 class="story-name"><span class="l">Los Ángeles</span> <span class="l">de Victoria</span></h2>
+        <p class="story-dek">Sección dedicada a tomarle fotos al ángel más hermoso que he conocido.</p>
+      </article>
+      <div class="section">
+        <p class="folio">Página 3 · The MVP Post</p>
+        <h1 class="folio-title"><span class="l">Los Ángeles</span> <span class="l">de Victoria</span></h1>
+        <p class="dek">Sección dedicada a tomarle fotos al ángel más hermoso que he conocido.</p>
+        <h2 class="memories">Recuerdos</h2>
+      </div>
+      <p class="note">La más cercana a Trajan: mayúsculas altas y versalitas en las minúsculas, remates finos.</p>
+    </section>
+
+    <section class="option o-marcellus">
+      <p class="tag">C · Alternativa — <b>Marcellus SC</b></p>
+      <article class="story">
+        <p class="kicker">Página 3</p>
+        <img src="/portada/angeles.webp" alt="">
+        <h2 class="story-name"><span class="l">Los Ángeles</span> <span class="l">de Victoria</span></h2>
+        <p class="story-dek">Sección dedicada a tomarle fotos al ángel más hermoso que he conocido.</p>
+      </article>
+      <div class="section">
+        <p class="folio">Página 3 · The MVP Post</p>
+        <h1 class="folio-title"><span class="l">Los Ángeles</span> <span class="l">de Victoria</span></h1>
+        <p class="dek">Sección dedicada a tomarle fotos al ángel más hermoso que he conocido.</p>
+        <h2 class="memories">Recuerdos</h2>
+      </div>
+      <p class="note">Más suave y redondeada; trazo más parejo, menos contraste.</p>
+    </section>
+  </main>
+</body>
+</html>

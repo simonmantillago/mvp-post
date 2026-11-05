@@ -7,6 +7,8 @@ export type SectionEntry = {
   id: Exclude<SectionId, 'portada'>
   path: string
   name: string
+  /** Cortes fijos del nombre (cada línea nunca se parte), cuando el título debe leerse así */
+  nameLines?: string[]
   page: number
   /** Bajada del artículo en la portada */
   dek: string
@@ -37,6 +39,7 @@ export const sections: SectionEntry[] = [
     id: 'alfombra',
     path: '/alfombra-roja',
     name: 'Los Ángeles de Victoria',
+    nameLines: ['Los Ángeles', 'de Victoria'],
     page: 3,
     dek: 'Sección dedicada a tomarle fotos al ángel más hermoso que he conocido.',
     cover: '/portada/angeles.webp',

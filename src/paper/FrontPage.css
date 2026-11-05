@@ -220,14 +220,24 @@
 /* Título grande a todo el ancho; la foto flota a la izquierda y el texto la rodea */
 .story--lead-left .story-name { margin-bottom: var(--s3); font-size: 2.6rem; color: var(--accent-text); }
 .story--lead-left .story-photo { float: left; width: 48%; margin: 0 var(--s3) var(--s2) 0; }
-/* Bodoni en itálica, como el título dentro de la sección */
-.story[data-section="alfombra"] .story-name { font-style: italic; }
+/* Los Ángeles de Victoria: capitales romanas (Cinzel), como el título dentro de la sección.
+   Dos renglones fijos («Los Ángeles / de Victoria») a la medida del hueco que deja la foto (52 % menos el margen):
+   «Los Ángeles» mide ~6.9 em en Cinzel con este espaciado. */
+.story[data-section="alfombra"] { container-type: inline-size; }
+.story[data-section="alfombra"] .story-name {
+  font-family: var(--face-title);
+  font-size: min(1.9rem, calc((52cqi - var(--s3)) / 6.95));
+  line-height: 1.05;
+  letter-spacing: 0.04em;
+}
 /* 2000's Collage: Kabisat es ancha y sus mayúsculas miden 1.22 em → en una sola línea, a la medida del ancho, sin encimarse */
 .story[data-section="y2k"] .story-name {
   font-size: min(5.7vw, 2.3rem);
   line-height: 1.35;
   text-transform: uppercase;
 }
+/* Renglones fijos del nombre (SectionName con `nameLines`) */
+.name-line { display: block; white-space: nowrap; }
 /* el nombre nunca se parte; el sello «Nuevo» baja si no cabe al lado.
    Borde negro como el título dentro de la sección: el trazo va detrás del relleno para no comerse la letra */
 .story[data-section="y2k"] .story-name-text {

@@ -33,7 +33,21 @@ export function BackButton({ to = '/' }: { to?: string }) {
 }
 
 /** Cabezal de cada sección: folio del periódico + nombre de la sección en su propia voz. */
-export function Folio({ page, title, children }: { page: number; title: string; children?: ReactNode }) {
+/** Nombre de la sección; con `lines`, cada línea va entera en su renglón (p. ej. «Los Ángeles / de Victoria»). */
+export function SectionName({ name, lines }: { name: string; lines?: string[] }) {
+  if (!lines) return <>{name}</>
+  return (
+    <>
+      {lines.map((l, i) => (
+        <span key={i} className="name-line">
+          {l}{i < lines.length - 1 ? ' ' : ''}
+        </span>
+      ))}
+    </>
+  )
+}
+
+export function Folio({ page, title, children }: { page: number; title: ReactNode; children?: ReactNode }) {
   return (
     <header className="folio">
       <p className="folio-line">

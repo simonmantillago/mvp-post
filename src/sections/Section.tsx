@@ -1,7 +1,7 @@
 import { useEffect, type ReactNode } from 'react'
 import { useMarkSeen } from '../hooks/useData'
 import type { SectionId } from '../lib/types'
-import { BackButton, Folio } from '../paper/nav'
+import { BackButton, Folio, SectionName } from '../paper/nav'
 import { sectionById } from './registry'
 import './Section.css'
 
@@ -20,7 +20,7 @@ export function Section({ id, className = '', header, children }: { id: Exclude<
   return (
     <main className={`section section--${id} ${className}`} data-section={id}>
       <BackButton />
-      <Folio page={entry.page} title={entry.name}>
+      <Folio page={entry.page} title={<SectionName name={entry.name} lines={entry.nameLines} />}>
         {header}
       </Folio>
       {children}

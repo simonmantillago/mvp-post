@@ -26,10 +26,12 @@
   color: var(--text);
   text-wrap: balance;
 }
+/* Título en capitales romanas (Cinzel, --face-title); Cinzel es ancha: un paso más chico que el folio común */
 .red-carpet .folio-title {
-  font-style: italic;
+  font-family: var(--face-title);
+  font-size: clamp(2.1rem, 9.6vw, 3rem);
   color: var(--accent-text);
-  letter-spacing: -0.01em;
+  letter-spacing: 0.04em;
 }
 
 /* Visor enmarcado en pedrería dorada (marco raster generado en canvas) */
@@ -196,7 +198,8 @@
 .memories-title {
   padding-bottom: var(--s2);
   border-bottom: 1px solid var(--rule);
-  font: italic 400 var(--size-h2) / 1 var(--face-display);
+  font: 400 var(--size-h2) / 1 var(--face-title);
+  letter-spacing: 0.04em;
   color: var(--accent-text);
 }
 .polaroids {
