@@ -17,11 +17,12 @@ function excerpt(text: string | undefined, max = 210) {
   return text.slice(0, text.lastIndexOf(' ', max)) + '…'
 }
 
-export function FrontPage() {
+/** `active`: la portada está a la vista (sigue montada, oculta, mientras se lee una sección). */
+export function FrontPage({ active = true }: { active?: boolean }) {
   const { reader, nameOf } = useCouple()
   const { load } = usePublishedEditions()
-  const unseen = useUnseen()
-  useMarkSeen('portada')
+  const unseen = useUnseen(active)
+  useMarkSeen('portada', active)
   useEffect(() => prefetchAllQuietly(), [])
 
   const editions = load.state === 'ready' ? load.data : []

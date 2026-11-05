@@ -98,7 +98,8 @@ export function useSignedUrl(bucket: string, path: string | null | undefined) {
 }
 
 /** Pendientes por sección (para los sellos "Nuevo"). */
-export function useUnseen() {
+/** `active`: vuelve a contar cada vez que la portada vuelve a la vista. */
+export function useUnseen(active = true) {
   const [unseen, setUnseen] = useState<Partial<Record<SectionId, number>>>({})
   const refresh = useCallback(async () => {
     const { data } = await supabase.rpc('unseen_by_section')
@@ -107,7 +108,9 @@ export function useUnseen() {
     setUnseen(next)
   }, [])
   useEffect(() => {
-    refresh()
+    if (active) refresh()
+  }, [active, refresh])
+  useEffect(() => {
     const channel = supabase
       .channel('unseen')
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'activity' }, () => refresh())
@@ -120,8 +123,9 @@ export function useUnseen() {
 }
 
 /** Marca una sección como vista y limpia el badge del ícono si ya no queda nada. */
-export function useMarkSeen(section: SectionId) {
+export function useMarkSeen(section: SectionId, active = true) {
   useEffect(() => {
+    if (!active) return
     supabase
       .from('section_reads')
       .upsert({ section, seen_at: new Date().toISOString() }, { onConflict: 'user_id,section' })
@@ -132,5 +136,5 @@ export function useMarkSeen(section: SectionId) {
         if (total === 0) nav.clearAppBadge?.().catch(() => {})
         else nav.setAppBadge?.(total).catch(() => {})
       })
-  }, [section])
+  }, [section, active])
 }

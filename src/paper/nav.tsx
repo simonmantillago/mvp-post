@@ -1,6 +1,6 @@
-import { type ReactNode } from 'react'
+import { type ReactNode, useLayoutEffect } from 'react'
 import { createPortal } from 'react-dom'
-import { useNavigate } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 import { formatDay } from './dates'
 import { Icon } from '../ui/Icon'
 import './nav.css'
@@ -18,14 +18,35 @@ export function useTurn() {
   }
 }
 
+/** Qué ruta hay en cada entrada del historial de esta apertura (por el `idx` que guarda react-router). */
+const trail = new Map<number, string>()
+const historyIdx = () => (window.history.state as { idx?: number } | null)?.idx
+
+/** Se llama una vez en App: va anotando el historial para que «volver» sepa si puede ir hacia atrás. */
+export function useHistoryTrail() {
+  const { pathname } = useLocation()
+  useLayoutEffect(() => {
+    const idx = historyIdx()
+    if (typeof idx === 'number') trail.set(idx, pathname)
+  }, [pathname])
+}
+
 /**
  * Flecha para volver a la portada, arriba a la derecha bajo la isla dinámica.
  * Va en <body> con `position: absolute`: se queda arriba de la página y se va con el scroll.
  */
 export function BackButton({ to = '/' }: { to?: string }) {
   const turn = useTurn()
+  const navigate = useNavigate()
+  function back() {
+    // Si se llegó desde ahí, se vuelve atrás en el historial (como deslizar): la portada queda donde se dejó
+    // y deslizar hacia atrás después no regresa a la sección
+    const idx = historyIdx()
+    if (typeof idx === 'number' && idx > 0 && trail.get(idx - 1) === to) navigate(-1)
+    else turn(to, true)
+  }
   return createPortal(
-    <button type="button" className="back-button" aria-label="Volver a la portada" onClick={() => turn(to, true)}>
+    <button type="button" className="back-button" aria-label="Volver a la portada" onClick={back}>
       <Icon name="arrow-left" size={22} />
     </button>,
     document.body,

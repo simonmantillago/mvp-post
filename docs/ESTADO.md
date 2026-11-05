@@ -100,6 +100,14 @@ Collage, Vinilos y Cartelera tardaban al entrar porque todo se volvía a pedir a
 - `preconnect` a Supabase en `index.html`; Kabisat en woff2 (51 → 16 KB); `escudo.webp` 191 → 74 KB; fuera `swag.webp` y `cartas.webp` (solo los usaba la demo).
 - **Quedan (baja prioridad):** índice y poda de `activity`, `(select auth.uid())` en RLS, marcar sección vista en una sola RPC, quitar `@fontsource/bagel-fat-one`, liberar las copias en memoria de lo subido.
 
+## Volver a la portada sin parpadeo (2026-11-05)
+- La portada ya no se desmonta al entrar a una sección: queda oculta (`display: none`) y al volver se muestra tal cual, sin recrear las fotos. Antes, al deslizar hacia atrás en el iPhone, todas las imágenes parpadeaban porque la portada se montaba de nuevo.
+- El scroll lo maneja la app (`ScrollMemory` en `App.tsx`, `history.scrollRestoration = 'manual'`): las secciones abren arriba y la portada vuelve al punto donde se dejó, con la flecha o deslizando.
+- La flecha ← hace `navigate(-1)` cuando la entrada anterior del historial es la portada (`useHistoryTrail` en `nav.tsx`); si se entró por un enlace directo (notificación), abre la portada desde arriba como antes.
+- Al volver se recuentan los «Nuevo» y se marca la portada como vista (`useUnseen(active)`, `useMarkSeen(..., active)`).
+- Ojo: con `<BrowserRouter>` (modo declarativo) react-router ignora `viewTransition`, así que la animación de pasar la página de `base.css` no se está viendo. Para tenerla habría que pasar a `createBrowserRouter` + `RouterProvider`.
+- Probado en demo a 390 px con las 5 secciones (flecha y atrás del historial). **Falta:** probar el deslizamiento en el iPhone.
+
 ## Pendientes conocidos
 - **Fotos de perfil** de ambos en `public/readers/maria-victoria.jpg` y `simon.jpg` (hoy se ven iniciales).
 - ~~Quitar fondo~~ hecho 2026-11-04 en el Recorte de 2000's Collage (`@imgly/background-removal`, en el teléfono). Falta medir tiempo y memoria en el iPhone; plan B MediaPipe si se cae.
