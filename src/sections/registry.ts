@@ -28,7 +28,7 @@ export const sections: SectionEntry[] = [
     path: '/y2k',
     name: "2000's Collage",
     page: 2,
-    dek: 'Collage de fotos de la pareja con más estilo del momento: fotos y recortes pegados a mano, como en 2003.',
+    dek: 'Collage de fotos de la pareja con más estilo del momento: fotos y recortes pegados a mano, al estilo Y2K.',
     cover: '/portada/swag.webp',
     caption: '#SWAG, en primera fila.',
     layout: 'lead-left',
