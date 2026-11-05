@@ -105,7 +105,14 @@ Collage, Vinilos y Cartelera tardaban al entrar porque todo se volvía a pedir a
 - El scroll lo maneja la app (`ScrollMemory` en `App.tsx`, `history.scrollRestoration = 'manual'`): las secciones abren arriba y la portada vuelve al punto donde se dejó, con la flecha o deslizando.
 - La flecha ← hace `navigate(-1)` cuando la entrada anterior del historial es la portada (`useHistoryTrail` en `nav.tsx`); si se entró por un enlace directo (notificación), abre la portada desde arriba como antes.
 - Al volver se recuentan los «Nuevo» y se marca la portada como vista (`useUnseen(active)`, `useMarkSeen(..., active)`).
-- Ojo: con `<BrowserRouter>` (modo declarativo) react-router ignora `viewTransition`, así que la animación de pasar la página de `base.css` no se está viendo. Para tenerla habría que pasar a `createBrowserRouter` + `RouterProvider`.
+- Al entrar a una sección, la portada sigue a la vista hasta que la sección está lista (un solo `<Suspense>` envuelve portada y secciones en `App.tsx`; así no sale «En prensa…»).
+
+## Pasar la página activado (2026-11-05, a prueba)
+Con `<BrowserRouter>` react-router ignoraba `viewTransition` y la animación de `base.css` nunca se veía. Se activó para que Simón la vea. **Cambios, por si hay que deshacerlo:**
+1. `src/main.tsx`: `createBrowserRouter([{ path: '*', element: <App /> }])` + `RouterProvider` de `react-router/dom`, en lugar de `<BrowserRouter><App /></BrowserRouter>`. **Volver a `<BrowserRouter>` quita la animación por completo**; lo demás puede quedarse como está.
+2. `src/paper/nav.tsx`: la flecha pone `html.turn-back` antes de `navigate(-1)` para pasar la página hacia atrás; un `popstate` que no viene de la flecha (deslizar en el iPhone, atrás del navegador) pone `html.no-turn`.
+3. `src/styles/base.css`: `html.no-turn::view-transition-*` sin animación, porque iOS ya anima el deslizamiento.
+Las animaciones (`page-unfold`, `page-unfold-back`, `page-under`) son las de antes y no se cambiaron. Probado en Chromium a 390 px. **Falta:** verla en el iPhone (Safari 18+ tiene View Transitions; en versiones anteriores navega sin animación).
 - Probado en demo a 390 px con las 5 secciones (flecha y atrás del historial). **Falta:** probar el deslizamiento en el iPhone.
 
 ## Pendientes conocidos

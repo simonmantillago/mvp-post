@@ -85,16 +85,17 @@ export default function App() {
   return (
     <CoupleProvider session={session}>
       <ScrollMemory atFront={atFront} />
-      {/* La portada no se desmonta al entrar a una sección: al volver sigue igual, sin recargar las fotos */}
-      <div style={{ display: atFront ? 'contents' : 'none' }}>
-        <ErrorBoundary>
-          <FrontPage active={atFront} />
-        </ErrorBoundary>
-      </div>
-      {!atFront && (
-        // Una por ruta: si una sección falla, al volver a la portada se reinicia
-        <ErrorBoundary key={location.pathname}>
-          <Suspense fallback={<PressNote title="En prensa…" />}>
+      {/* Un solo Suspense para todo: al entrar a una sección, la portada sigue a la vista hasta que la sección está lista */}
+      <Suspense fallback={<PressNote title="En prensa…" />}>
+        {/* La portada no se desmonta al entrar a una sección: al volver sigue igual, sin recargar las fotos */}
+        <div style={{ display: atFront ? 'contents' : 'none' }}>
+          <ErrorBoundary>
+            <FrontPage active={atFront} />
+          </ErrorBoundary>
+        </div>
+        {!atFront && (
+          // Una por ruta: si una sección falla, al volver a la portada se reinicia
+          <ErrorBoundary key={location.pathname}>
             <Routes>
               <Route path="/columna/:number" element={<Column />} />
               <Route path="/redaccion" element={<Newsroom />} />
@@ -107,9 +108,9 @@ export default function App() {
               <Route path="/suscripcion" element={<Subscription />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
-          </Suspense>
-        </ErrorBoundary>
-      )}
+          </ErrorBoundary>
+        )}
+      </Suspense>
     </CoupleProvider>
   )
 }
