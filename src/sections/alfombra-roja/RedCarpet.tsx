@@ -52,7 +52,7 @@ export default function RedCarpet() {
   }
 
   return (
-    <Section id="alfombra" className="red-carpet" ready={load.state !== 'loading'} header={<p className="carpet-dek">Sección dedicada a tomarle fotos al ángel más hermoso que he conocido.</p>}>
+    <Section id="alfombra" className="red-carpet" ready={load.state !== 'loading'}>
       <div className="carpet-ground" aria-hidden="true" />
       <div className="section-body" style={{ '--grain': `url(${TEX.grain})` } as CSSProperties}>
         <Camera

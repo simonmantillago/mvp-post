@@ -19,13 +19,6 @@
     url(/sections/alfombra/fondo.webp) center / cover;
 }
 /* Bajada bajo el título: la dedicatoria de la sección, en la voz del mundo */
-.carpet-dek {
-  max-width: 30ch;
-  margin-top: var(--s2);
-  font: italic 400 1.0625rem / 1.4 var(--face-display);
-  color: var(--text);
-  text-wrap: balance;
-}
 /* Título en capitales romanas (Cinzel, --face-title); Cinzel es ancha: un paso más chico que el folio común */
 .red-carpet .folio-title {
   font-family: var(--face-title);

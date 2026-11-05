@@ -257,7 +257,7 @@
   text-shadow: 0.06em 0.05em 0 var(--accent);
 }
 .y2k-canvas .press-note-body {
-  font: 400 0.875rem/1.45 var(--face-display);
+  font: 500 1rem/1.45 var(--face-ui);
   font-style: normal;
   color: var(--text-soft);
 }
