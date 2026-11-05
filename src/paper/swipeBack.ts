@@ -10,8 +10,10 @@ import { useEffect, type RefObject } from 'react'
  * Al soltar pasado un tercio (o con un tirón), se vuelve; si no, la sección regresa a su sitio.
  *
  * Mientras dura, la portada (`.front-layer.is-under`) y la sección (`.page-layer.is-swiping`)
- * se apilan arriba de la página, con la ventana en scroll 0, y cada una corre su contenido
- * (`.layer-inner`, `top` negativo) al punto donde estaba. No son `position: fixed` a propósito:
+ * se apilan justo en la parte de la página que se está viendo, y cada una corre su contenido
+ * (`.layer-inner`, `top` negativo) al punto donde estaba. El scroll de la ventana no se toca:
+ * en el iPhone, mover el scroll y la página a la vez no cae en el mismo cuadro y parpadeaba
+ * cuando la sección estaba bajada. No son `position: fixed` a propósito:
  * en la app instalada (barra de estado translúcida) iOS recorta lo fijo antes del borde de abajo
  * y quedaba una franja negra. Lo que sí es fijo dentro de la sección (p. ej. el «+» del Collage)
  * se ubica respecto a la capa, que mide lo mismo que la ventana, así que no se mueve.
@@ -34,7 +36,9 @@ function extraBelow() {
   return Math.max(0, (standalone ? screen.height : 0) - window.innerHeight) + 120
 }
 
-function lift(layer: HTMLElement, cls: string, y: number) {
+/** `at`: dónde está la ventana (la capa se pone ahí); `y`: el scroll que tenía su contenido. */
+function lift(layer: HTMLElement, cls: string, at: number, y: number) {
+  layer.style.top = `${at}px`
   layer.style.height = `${window.innerHeight}px`
   layer.classList.add(cls)
   const inner = layer.firstElementChild as HTMLElement | null
@@ -43,6 +47,7 @@ function lift(layer: HTMLElement, cls: string, y: number) {
 
 function drop(layer: HTMLElement, cls: string) {
   layer.classList.remove(cls)
+  layer.style.top = ''
   layer.style.height = ''
   const inner = layer.firstElementChild as HTMLElement | null
   if (inner) inner.style.top = ''
@@ -129,10 +134,9 @@ export function useSwipeBack({
       root.style.setProperty('--swipe-extra', `${extraBelow()}px`)
       root.classList.add('is-swiping-back')
       place(0)
-      lift(f, 'is-under', frontY.current) // la portada espera debajo en el punto donde se dejó
-      lift(p, 'is-swiping', pageY) // y la sección sigue donde estaba
+      lift(f, 'is-under', pageY, frontY.current) // la portada espera debajo en el punto donde se dejó
+      lift(p, 'is-swiping', pageY, pageY) // y la sección sigue donde estaba, sin mover el scroll
       freeze(frozen)
-      window.scrollTo(0, 0)
       return true
     }
 
@@ -153,7 +157,7 @@ export function useSwipeBack({
         } else {
           clearPage(p)
           clearSwipe(front.current)
-          window.scrollTo(0, pageY)
+          if (window.scrollY !== pageY) window.scrollTo(0, pageY)
         }
       }
       p.addEventListener('transitionend', end)

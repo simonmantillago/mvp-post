@@ -80,7 +80,7 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em
 
 /* Deslizar desde el borde para volver (src/paper/swipeBack.ts): la sección se va hacia la derecha
    bajo el dedo y la portada, que sigue montada, espera quieta debajo. Mientras dura el gesto las dos
-   capas se apilan arriba de la página (absolutas, no fijas: iOS recorta lo fijo antes del borde de
+   capas se apilan en la parte de la página que se ve (absolutas, no fijas: iOS recorta lo fijo antes del borde de
    abajo en la app instalada); fuera de él no cambian nada (display: contents). */
 .page-layer,
 .layer-inner { display: contents; }
