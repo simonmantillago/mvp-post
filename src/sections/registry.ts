@@ -73,7 +73,7 @@ export const sections: SectionEntry[] = [
     path: '/cartas',
     name: 'Cartas mágicas',
     page: 6,
-    dek: 'Nuevo hechizo para enviar mensajes, las cartas al editor ahora viajan por lechuza y llegan al instante. Se reporta que las lechuzas han aprendido a decir Tin por algún motivo desconocido.',
+    dek: 'Nuevo hechizo para enviar mensajes, las cartas al editor ahora llegan al instante. Y las lechuzas han aprendido a decir Tin por algún motivo desconocido.',
     cover: '/portada/escudo.webp',
     caption: 'Correspondencia certificada.',
     coverAspect: '44 / 50',
