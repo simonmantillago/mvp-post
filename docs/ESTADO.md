@@ -111,7 +111,7 @@ Con `<BrowserRouter>` react-router ignora `viewTransition`, así que la animaci�
 
 ## Deslizar para volver, hecho por la app (2026-11-05)
 - En la app instalada, el gesto de volver de iOS enseñaba una pantalla blanca mientras se deslizaba (no tenía la captura de la portada). Ahora **toda la app navega con `replace`**, sin entradas en el historial, así que iOS no ofrece su gesto, y el gesto es propio: `src/paper/swipeBack.ts`.
-- Desde los primeros 30 px del borde izquierdo, la portada (que sigue montada, en `.front-layer`) entra desde la izquierda bajo el dedo, en el punto donde se dejó. Al soltar pasado un tercio del ancho, o con un tirón, vuelve; si no, se retira. El scroll vertical no lo activa.
+- Desde los primeros 30 px del borde izquierdo, **la sección se va hacia la derecha** bajo el dedo (`.page-layer.is-swiping`, con una copia del fondo de `<html>`) y la portada espera quieta debajo (`.front-layer.is-under`), en el punto donde se dejó. Al soltar pasado un tercio del ancho, o con un tirón, vuelve; si no, la sección regresa a su scroll. El scroll vertical no lo activa. (Primera versión, descartada: la portada entraba desde la izquierda.)
 - `.front-layer` vuelve a declarar los tokens de `:root` (en `tokens.css`) porque mientras se desliza `<html>` todavía lleva los de la sección. `data-section` en `<html>` se quita en `useLayoutEffect` (Section.tsx).
 - Notificaciones con la app abierta: el service worker manda `{ type: 'open', url }` y la app navega sin recargar (`useOpenFromPush` en App.tsx); si no contesta en 3 s, `client.navigate()` como antes.
 - Todo enlace nuevo debe llevar `replace` (o usar `useTurn`).

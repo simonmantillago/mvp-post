@@ -93,8 +93,9 @@ export default function App() {
   const atFront = location.pathname === '/'
   const frontY = useRef(0)
   const frontLayer = useRef<HTMLDivElement>(null)
+  const pageLayer = useRef<HTMLDivElement>(null)
   const toFront = useCallback(() => navigate('/', { replace: true }), [navigate])
-  useSwipeBack({ enabled: atFront === false && !!session, layer: frontLayer, frontY, onBack: toFront })
+  useSwipeBack({ enabled: atFront === false && !!session, front: frontLayer, page: pageLayer, frontY, onBack: toFront })
   useOpenFromPush()
 
   if (!isSupabaseConfigured) {
@@ -115,21 +116,24 @@ export default function App() {
           </ErrorBoundary>
         </div>
         {!atFront && (
-          // Una por ruta: si una sección falla, al volver a la portada se reinicia
-          <ErrorBoundary key={location.pathname}>
-            <Routes>
-              <Route path="/columna/:number" element={<Column />} />
-              <Route path="/redaccion" element={<Newsroom />} />
-              <Route path="/redaccion/:id" element={<Newsroom />} />
-              <Route path="/y2k" element={<Y2K />} />
-              <Route path="/alfombra-roja" element={<RedCarpet />} />
-              <Route path="/vinilos" element={<Vinyls />} />
-              <Route path="/cartelera" element={<Cartelera />} />
-              <Route path="/cartas" element={<Letters />} />
-              <Route path="/suscripcion" element={<Subscription />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </ErrorBoundary>
+          // Capa de la sección: al deslizar para volver se va hacia la derecha (swipeBack.ts)
+          <div ref={pageLayer} className="page-layer">
+            {/* Una por ruta: si una sección falla, al volver a la portada se reinicia */}
+            <ErrorBoundary key={location.pathname}>
+              <Routes>
+                <Route path="/columna/:number" element={<Column />} />
+                <Route path="/redaccion" element={<Newsroom />} />
+                <Route path="/redaccion/:id" element={<Newsroom />} />
+                <Route path="/y2k" element={<Y2K />} />
+                <Route path="/alfombra-roja" element={<RedCarpet />} />
+                <Route path="/vinilos" element={<Vinyls />} />
+                <Route path="/cartelera" element={<Cartelera />} />
+                <Route path="/cartas" element={<Letters />} />
+                <Route path="/suscripcion" element={<Subscription />} />
+                <Route path="*" element={<Navigate to="/" replace />} />
+              </Routes>
+            </ErrorBoundary>
+          </div>
         )}
       </Suspense>
     </CoupleProvider>

@@ -5,30 +5,44 @@ import { useEffect, type RefObject } from 'react'
  *
  * El gesto de iOS enseña una captura de la página anterior, y en la app instalada esa captura
  * suele faltar (se ve blanco). Por eso la app no deja entradas en el historial (todo navega con
- * `replace`) y el gesto es propio: la portada, que sigue montada, entra desde la izquierda bajo
- * el dedo, en el punto donde se dejó. Al soltar pasado un tercio (o con un tirón), se vuelve.
+ * `replace`) y el gesto es propio, como el de iOS: la sección se va hacia la derecha bajo el dedo
+ * y la portada, que sigue montada, ya está debajo en el punto donde se dejó.
+ * Al soltar pasado un tercio (o con un tirón), se vuelve; si no, la sección regresa a su sitio.
+ *
+ * Mientras dura, las dos capas flotan fijas en la pantalla (`.front-layer.is-under` debajo,
+ * `.page-layer.is-swiping` encima) y cada una guarda su scroll en `scrollTop`. Como varias
+ * secciones pintan su fondo en <html>, la capa de la sección se lleva una copia de ese fondo.
  */
 const EDGE = 30 // px desde el borde donde empieza el gesto
 const SLOP = 8 // px antes de decidir si es horizontal
 const COMMIT = 0.33 // fracción del ancho para volver al soltar
 const FLICK = 0.45 // px/ms: un tirón rápido vuelve aunque sea corto
 
-/** Deja la capa de la portada como estaba (la llama también App al mostrar la portada). */
-export function clearSwipe(layer: HTMLElement | null) {
-  if (!layer) return
-  layer.classList.remove('is-swiping')
-  layer.style.transform = ''
-  layer.style.transition = ''
+const BG = ['backgroundImage', 'backgroundSize', 'backgroundPosition', 'backgroundRepeat', 'backgroundColor'] as const
+
+/** Deja la portada como estaba (la llama también App al mostrar la portada tras volver). */
+export function clearSwipe(front: HTMLElement | null) {
+  document.documentElement.classList.remove('is-swiping-back')
+  front?.classList.remove('is-under')
+}
+
+function clearPage(page: HTMLElement) {
+  page.classList.remove('is-swiping')
+  page.style.transform = ''
+  page.style.transition = ''
+  for (const k of BG) page.style[k] = ''
 }
 
 export function useSwipeBack({
   enabled,
-  layer,
+  front,
+  page,
   frontY,
   onBack,
 }: {
   enabled: boolean
-  layer: RefObject<HTMLElement | null>
+  front: RefObject<HTMLElement | null>
+  page: RefObject<HTMLElement | null>
   frontY: RefObject<number>
   onBack: () => void
 }) {
@@ -37,42 +51,56 @@ export function useSwipeBack({
     let start: { x: number; y: number } | null = null
     let dragging = false
     let settling = false
+    let pageY = 0
     let dx = 0
     let lastX = 0
     let lastT = 0
     let speed = 0
 
     const place = (x: number) => {
-      if (layer.current) layer.current.style.transform = `translate3d(${x - innerWidth}px, 0, 0)`
+      if (page.current) page.current.style.transform = `translate3d(${x}px, 0, 0)`
     }
 
     function begin() {
-      const l = layer.current
-      if (!l) return false
-      l.style.transition = 'none'
-      l.classList.add('is-swiping')
-      l.scrollTop = frontY.current // la portada aparece en el punto donde se dejó
+      const f = front.current
+      const p = page.current
+      if (!f || !p) return false
+      pageY = window.scrollY
+      // La sección se lleva su fondo, que vive en <html>
+      const bg = getComputedStyle(document.documentElement)
+      for (const k of BG) p.style[k] = bg[k]
+      p.style.transition = 'none'
+      document.documentElement.classList.add('is-swiping-back')
+      f.classList.add('is-under')
+      p.classList.add('is-swiping')
+      f.scrollTop = frontY.current // la portada espera debajo en el punto donde se dejó
+      p.scrollTop = pageY // y la sección sigue donde estaba
       place(0)
       return true
     }
 
     function settle(back: boolean) {
-      const l = layer.current
-      if (!l) return
+      const p = page.current
+      if (!p) return
       settling = true
-      l.style.transition = 'transform 220ms var(--ease-out)'
+      p.style.transition = 'transform 240ms var(--ease-out)'
       place(back ? innerWidth : 0)
       let done = false
       const end = () => {
         if (done) return
         done = true
-        l.removeEventListener('transitionend', end)
+        p.removeEventListener('transitionend', end)
         settling = false
-        if (back) onBack() // App quita la capa en el mismo cuadro en que muestra la portada
-        else clearSwipe(l)
+        if (back) {
+          onBack() // App muestra la portada y quita las capas en el mismo cuadro
+        } else {
+          clearPage(p)
+          clearSwipe(front.current)
+          window.scrollTo(0, pageY)
+        }
       }
-      l.addEventListener('transitionend', end)
-      window.setTimeout(end, 320)
+      p.addEventListener('transitionend', end)
+      window.setTimeout(end, 340)
     }
 
     function onStart(e: TouchEvent) {
@@ -134,5 +162,5 @@ export function useSwipeBack({
       document.removeEventListener('touchend', onEnd)
       document.removeEventListener('touchcancel', onCancel)
     }
-  }, [enabled, layer, frontY, onBack])
+  }, [enabled, front, page, frontY, onBack])
 }

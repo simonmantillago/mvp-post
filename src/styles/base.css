@@ -78,19 +78,28 @@ a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em
   background-size: 3px 3px;
 }
 
-/* Deslizar desde el borde para volver (src/paper/swipeBack.ts): la portada, que sigue montada,
-   flota sobre la sección y entra desde la izquierda bajo el dedo */
-.front-layer.is-swiping {
+/* Deslizar desde el borde para volver (src/paper/swipeBack.ts): la sección se va hacia la derecha
+   bajo el dedo y la portada, que sigue montada, espera quieta debajo. Las dos capas flotan fijas
+   en la pantalla mientras dura el gesto; fuera de él no cambian nada (display: contents). */
+.page-layer { display: contents; }
+.front-layer.is-under,
+.page-layer.is-swiping {
   display: block !important;
   position: fixed;
   inset: 0;
-  z-index: 45; /* sobre la flecha de volver (40) y el telón (35) */
   overflow: hidden;
-  background: var(--paper);
-  box-shadow: var(--shadow-edge);
   pointer-events: none;
+}
+.front-layer.is-under {
+  z-index: 44;
+  background: var(--paper);
+}
+.page-layer.is-swiping {
+  z-index: 45; /* sobre la portada; la flecha de volver (40) se esconde mientras */
+  box-shadow: var(--shadow-edge);
   will-change: transform;
 }
+html.is-swiping-back .back-button { visibility: hidden; }
 
 /* Pasar la página (View Transitions): la página nueva entra desdoblándose
    desde el lomo derecho; la vieja se queda debajo. */
