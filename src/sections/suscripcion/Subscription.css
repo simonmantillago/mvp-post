@@ -119,6 +119,20 @@
   align-items: center;
   gap: var(--s2);
 }
+.coupon-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--s4);
+}
+.coupon-cancel {
+  min-height: 2.75rem;
+  padding: 0 var(--s2);
+  border: 0;
+  background: none;
+  font: italic var(--size-small) / 1 var(--face-body);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
 /* Segundo toque para quitar: tinta rosa de error */
 .coupon-danger {
   border-color: var(--spot-text);

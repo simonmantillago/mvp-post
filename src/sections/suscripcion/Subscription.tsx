@@ -155,7 +155,7 @@ function FaceIdBlock() {
     setBusy(false)
     if (!problem || problem === 'exists') {
       await load()
-      setMsg({ kind: 'ok', text: problem ? 'Este iPhone ya tenía Face ID para el periódico.' : 'Listo, Face ID activado.' })
+      if (problem) setMsg({ kind: 'ok', text: 'Este iPhone ya tenía Face ID para el periódico.' })
       return
     }
     if (problem === 'cancel') return
@@ -196,7 +196,7 @@ function FaceIdBlock() {
       {keys === 'error' && <p className="coupon-help">No se pudo revisar Face ID. Abre de nuevo esta página con conexión.</p>}
       {Array.isArray(keys) && (
         <p className="coupon-help">
-          {on ? `Activado desde el ${since}. En «¿Quién lee hoy?» toca «Entrar con Face ID».` : 'Entra mirando el teléfono, sin escribir la contraseña. La llave se guarda en tu Llavero de iCloud.'}
+          {on ? `Activado desde el ${since}.` : 'Entra mirando el teléfono, sin escribir la contraseña. La llave se guarda en tu Llavero de iCloud.'}
         </p>
       )}
       {msg && (
@@ -228,7 +228,14 @@ function PasswordBlock() {
   const [next, setNext] = useState('')
   const [again, setAgain] = useState('')
   const [busy, setBusy] = useState(false)
+  const [open, setOpen] = useState(false)
   const [msg, setMsg] = useState<{ kind: 'error' | 'ok'; text: string } | null>(null)
+
+  function close() {
+    setOpen(false)
+    setNext('')
+    setAgain('')
+  }
 
   async function submit(e: FormEvent) {
     e.preventDefault()
@@ -249,10 +256,34 @@ function PasswordBlock() {
       })
       return
     }
-    setNext('')
-    setAgain('')
+    close()
     setMsg({ kind: 'ok', text: 'Listo. La próxima vez entra con la nueva.' })
   }
+
+  const note = msg && (
+    <p className={msg.kind === 'ok' ? 'coupon-note coupon-note-ok' : 'coupon-note'} role={msg.kind === 'ok' ? 'status' : 'alert'}>
+      {msg.text}
+    </p>
+  )
+
+  if (!open)
+    return (
+      <section className="coupon-block" aria-labelledby="clave">
+        <h2 id="clave">Contraseña</h2>
+        {note}
+        <button
+          type="button"
+          className="coupon-signout"
+          aria-expanded={false}
+          onClick={() => {
+            setMsg(null)
+            setOpen(true)
+          }}
+        >
+          Cambiar contraseña
+        </button>
+      </section>
+    )
 
   return (
     <form className="coupon-block" aria-labelledby="clave" onSubmit={submit} noValidate>
@@ -260,21 +291,22 @@ function PasswordBlock() {
       <input type="email" name="username" autoComplete="username" value={session?.user.email ?? ''} readOnly hidden />
       <label className="coupon-field">
         <span>Nueva</span>
-        <input type="password" name="new-password" autoComplete="new-password" value={next} onChange={(e) => setNext(e.target.value)} />
+        <input type="password" name="new-password" autoComplete="new-password" autoFocus value={next} onChange={(e) => setNext(e.target.value)} />
       </label>
       <label className="coupon-field">
         <span>Repítela</span>
         <input type="password" name="confirm-password" autoComplete="new-password" value={again} onChange={(e) => setAgain(e.target.value)} />
       </label>
       <p className="coupon-help">Mínimo {MIN_PASSWORD} caracteres. Tu iPhone te ofrecerá guardarla.</p>
-      {msg && (
-        <p className={msg.kind === 'ok' ? 'coupon-note coupon-note-ok' : 'coupon-note'} role={msg.kind === 'ok' ? 'status' : 'alert'}>
-          {msg.text}
-        </p>
-      )}
-      <button type="submit" className="coupon-action" disabled={busy || !next || !again}>
-        {busy ? 'Cambiando…' : 'Cambiar contraseña'}
-      </button>
+      {note}
+      <div className="coupon-actions">
+        <button type="submit" className="coupon-action" disabled={busy || !next || !again}>
+          {busy ? 'Cambiando…' : 'Guardar'}
+        </button>
+        <button type="button" className="coupon-cancel" onClick={() => (close(), setMsg(null))} disabled={busy}>
+          Cancelar
+        </button>
+      </div>
     </form>
   )
 }

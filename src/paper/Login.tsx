@@ -157,9 +157,8 @@ function FaceIdSignIn() {
 
   return (
     <div className="login-faceid">
-      <button type="button" className="login-faceid-button" onClick={go} disabled={busy}>
-        <Icon name="face-id" size={22} />
-        {busy ? 'Mirando…' : 'Entrar con Face ID'}
+      <button type="button" className="login-faceid-button" onClick={go} disabled={busy} aria-label="Entrar con Face ID">
+        <Icon name="face-id" size={48} stroke={1.25} />
       </button>
       {note && (
         <p className="credential-error" role="alert">

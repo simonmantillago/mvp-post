@@ -34,19 +34,19 @@
   margin: 0 auto var(--s5);
   text-align: center;
 }
+/* Solo el ícono, sin borde; zona de toque de 4rem */
 .login-faceid-button {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--s2);
-  min-height: 2.75rem;
-  padding: 0 var(--s4);
-  border: 1px solid var(--ink);
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  border: 0;
+  border-radius: var(--radius);
   background: transparent;
   color: var(--ink);
-  font: 700 var(--size-body) / 1 var(--face-head);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  transition: opacity 200ms var(--ease-out), scale 200ms var(--ease-out);
 }
+.login-faceid-button:active { scale: 0.92; }
 .login-faceid-button:disabled { opacity: 0.45; cursor: default; }
 .login-faceid-button:focus-visible { outline: 2px solid var(--spot); outline-offset: 2px; }
 .login-sign {
