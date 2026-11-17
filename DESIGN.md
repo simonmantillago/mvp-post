@@ -227,7 +227,7 @@ Los materiales son imprenta y objetos: medio tono, filetes dobles, sellos de gom
 Papel y tinta con una segunda plancha rosa en la portada; cada sección trae su propia paleta cerrada que reemplaza los roles, no los suma.
 
 ### Primary
-- **Rosa Segunda Plancha** (spot): la única tinta de color del papel. Banda de la columna («CARRIE'S COLUMN»), sello «Nuevo», capitular, cinta del ejemplar en la llegada, botón «Publicar», filete bajo «Secciones», comillas del destacado, cursor del titular. Blanco encima (`on-spot`).
+- **Rosa Segunda Plancha** (spot): la única tinta de color del papel. Banda de la columna («CARRIE'S COLUMN»), capitular, cinta del ejemplar en la llegada, botón «Publicar», filete bajo «Secciones», comillas del destacado, cursor del titular. Blanco encima (`on-spot`).
 - **Rosa Texto** (spot-text): la misma tinta oscurecida para texto pequeño sobre papel (≥ 4,5:1): errores, notas, tinta del sello de goma.
 
 ### Neutral
@@ -299,7 +299,7 @@ El papel es plano; la profundidad viene de objetos físicos puestos encima: cred
 - **Página sobre la mesa** (`0 30px 60px -30px rgba(0,0,0,0.45), 0 0 0 1px rgba(20,20,20,0.08)`): la portada en escritorio.
 - **Objeto en la mesa** (`0 6px 14px -8px rgba(0,0,0,0.35)` en cartas; `0 10px 18px -10px rgba(0,0,0,0.9)` en polaroids sobre fondo oscuro): hojas y fotos sueltas.
 - **Recorte** (`filter: drop-shadow(0 8px 8px rgba(0,0,0,0.5))`): piezas del collage, que siguen su silueta. Los recortes son como stickers de WhatsApp: se quita el fondo en el teléfono (`@imgly/background-removal`), se ciñe a la silueta y se le hornea un borde blanco grueso (se guarda también una copia sin borde para «Quitar borde»).
-- **Fuera de registro** (`-3px 2px 0 rgba(194,37,92,0.28)` y `translate: 2px -1px`): banda de sección, cinta de llegada. El sello «Nuevo» usa `-2px 1px 0` en tinta.
+- **Fuera de registro** (`-3px 2px 0 rgba(194,37,92,0.28)` y `translate: 2px -1px`): banda de sección, cinta de llegada.
 
 ### Named Rules
 **The Objects Lift, Paper Doesn't Rule.** Solo los objetos llevan sombra. El papel, los filetes y los bloques de texto nunca.
@@ -339,7 +339,7 @@ No hay tarjetas genéricas; cada contenedor es un objeto del mundo: credencial l
 - **Artículos de sección:** el índice de secciones es una plana de periódico en papel. Cada sección es un artículo con:
   - foto a color en marco blanco con filete de tinta (el único objeto que se levanta) y pie en itálica;
   - título en la cara display de su mundo (el artículo lleva `data-section`), en tinta;
-  - bajada en Libre Caslon, «Pág. N» y el sello «Nuevo»;
+  - bajada en Libre Caslon, «Pág. N» y el botón «Ver» (con punto rojo si hay algo nuevo);
   - botón de tinta «Ver sección →».
 
   La composición varía por artículo (`layout` en `src/sections/registry.ts`): `lead-left` (título a todo el ancho y foto flotando a la izquierda), `float-right` (foto a la derecha), `banner` (foto apaisada a todo el ancho y bajada a dos columnas con capitular) y `pair` (dos artículos lado a lado con filete de columna, uno con la foto arriba y otro abajo). Las fotos mantienen un tamaño parecido.
@@ -347,8 +347,8 @@ No hay tarjetas genéricas; cada contenedor es un objeto del mundo: credencial l
 - **Folio:** línea de etiqueta con la cabecera en miniatura sobre un filete en `--rule`, y debajo el título de sección.
 - **Pestañas (Cartelera):** tres columnas, filete inferior de 3 px que pasa a `--neon` en la activa.
 
-### Sello «Nuevo» y sello de goma
-El sello «Nuevo» es un rectángulo rosa en Antonio 700 de 0.75rem con 0.14em de tracking, girado −4°, y cambia en su sitio sin mover la fila. El sello de goma (`RubberStamp`) marca estados («Visto»): doble filete de 3 px en `--stamp-ink`, fondo blanco al 55 %, girado −9°, con máscara de tinta irregular.
+### Punto de «nuevo» y sello de goma
+Lo nuevo de una sección se marca con un punto rojo (`--badge`, 0.75rem, anillo de 2px del color del papel) en la esquina superior derecha de su botón «Ver»/«Ver sección», como el badge de iOS; no toca el título (2026-11-16, reemplaza al sello «Nuevo»). El sello de goma (`RubberStamp`) marca estados («Visto»): doble filete de 3 px en `--stamp-ink`, fondo blanco al 55 %, girado −9°, con máscara de tinta irregular.
 
 ### Polaroid y carrete de efectos
 Las fotos de Alfombra roja son polaroids (Blanco Polaroid, pie en Bodoni itálica) que se revelan con un efecto elegido por quien la tomó: Original, Grano, Vintage, Flash, Noir o Digicam 2003 (este último con la fecha estampada en naranja LCD). El efecto es CSS sobre la foto (`.fx-<id>`: filtro + una capa con `--grain` o los roles `--fx-*`); el archivo guardado no cambia. En la polaroid grande, la autora o el autor desliza un carrete de miniaturas (la misma foto con cada efecto) y toca una; la elegida lleva filete `--accent`. Una foto recién tomada no se sube de inmediato: se abre como polaroid con pie, carrete y las acciones Descartar / Publicar. Las polaroids propias se borran desde un botón en su esquina inferior, que pide un segundo toque («¿Borrar?», en vino).

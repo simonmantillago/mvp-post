@@ -157,11 +157,6 @@ function Story({ s, unseen, photoLast = false }: { s: SectionEntry; unseen: numb
   const name = (
     <h3 className="story-name">
       <span className="story-name-text"><SectionName name={s.name} lines={s.nameLines} /></span>
-      {unseen > 0 && (
-        <span className="story-new">
-          Nuevo<span className="visually-hidden">: {unseen} sin ver</span>
-        </span>
-      )}
     </h3>
   )
   const page = <p className="story-page">Pág. {s.page}</p>
@@ -169,6 +164,11 @@ function Story({ s, unseen, photoLast = false }: { s: SectionEntry; unseen: numb
     <Link replace to={s.path} viewTransition className="story-go" {...early}>
       {s.layout === 'pair' ? 'Ver' : 'Ver sección'} <Icon name="arrow-right" size={18} />
       {s.layout === 'pair' && <span className="visually-hidden"> {s.name}</span>}
+      {unseen > 0 && (
+        <span className="story-dot">
+          <span className="visually-hidden">: {unseen} sin ver</span>
+        </span>
+      )}
     </Link>
   )
   const dek = <p className="story-dek">{s.dek}</p>
