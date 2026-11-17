@@ -1,82 +1,82 @@
 # The MVP Post
 
-Una PWA privada para dos personas con forma de **periódico neoyorquino de 2003**. La portada es una columna que uno le escribe al otro, y cada sección del periódico es un mundo con su propia estética:
+A private PWA for two people, shaped like a **2003 New York newspaper**. The front page is a column one person writes to the other, and each section of the paper is its own world with its own look:
 
-- **Carrie's Column**: ediciones semanales con titular, foto y texto.
-- **2000's Collage**: mural compartido de fotos, recortes tipo sticker (el fondo se quita en el propio teléfono) y texto; mover, girar, escalar y fijar con candado.
-- **Los Ángeles de Victoria**: cámara dentro de la app, ráfaga de paparazzi y polaroids con efectos de revelado.
-- **Los vinilos de Big**: canciones dedicadas, búsqueda en Spotify y un tocadiscos 3D (three.js) cuya aguja es play/pausa.
-- **Cartelera**: videoclub de pendientes, viendo y vistas, búsqueda en TMDB, críticas y «Ruletazo».
-- **Cartas mágicas**: chat en tiempo real con estética de lechucería y el «Tin» (un aviso urgente).
-- **Suscripción**: perfil, notificaciones y silenciar secciones.
+- **Carrie's Column**: weekly editions with a headline, a photo, and the column itself.
+- **2000's Collage**: a shared board of photos, sticker-style cutouts (the background is removed on the phone itself), and text. Pieces can be moved, rotated, scaled, and locked.
+- **Los Ángeles de Victoria**: an in-app camera with a paparazzi burst, turning shots into polaroids with developing effects.
+- **Los vinilos de Big**: dedicated songs, Spotify search, and a 3D turntable (three.js) whose tonearm is play/pause.
+- **Cartelera**: a video-store watchlist (to watch, watching, watched) with TMDB search, reviews, and a "Ruletazo" wheel that picks what to watch.
+- **Cartas mágicas**: real-time chat styled as an owl post office, plus the "Tin", an urgent nudge.
+- **Suscripción**: profile, notifications, and per-section muting.
 
-Todo lo nuevo llega como notificación push, con contador en el ícono. Está pensada para iPhone con la app instalada en la pantalla de inicio. La interfaz está en español.
+Everything new arrives as a push notification, with a badge count on the app icon. It's built for iPhone with the app installed on the home screen. **The UI is in Spanish.**
 
 ## Stack
 
-- React 19 + Vite 6 + TypeScript, `react-router` 7, `three` (solo el tocadiscos), `@imgly/background-removal` (recortes).
-- PWA con `vite-plugin-pwa` (modo `injectManifest`) y service worker propio: precache, push, badge y deep links.
-- Supabase: Auth, Postgres con RLS, Storage privado, Realtime, Edge Functions y `pg_net` + Vault.
-- Netlify para el hosting.
+- React 19 + Vite 6 + TypeScript, `react-router` 7, `three` (turntable only), `@imgly/background-removal` (cutouts).
+- PWA via `vite-plugin-pwa` (`injectManifest` mode) with a custom service worker: precache, push, badge, and deep links.
+- Supabase: Auth, Postgres with RLS, private Storage, Realtime, Edge Functions, and `pg_net` + Vault.
+- Netlify for hosting.
 
-## Verla sin configurar nada (modo demo)
+## Try it without any setup (demo mode)
 
-Con Node 20:
+With Node 20:
 
 ```bash
 npm install
 npm run dev
 ```
 
-Abre `http://localhost:5173/?demo`. Es un backend falso en memoria con datos de ejemplo:
+Open `http://localhost:5173/?demo`. It runs on a fake in-memory backend with sample data:
 
-- `?demo`: lectora.
-- `?demo=el`: columnista; también ve la Redacción.
-- `?demo=fuera`: pantalla de login.
-- Agrega `&lento` para simular que cada consulta tarda 2 segundos.
+- `?demo`: as the reader.
+- `?demo=el`: as the columnist, who also sees the newsroom (Redacción).
+- `?demo=fuera`: the login screen.
+- Add `&lento` to make every query take 2 seconds.
 
-El modo demo solo existe en `npm run dev` y no entra al build.
+Demo mode only exists under `npm run dev` and is excluded from the build.
 
-## Montarla con tu propio backend
+## Run it with your own backend
 
 ### 1. Supabase
 
-1. Crea un proyecto en Supabase y vincúlalo:
+1. Create a Supabase project and link it:
    ```bash
    npx supabase login
-   npx supabase link --project-ref <tu-ref>
+   npx supabase link --project-ref <your-ref>
    npx supabase db push --linked
    ```
-   Esto aplica las migraciones de `supabase/migrations/`: tablas, RLS, buckets y triggers.
-2. En Auth, crea a mano las dos cuentas (correo y contraseña) y **deshabilita los registros**.
-3. Agrega las dos cuentas a la pareja (SQL):
+   This applies the migrations in `supabase/migrations/`: tables, RLS, buckets, and triggers.
+2. In Auth, create the two accounts by hand (email and password) and **disable sign-ups**.
+3. Add both accounts to the couple (SQL):
    ```sql
    insert into public.couple_members (user_id)
-   select id from auth.users where email in ('ella@ejemplo.com', 'el@ejemplo.com');
+   select id from auth.users where email in ('her@example.com', 'him@example.com');
    ```
 
-### 2. Notificaciones push
+### 2. Push notifications
 
-1. Genera llaves VAPID:
+1. Generate VAPID keys:
    ```bash
    npx web-push generate-vapid-keys
    ```
-2. Carga los secretos y despliega la función:
+2. Set the secrets and deploy the function:
    ```bash
-   npx supabase secrets set VAPID_PUBLIC_KEY=... VAPID_PRIVATE_KEY=... VAPID_SUBJECT=mailto:tu@correo NOTIFY_SECRET=<aleatorio>
+   npx supabase secrets set VAPID_PUBLIC_KEY=... VAPID_PRIVATE_KEY=... VAPID_SUBJECT=mailto:you@example.com NOTIFY_SECRET=<random>
    npx supabase functions deploy notify --no-verify-jwt
    ```
-3. Guarda en Vault la URL de la función y el mismo secreto (SQL):
+3. Store the function URL and the same secret in Vault (SQL):
    ```sql
-   select vault.create_secret('https://<tu-ref>.supabase.co/functions/v1/notify', 'notify_url');
-   select vault.create_secret('<el mismo NOTIFY_SECRET>', 'notify_secret');
+   select vault.create_secret('https://<your-ref>.supabase.co/functions/v1/notify', 'notify_url');
+   select vault.create_secret('<the same NOTIFY_SECRET>', 'notify_secret');
    ```
 
-Sin esto la app funciona igual, solo que sin notificaciones.
+Without this the app still works, just without notifications.
 
-### 3. Búsquedas (opcional)
+### 3. Search (optional)
 
-- **Spotify**: crea una app en Spotify for Developers.
+- **Spotify**: create an app in Spotify for Developers.
   ```bash
   npx supabase secrets set SPOTIFY_CLIENT_ID=... SPOTIFY_CLIENT_SECRET=...
   npx supabase functions deploy spotify-search
@@ -87,64 +87,66 @@ Sin esto la app funciona igual, solo que sin notificaciones.
   npx supabase functions deploy movie-search
   ```
 
-Ambas funciones exigen sesión y que el usuario sea de la pareja.
+Both functions require a signed-in session from one of the two members.
 
-### 4. Variables del cliente
+### 4. Client variables
 
-Copia `.env.example` a `.env.local` y llénalo:
+Copy `.env.example` to `.env.local` and fill it in:
 
-| Variable | Qué es |
+| Variable | What it is |
 | --- | --- |
-| `VITE_SUPABASE_URL` | URL del proyecto |
-| `VITE_SUPABASE_ANON_KEY` | Llave anon (pública) |
-| `VITE_VAPID_PUBLIC_KEY` | Llave pública VAPID |
-| `VITE_EMAIL_HER` / `VITE_EMAIL_HIM` | Correos de las dos cuentas (las tarjetas del login) |
+| `VITE_SUPABASE_URL` | Project URL |
+| `VITE_SUPABASE_ANON_KEY` | Anon key (public) |
+| `VITE_VAPID_PUBLIC_KEY` | VAPID public key |
+| `VITE_EMAIL_HER` / `VITE_EMAIL_HIM` | Emails of the two accounts (used by the login cards) |
 
-Los nombres que se ven en el login están en `src/paper/readers.ts`.
+The names shown on the login screen live in `src/paper/readers.ts`.
 
 ### 5. Netlify
 
-`netlify.toml` ya trae el build, la reescritura SPA y los encabezados de caché:
+`netlify.toml` already sets the build, the SPA rewrite, and the cache headers:
 
-1. Conecta el repo a un sitio de Netlify.
-2. Carga ahí las mismas variables `VITE_*`.
-3. En Supabase → Auth → URL Configuration, pon la URL del sitio como `site_url`.
+1. Connect the repo to a Netlify site.
+2. Add the same `VITE_*` variables there.
+3. In Supabase → Auth → URL Configuration, set the site URL as `site_url`.
 
-## Comandos
+## Commands
 
 ```bash
-npm run dev       # desarrollo en http://localhost:5173
-npm run build     # tsc -b && vite build → dist/ (incluye sw.js)
-npm run preview   # sirve dist/ para probar el service worker
+npm run dev       # development at http://localhost:5173
+npm run build     # tsc -b && vite build → dist/ (includes sw.js)
+npm run preview   # serves dist/ to test the service worker
 npm run lint      # tsc --noEmit
 ```
 
-## Estructura
+## Structure
 
 ```
 src/
-  paper/          llegada, login, portada, columna, transiciones
-  sections/       una carpeta por sección (registro en registry.ts)
-  lib/ hooks/     cliente de Supabase, push, caché, datos
-  styles/         tokens por sección
+  paper/          arrival, login, front page, column, page transitions
+  sections/       one folder per section (registered in registry.ts)
+  lib/ hooks/     Supabase client, push, cache, data
+  styles/         per-section tokens
   sw.ts           service worker
 supabase/
-  migrations/     esquema, RLS y triggers
+  migrations/     schema, RLS, and triggers
   functions/      notify, spotify-search, movie-search
-docs/             specs, modelo de datos, wireframes
+docs/             specs, data model, wireframes (in Spanish)
 ```
 
-Más detalle en [docs/modules.md](docs/modules.md), [docs/data-model.md](docs/data-model.md) y [DESIGN.md](DESIGN.md).
+More detail in [docs/modules.md](docs/modules.md), [docs/data-model.md](docs/data-model.md), and [DESIGN.md](DESIGN.md).
 
-## Notas
+## Notes
 
-- Web Push en iPhone requiere iOS 16.4+ y la app instalada en la pantalla de inicio.
-- Quitar el fondo de los recortes descarga un modelo de unos 40 MB la primera vez.
-- `@imgly/background-removal` es AGPL-3.0.
+- Web Push on iPhone requires iOS 16.4+ and the app installed on the home screen.
+- Removing the background from cutouts downloads a ~40 MB model the first time.
+- `@imgly/background-removal` is licensed AGPL-3.0.
 
-## Licencia
+## License
 
-El código está bajo licencia [MIT](LICENSE). Las fotos de portada, las imágenes de referencia, la fuente Kabisat (versión demo) y el audio de paparazzi son de terceros y conservan sus propios términos.
+The source code is licensed under [MIT](LICENSE).
+
+Third-party material in this repository keeps its own terms and is not covered by the MIT license: the cover photos in `public/portada/`, the reference images in `docs/inspiration/` and `docs/archivo-mvp-os/`, the Kabisat demo font in `src/sections/y2k/fonts/`, and the audio in `public/sections/alfombra/paparazzi.mp3`.
 
 ---
 

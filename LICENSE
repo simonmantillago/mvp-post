@@ -19,11 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-This license covers the source code. Third-party material included in the
-repository keeps its own terms and is not licensed under MIT: the cover photos
-in public/portada/, the reference images in docs/inspiration/ and
-docs/archivo-mvp-os/, the Kabisat demo font in src/sections/y2k/fonts/, and the
-audio in public/sections/alfombra/paparazzi.mp3.
