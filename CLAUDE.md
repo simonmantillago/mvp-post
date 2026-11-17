@@ -123,7 +123,7 @@ docs/                     # specs, wireframe, inspiración
 - [x] Portada, La columna, redacción, transición de página, esquina doblada, "Nuevo"
 - [x] Suscripción (perfil, notificaciones, silenciar secciones, guía de instalación en iPhone)
 - [x] Cambiar contraseña en Suscripción (mín. 10 caracteres, correo oculto para el Llavero de iCloud / Face ID, 2026-11-16). Probado en demo. **Falta:** probarlo en el iPhone.
-- [x] Face ID con passkeys de Supabase (beta, 2026-11-16): «Entrar con Face ID» en el login, «Activar/Quitar Face ID» en Suscripción (`src/lib/passkey.ts`, supabase-js ~2.109 con `experimental.passkey`; 2.110+ pide Node 22). Mínimo de contraseña 10 en la nube. La CLI (2.122 y 3.2) no gestiona `[auth.passkey]`/`[auth.webauthn]`: se activan en el panel (Authentication → Passkeys, RP ID `mvp-post.netlify.app`, origen `https://mvp-post.netlify.app`). **Falta:** activarlo en el panel y probar en ambos iPhone.
+- [x] Face ID con passkeys de Supabase (beta, 2026-11-16): «Entrar con Face ID» en el login, «Activar/Quitar Face ID» en Suscripción (`src/lib/passkey.ts`, supabase-js ~2.109 con `experimental.passkey`; 2.110+ pide Node 22). Mínimo de contraseña 10 en la nube. La CLI (2.122 y 3.2) no gestiona `[auth.passkey]`/`[auth.webauthn]`: se activan en el panel (Authentication → Passkeys, RP ID `mvp-post.netlify.app`, origen `https://mvp-post.netlify.app`). Activado en el panel (verificado: `passkeys_enabled`, rpId correcto). **Falta:** activar y probar en ambos iPhone.
 
 ### Fase 4 — Secciones
 - [x] Cartas al editor (Realtime + ¡Extra!)
