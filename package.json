@@ -21,7 +21,7 @@
     "@fontsource/special-elite": "^5.3.0",
     "@fontsource/unifrakturcook": "^5.3.0",
     "@imgly/background-removal": "^1.7.0",
-    "@supabase/supabase-js": "^2.57.4",
+    "@supabase/supabase-js": "~2.109.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router": "^7.18.4",

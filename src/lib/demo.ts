@@ -5,6 +5,7 @@
 
 export function createDemoClient(): any {
   const uploads = new Map<string, string>()
+  const passkeys: { id: string; created_at: string }[] = []
   const HER = 'demo-her'
   const HIM = 'demo-him'
   const ago = (min: number) => new Date(Date.now() - min * 60_000).toISOString()
@@ -190,6 +191,20 @@ export function createDemoClient(): any {
       signInWithPassword: async () => ({ error: null }),
       signOut: async () => ({ error: null }),
       updateUser: async () => ({ data: { user: demoSession.user }, error: null }),
+      // Face ID falso: registrar guarda una llave en memoria; entrar no hace nada (ya hay sesión).
+      registerPasskey: async () => {
+        const key = { id: `pk${passkeys.length + 1}`, created_at: new Date().toISOString() }
+        passkeys.push(key)
+        return { data: key, error: null }
+      },
+      signInWithPasskey: async () => ({ data: { session: demoSession, user: demoSession.user }, error: null }),
+      passkey: {
+        list: async () => ({ data: [...passkeys], error: null }),
+        delete: async ({ passkeyId }: { passkeyId: string }) => {
+          passkeys.splice(passkeys.findIndex((p) => p.id === passkeyId), 1)
+          return { data: null, error: null }
+        },
+      },
     },
   }
 }

@@ -180,20 +180,19 @@ enable_anonymous_sign_ins = false
 # Allow/disallow testing manual linking of accounts
 enable_manual_linking = false
 # Passwords shorter than this value will be rejected as weak. Minimum 6, recommended 8 or more.
-minimum_password_length = 6
+minimum_password_length = 10
 # Passwords that do not meet the following requirements will be rejected as weak. Supported values
 # are: `letters_digits`, `lower_upper_letters_digits`, `lower_upper_letters_digits_symbols`
 # password_requirements = ""
 
-# Configure passkey sign-ins.
-# [auth.passkey]
-# enabled = false
+# Face ID: passkeys (beta). Cambiar rp_id invalida todas las passkeys ya creadas.
+[auth.passkey]
+enabled = true
 
-# Configure WebAuthn relying party settings (required when passkey is enabled).
-# [auth.webauthn]
-# rp_display_name = "Supabase"
-# rp_id = "localhost"
-# rp_origins = ["http://127.0.0.1:3000"]
+[auth.webauthn]
+rp_display_name = "The MVP Post"
+rp_id = "mvp-post.netlify.app"
+rp_origins = ["https://mvp-post.netlify.app"]
 
 [auth.rate_limit]
 # Number of emails that can be sent per hour. Requires auth.email.smtp to be enabled.

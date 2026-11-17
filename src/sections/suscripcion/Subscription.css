@@ -114,6 +114,16 @@
   color: var(--paper);
 }
 .coupon-action:disabled { opacity: 0.4; }
+.coupon-faceid {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s2);
+}
+/* Segundo toque para quitar: tinta rosa de error */
+.coupon-danger {
+  border-color: var(--spot-text);
+  color: var(--spot-text);
+}
 .coupon-action:focus-visible,
 .coupon-signout:focus-visible { outline: 2px solid var(--spot); outline-offset: 2px; }
 .subscription-sign {

@@ -3,8 +3,10 @@ import { useCouple } from '../../hooks/useCouple'
 import { useSession } from '../../hooks/useSession'
 import { useMarkSeen } from '../../hooks/useData'
 import { disablePush, enablePush, getPushState, isInstalled, type PushState } from '../../lib/push'
+import { passkeyProblem, passkeysSupported } from '../../lib/passkey'
 import { supabase } from '../../lib/supabase'
 import { BackButton } from '../../paper/nav'
+import { Icon } from '../../ui/Icon'
 import { sections } from '../registry'
 import './Subscription.css'
 
@@ -105,6 +107,8 @@ export default function Subscription() {
           </p>
         )}
 
+        <FaceIdBlock />
+
         <PasswordBlock />
 
         <button type="button" className="coupon-signout" onClick={() => supabase.auth.signOut()}>
@@ -113,6 +117,105 @@ export default function Subscription() {
       </div>
       <p className="subscription-sign">SMG Development®</p>
     </main>
+  )
+}
+
+/** Activar o quitar la passkey de esta cuenta (Face ID en el iPhone). */
+function FaceIdBlock() {
+  const [keys, setKeys] = useState<{ id: string; created_at: string }[] | 'loading' | 'error'>('loading')
+  const [busy, setBusy] = useState(false)
+  const [confirm, setConfirm] = useState(false)
+  const [msg, setMsg] = useState<{ kind: 'error' | 'ok'; text: string } | null>(null)
+  const supported = passkeysSupported()
+
+  async function load() {
+    try {
+      const { data, error } = await supabase.auth.passkey.list()
+      setKeys(error || !data ? 'error' : data)
+    } catch {
+      setKeys('error')
+    }
+  }
+  useEffect(() => {
+    if (supported) load()
+  }, [supported])
+
+  if (!supported) return null
+
+  async function activate() {
+    setBusy(true)
+    setMsg(null)
+    let problem = null
+    try {
+      const { error } = await supabase.auth.registerPasskey()
+      if (error) problem = passkeyProblem(error)
+    } catch (err) {
+      problem = passkeyProblem(err)
+    }
+    setBusy(false)
+    if (!problem || problem === 'exists') {
+      await load()
+      setMsg({ kind: 'ok', text: problem ? 'Este iPhone ya tenía Face ID para el periódico.' : 'Listo, Face ID activado.' })
+      return
+    }
+    if (problem === 'cancel') return
+    setMsg({
+      kind: 'error',
+      text:
+        problem === 'offline'
+          ? 'Sin conexión. Inténtalo cuando vuelva la señal.'
+          : problem === 'disabled'
+            ? 'Face ID todavía no está listo en el periódico.'
+            : 'No se pudo activar. Intenta otra vez.',
+    })
+  }
+
+  async function remove() {
+    if (!Array.isArray(keys)) return
+    if (!confirm) return setConfirm(true)
+    setBusy(true)
+    setMsg(null)
+    const results = await Promise.all(keys.map((k) => supabase.auth.passkey.delete({ passkeyId: k.id }).catch((error) => ({ error }))))
+    setBusy(false)
+    setConfirm(false)
+    await load()
+    setMsg(
+      results.some((r) => r.error)
+        ? { kind: 'error', text: 'No se pudo quitar. Revisa la conexión e intenta de nuevo.' }
+        : { kind: 'ok', text: 'Quitado. Entra con tu contraseña; la llave guardada en el iPhone ya no abre el periódico.' },
+    )
+  }
+
+  const on = Array.isArray(keys) && keys.length > 0
+  const since = on ? new Date(keys[0].created_at).toLocaleDateString('es', { day: 'numeric', month: 'long' }) : ''
+
+  return (
+    <section className="coupon-block" aria-labelledby="faceid">
+      <h2 id="faceid">Face ID</h2>
+      {keys === 'loading' && <p className="coupon-help">Revisando…</p>}
+      {keys === 'error' && <p className="coupon-help">No se pudo revisar Face ID. Abre de nuevo esta página con conexión.</p>}
+      {Array.isArray(keys) && (
+        <p className="coupon-help">
+          {on ? `Activado desde el ${since}. En «¿Quién lee hoy?» toca «Entrar con Face ID».` : 'Entra mirando el teléfono, sin escribir la contraseña. La llave se guarda en tu Llavero de iCloud.'}
+        </p>
+      )}
+      {msg && (
+        <p className={msg.kind === 'ok' ? 'coupon-note coupon-note-ok' : 'coupon-note'} role={msg.kind === 'ok' ? 'status' : 'alert'}>
+          {msg.text}
+        </p>
+      )}
+      {Array.isArray(keys) &&
+        (on ? (
+          <button type="button" className={confirm ? 'coupon-signout coupon-danger' : 'coupon-signout'} onClick={remove} onBlur={() => setConfirm(false)} disabled={busy}>
+            {busy ? 'Quitando…' : confirm ? '¿Quitar Face ID?' : 'Quitar Face ID'}
+          </button>
+        ) : (
+          <button type="button" className="coupon-action coupon-faceid" onClick={activate} disabled={busy}>
+            <Icon name="face-id" size={20} />
+            {busy ? 'Activando…' : 'Activar Face ID'}
+          </button>
+        ))}
+    </section>
   )
 }
 

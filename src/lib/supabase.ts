@@ -12,7 +12,8 @@ export const isSupabaseConfigured = (import.meta.env.DEV && isDemo()) || Boolean
 
 // Sin .env.local la app arranca igual (para trabajar el diseño); las llamadas fallarán.
 const client = createClient(url ?? 'http://localhost:54321', anonKey ?? 'missing-anon-key', {
-  auth: { persistSession: true, autoRefreshToken: true },
+  // passkey: Face ID (beta de Supabase), ver src/lib/passkey.ts
+  auth: { persistSession: true, autoRefreshToken: true, experimental: { passkey: true } },
 })
 
 export const supabase: typeof client = import.meta.env.DEV && isDemo() ? createDemoClient() : client

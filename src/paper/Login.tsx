@@ -1,5 +1,6 @@
 import { useRef, useState, type FormEvent } from 'react'
 import { flushSync } from 'react-dom'
+import { passkeyProblem, passkeysSupported } from '../lib/passkey'
 import { supabase } from '../lib/supabase'
 import { Icon } from '../ui/Icon'
 import { initials, readers, type Reader } from './readers'
@@ -118,8 +119,54 @@ export function Login() {
         })}
       </ul>
 
+      {!chosen && <FaceIdSignIn />}
+
       <p className="login-sign">SMG Development®</p>
     </main>
+  )
+}
+
+/** Entrar con la passkey del Llavero: el iPhone muestra la cuenta y pide Face ID; no hace falta elegir credencial. */
+function FaceIdSignIn() {
+  const [busy, setBusy] = useState(false)
+  const [note, setNote] = useState<string | null>(null)
+  if (!passkeysSupported()) return null
+
+  async function go() {
+    setBusy(true)
+    setNote(null)
+    let problem = null
+    try {
+      const { error } = await supabase.auth.signInWithPasskey()
+      if (error) problem = passkeyProblem(error)
+    } catch (err) {
+      problem = passkeyProblem(err)
+    }
+    setBusy(false)
+    if (!problem) return
+    setNote(
+      problem === 'offline'
+        ? 'No hay conexión. Conéctate a internet para entrar.'
+        : problem === 'cancel' || problem === 'missing'
+          ? '¿No salió tu cuenta? Entra con tu contraseña y activa Face ID en Suscripción.'
+          : problem === 'disabled'
+            ? 'Face ID todavía no está listo en el periódico. Entra con tu contraseña.'
+            : 'Face ID no respondió. Intenta otra vez o entra con tu contraseña.',
+    )
+  }
+
+  return (
+    <div className="login-faceid">
+      <button type="button" className="login-faceid-button" onClick={go} disabled={busy}>
+        <Icon name="face-id" size={22} />
+        {busy ? 'Mirando…' : 'Entrar con Face ID'}
+      </button>
+      {note && (
+        <p className="credential-error" role="alert">
+          {note}
+        </p>
+      )}
+    </div>
   )
 }
 

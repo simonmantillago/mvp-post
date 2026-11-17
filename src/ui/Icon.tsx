@@ -30,6 +30,7 @@ const paths = {
   door: 'M6 21V4h12v17M3 21h18M14 12h.01',
   wheel: 'M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16zM12 4v16M4 12h16M6.3 6.3l11.4 11.4M17.7 6.3L6.3 17.7',
   search: 'M10.5 17a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13zM15.5 15.5L20 20',
+  'face-id': 'M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2M9 9v1.5M15 9v1.5M12 9v4h-1M9 15.5a4 4 0 0 0 6 0',
 } as const
 
 export type IconName = keyof typeof paths
