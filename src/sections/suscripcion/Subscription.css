@@ -96,6 +96,8 @@
   font: italic var(--size-small) / 1.3 var(--face-body);
   color: var(--spot-text);
 }
+.coupon-note-ok { color: var(--ink); }
+.coupon-action,
 .coupon-signout {
   justify-self: start;
   min-height: 2.75rem;
@@ -106,6 +108,14 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
+/* Acción del bloque: tinta (principal); «Cerrar sesión» queda en contorno */
+.coupon-action {
+  background: var(--ink);
+  color: var(--paper);
+}
+.coupon-action:disabled { opacity: 0.4; }
+.coupon-action:focus-visible,
+.coupon-signout:focus-visible { outline: 2px solid var(--spot); outline-offset: 2px; }
 .subscription-sign {
   margin-top: var(--s6);
   text-align: center;

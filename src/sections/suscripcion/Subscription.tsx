@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { useCouple } from '../../hooks/useCouple'
+import { useSession } from '../../hooks/useSession'
 import { useMarkSeen } from '../../hooks/useData'
 import { disablePush, enablePush, getPushState, isInstalled, type PushState } from '../../lib/push'
 import { supabase } from '../../lib/supabase'
@@ -104,11 +105,73 @@ export default function Subscription() {
           </p>
         )}
 
+        <PasswordBlock />
+
         <button type="button" className="coupon-signout" onClick={() => supabase.auth.signOut()}>
           Cerrar sesión
         </button>
       </div>
       <p className="subscription-sign">SMG Development®</p>
     </main>
+  )
+}
+
+const MIN_PASSWORD = 10
+
+/** Cambiar la contraseña desde el teléfono. El correo va en un campo oculto para que el
+ *  Llavero de iCloud asocie la contraseña nueva a la cuenta y la ofrezca con Face ID. */
+function PasswordBlock() {
+  const session = useSession()
+  const [next, setNext] = useState('')
+  const [again, setAgain] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState<{ kind: 'error' | 'ok'; text: string } | null>(null)
+
+  async function submit(e: FormEvent) {
+    e.preventDefault()
+    if (busy) return
+    if (next.length < MIN_PASSWORD) return setMsg({ kind: 'error', text: `Usa al menos ${MIN_PASSWORD} caracteres.` })
+    if (next !== again) return setMsg({ kind: 'error', text: 'Las dos no coinciden. Escríbela otra vez.' })
+    if (!navigator.onLine) return setMsg({ kind: 'error', text: 'Sin conexión. Inténtalo cuando vuelva la señal.' })
+    setBusy(true)
+    setMsg(null)
+    const { error } = await supabase.auth.updateUser({ password: next })
+    setBusy(false)
+    if (error) {
+      const same = /different|same/i.test(error.message)
+      const weak = /weak|short|least/i.test(error.message)
+      setMsg({
+        kind: 'error',
+        text: same ? 'Es la misma que ya tienes. Elige otra.' : weak ? 'Es muy débil. Prueba una más larga.' : 'No se pudo cambiar. Revisa la conexión e intenta de nuevo.',
+      })
+      return
+    }
+    setNext('')
+    setAgain('')
+    setMsg({ kind: 'ok', text: 'Listo. La próxima vez entra con la nueva.' })
+  }
+
+  return (
+    <form className="coupon-block" aria-labelledby="clave" onSubmit={submit} noValidate>
+      <h2 id="clave">Contraseña</h2>
+      <input type="email" name="username" autoComplete="username" value={session?.user.email ?? ''} readOnly hidden />
+      <label className="coupon-field">
+        <span>Nueva</span>
+        <input type="password" name="new-password" autoComplete="new-password" value={next} onChange={(e) => setNext(e.target.value)} />
+      </label>
+      <label className="coupon-field">
+        <span>Repítela</span>
+        <input type="password" name="confirm-password" autoComplete="new-password" value={again} onChange={(e) => setAgain(e.target.value)} />
+      </label>
+      <p className="coupon-help">Mínimo {MIN_PASSWORD} caracteres. Tu iPhone te ofrecerá guardarla.</p>
+      {msg && (
+        <p className={msg.kind === 'ok' ? 'coupon-note coupon-note-ok' : 'coupon-note'} role={msg.kind === 'ok' ? 'status' : 'alert'}>
+          {msg.text}
+        </p>
+      )}
+      <button type="submit" className="coupon-action" disabled={busy || !next || !again}>
+        {busy ? 'Cambiando…' : 'Cambiar contraseña'}
+      </button>
+    </form>
   )
 }

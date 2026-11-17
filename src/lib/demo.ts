@@ -189,6 +189,7 @@ export function createDemoClient(): any {
       onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }),
       signInWithPassword: async () => ({ error: null }),
       signOut: async () => ({ error: null }),
+      updateUser: async () => ({ data: { user: demoSession.user }, error: null }),
     },
   }
 }

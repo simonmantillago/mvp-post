@@ -122,6 +122,7 @@ docs/                     # specs, wireframe, inspiración
 - [x] Llegada + login (credenciales de prensa)
 - [x] Portada, La columna, redacción, transición de página, esquina doblada, "Nuevo"
 - [x] Suscripción (perfil, notificaciones, silenciar secciones, guía de instalación en iPhone)
+- [x] Cambiar contraseña en Suscripción (mín. 10 caracteres, correo oculto para el Llavero de iCloud / Face ID, 2026-11-16). Probado en demo. **Falta:** probarlo en el iPhone. Passkeys de Supabase (beta) como opción futura.
 
 ### Fase 4 — Secciones
 - [x] Cartas al editor (Realtime + ¡Extra!)
