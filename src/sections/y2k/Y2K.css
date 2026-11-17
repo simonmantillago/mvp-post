@@ -262,9 +262,10 @@
   color: var(--text-soft);
 }
 
+/* Sobre una pieza el dedo hace scroll vertical (agarrarla pide mantener); la seleccionada se mueve directo */
 .piece {
   position: absolute;
-  touch-action: none;
+  touch-action: pan-y;
   transform-origin: 50% 50%;
   cursor: grab;
   filter: drop-shadow(0 8px 8px rgba(0, 0, 0, 0.5));
@@ -292,6 +293,7 @@
   border: 2px dashed var(--accent);
 }
 .piece.is-selected { outline: 2px dashed var(--text); outline-offset: 5px; }
+.piece.is-selected:not(.is-locked) { touch-action: none; }
 .piece:focus-visible { outline: 2px solid var(--focus); outline-offset: 5px; }
 .piece.is-locked { cursor: default; }
 /* Pieza fijada: solo al seleccionarla aparece un candadito en la esquina; tocarlo la desfija */

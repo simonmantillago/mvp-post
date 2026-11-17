@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties } from 'react'
 import { useCouple } from '../../hooks/useCouple'
 import { useLive, useSignedUrl } from '../../hooks/useData'
 import { live as queries } from '../queries'
@@ -15,6 +15,11 @@ type Geo = Pick<CollageItem, 'x' | 'y' | 'width' | 'rotation'>
 type Pt = { x: number; y: number }
 type Gesture = { id: string; start: Geo; pts: Pt[]; center?: Pt; handle: boolean; moved: boolean }
 type Ink = 'pink' | 'white' | 'black'
+
+// Con el dedo, una pieza sin seleccionar deja hacer scroll; mantenerla quieta HOLD_MS la agarra.
+// Moverse más de SLOP_PX antes de eso es scroll.
+const HOLD_MS = 350
+const SLOP_PX = 10
 
 // Tintas del texto pegado: se guardan por nombre y el CSS las pinta con los tokens de la sección
 const inks: { name: string; value: Ink }[] = [
@@ -69,6 +74,41 @@ export default function Y2K() {
   const pointers = useRef(new Map<number, Pt>())
   const gesture = useRef<Gesture | null>(null)
   const live = useRef<Geo | null>(null)
+  // Dedo sobre una pieza no seleccionada: aún no se sabe si es scroll, toque o mantener para agarrar
+  const pending = useRef<{ id: string; pointerId: number; x: number; y: number; timer: number; locked: boolean } | null>(null)
+
+  // Mientras se arrastra una pieza, el dedo no mueve la página. Tiene que ser touchmove no pasivo:
+  // touch-action ya no lo puede impedir porque la pieza deja pasar el scroll (pan-y).
+  useEffect(() => {
+    const el = canvasRef.current
+    if (!el) return
+    const stop = (e: TouchEvent) => {
+      if (gesture.current) e.preventDefault()
+    }
+    el.addEventListener('touchmove', stop, { passive: false })
+    return () => el.removeEventListener('touchmove', stop)
+  }, [])
+
+  function cancelPending() {
+    if (pending.current) window.clearTimeout(pending.current.timer)
+    pending.current = null
+  }
+
+  /** Empieza a mover la pieza (inmediato con mouse o si ya estaba seleccionada; tras mantener con el dedo). */
+  function grab(el: HTMLElement, id: string, pointerId: number, at: Pt, handle: boolean) {
+    setSelected(id)
+    setMenuPage(0)
+    setMenuAt(null)
+    try {
+      el.setPointerCapture(pointerId)
+    } catch {
+      /* el dedo ya se levantó */
+    }
+    pointers.current.clear()
+    pointers.current.set(pointerId, at)
+    live.current = null
+    snapshot(id, handle)
+  }
 
   function geoOf(id: string): Geo {
     const it = items.find((i) => i.id === id)!
@@ -106,19 +146,40 @@ export default function Y2K() {
       return
     }
     const item = items.find((i) => i.id === id)!
-    setSelected(id)
-    setMenuPage(0)
-    setMenuAt(null)
-    // Fijada: no se mueve ni abre la burbuja; solo aparece el candadito para desfijarla
-    if (item.locked) return
-    e.currentTarget.setPointerCapture(e.pointerId)
-    pointers.current.clear()
-    pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY })
-    live.current = null
-    snapshot(id, handle)
+    const at = { x: e.clientX, y: e.clientY }
+    // Mouse, manija o pieza ya seleccionada: se mueve de una vez, como antes
+    if (!item.locked && (e.pointerType !== 'touch' || handle || id === selected)) return grab(e.currentTarget, id, e.pointerId, at, handle)
+    // Con el dedo sobre otra pieza (o una fijada) puede ser scroll: se decide al levantar, mover o esperar
+    cancelPending()
+    const canvas = e.currentTarget
+    const pointerId = e.pointerId
+    pending.current = {
+      id,
+      pointerId,
+      ...at,
+      locked: item.locked,
+      // Mantener quieto ~0,35 s agarra la pieza (las fijadas no se agarran)
+      timer: item.locked
+        ? 0
+        : window.setTimeout(() => {
+            const p = pending.current
+            pending.current = null
+            if (p) grab(canvas, p.id, p.pointerId, { x: p.x, y: p.y }, false)
+          }, HOLD_MS),
+    }
   }
 
   function onCanvasMove(e: React.PointerEvent) {
+    const p = pending.current
+    if (p && p.pointerId === e.pointerId) {
+      // Se movió antes de tiempo: es scroll, la página sigue al dedo
+      if (Math.hypot(e.clientX - p.x, e.clientY - p.y) > SLOP_PX) cancelPending()
+      else {
+        p.x = e.clientX
+        p.y = e.clientY
+      }
+      return
+    }
     const g = gesture.current
     if (!g || !pointers.current.has(e.pointerId)) return
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY })
@@ -149,6 +210,16 @@ export default function Y2K() {
   }
 
   async function onCanvasUp(e: React.PointerEvent) {
+    const p = pending.current
+    if (p && p.pointerId === e.pointerId) {
+      // Toque corto: selecciona (la fijada muestra el candadito; la libre abre la burbuja)
+      cancelPending()
+      setSelected(p.id)
+      setMenuPage(0)
+      setMenuAt(null)
+      if (!p.locked) placeMenu(p.id)
+      return
+    }
     if (!pointers.current.delete(e.pointerId)) return
     const g = gesture.current
     if (!g) return
@@ -439,7 +510,11 @@ export default function Y2K() {
         onPointerDown={onCanvasDown}
         onPointerMove={onCanvasMove}
         onPointerUp={onCanvasUp}
-        onPointerCancel={onCanvasUp}
+        onPointerCancel={(e) => {
+          // El navegador tomó el dedo para hacer scroll: no es un toque
+          if (pending.current?.pointerId === e.pointerId) return cancelPending()
+          onCanvasUp(e)
+        }}
       >
         {load.state === 'loading' && <PressNote title="Buscando las tijeras…" />}
         {load.state === 'error' && <PressNote tone="error" title="Fe de erratas" body={load.message} />}

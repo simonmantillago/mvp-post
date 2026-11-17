@@ -123,13 +123,13 @@ docs/                     # specs, wireframe, inspiración
 - [x] Portada, La columna, redacción, transición de página, esquina doblada, "Nuevo"
 - [x] Suscripción (perfil, notificaciones, silenciar secciones, guía de instalación en iPhone)
 - [x] Cambiar contraseña en Suscripción (mín. 10 caracteres, correo oculto para el Llavero de iCloud / Face ID, 2026-11-16). Probado en demo. **Falta:** probarlo en el iPhone.
-- [x] Face ID con passkeys de Supabase (beta, 2026-11-16): «Entrar con Face ID» en el login, «Activar/Quitar Face ID» en Suscripción (`src/lib/passkey.ts`, supabase-js ~2.109 con `experimental.passkey`; 2.110+ pide Node 22). Mínimo de contraseña 10 en la nube. La CLI (2.122 y 3.2) no gestiona `[auth.passkey]`/`[auth.webauthn]`: se activan en el panel (Authentication → Passkeys, RP ID `mvp-post.netlify.app`, origen `https://mvp-post.netlify.app`). Activado en el panel (verificado: `passkeys_enabled`, rpId correcto). **Falta:** activar y probar en ambos iPhone.
+- [x] Face ID con passkeys de Supabase (beta, 2026-11-16): «Entrar con Face ID» en el login, «Activar/Quitar Face ID» en Suscripción (`src/lib/passkey.ts`, supabase-js ~2.109 con `experimental.passkey`; 2.110+ pide Node 22). Mínimo de contraseña 10 en la nube. La CLI (2.122 y 3.2) no gestiona `[auth.passkey]`/`[auth.webauthn]`: se activan en el panel (Authentication → Passkeys, RP ID `mvp-post.netlify.app`, origen `https://mvp-post.netlify.app`). Activado en el panel (verificado: `passkeys_enabled`, rpId correcto) y probado por Simón en su iPhone.
 
 ### Fase 4 — Secciones
 - [x] Cartas al editor (Realtime + ¡Extra!)
 - [x] Cartas mágicas ronda 2 (2026-11-03): el ¡Extra! ahora es **Tin** (push «¡TIN! ¡TIN!», `notify` desplegada y probada en iPhone); estética de lechucería (pergamino, estampillas en vez de lacres con inicial, Tin como vociferador). Mockup: `docs/wireframes/cartas.html`. Falta ver la estética en el iPhone.
 - [x] Estilo · Y2K (collage, gestos, burbuja iOS, fijar)
-- [x] 2000's Collage (2026-11-04): nombre nuevo, fondo de medio tono de Simón, Kabisat en titular y textos pegados (tildes, ñ y dígitos compuestos; folio y botones en Antonio como el resto), sin stickers, Recorte tipo WhatsApp (quita fondo + borde blanco). Probado en demo a 390/1440. **Falta:** probar el recorte en el iPhone (memoria y tiempo del modelo) y redesplegar `notify` (título nuevo de la push).
+- [x] 2000's Collage (2026-11-04): nombre nuevo, fondo de medio tono de Simón, Kabisat en titular y textos pegados (tildes, ñ y dígitos compuestos; folio y botones en Antonio como el resto), sin stickers, Recorte tipo WhatsApp (quita fondo + borde blanco). Scroll sobre las piezas (2026-11-16): con el dedo, deslizar sobre una pieza no seleccionada hace scroll, tocar la selecciona y mantener 0,35 s la agarra; la seleccionada se mueve directo. Probado en demo a 390/1440. **Falta:** probar el recorte en el iPhone (memoria y tiempo del modelo) y redesplegar `notify` (título nuevo de la push).
 - [x] Alfombra roja (cámara, flash, polaroids, ♥)
 - [x] Los vinilos de Big (oEmbed, tocadiscos, pila de fundas)
 - [x] Cartelera (turnos, ratings)
